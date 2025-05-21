@@ -1,4 +1,4 @@
-import LoginInput from "@/components/auth/LoginInput";
+import LoginInput from "@/components/auths/LoginInput";
 import { Image, StyleSheet, View } from "react-native";
 import React from 'react';
 
