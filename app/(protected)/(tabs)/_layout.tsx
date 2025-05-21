@@ -3,7 +3,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, router, Tabs } from 'expo-router';
 import { Pressable } from 'react-native';
 
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { useClientOnlyValue } from '@/hooks/useClientOnlyValue';
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {

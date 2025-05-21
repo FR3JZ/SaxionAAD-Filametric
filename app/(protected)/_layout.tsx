@@ -1,8 +1,9 @@
 import { AuthContext } from '@/context/authContext';
-import { setLoggedInState } from '@/NativeFeatures/AuthStorage';
+import { setLoggedInState } from '@/nativeFeatures/AuthStorage';
 import { useFonts } from 'expo-font';
 import { Redirect, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import React from 'react';
 import { useContext, useEffect } from 'react';
 import 'react-native-reanimated';
 

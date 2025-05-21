@@ -1,6 +1,7 @@
-import { getLoggedInState, setLoggedInState } from "@/NativeFeatures/AuthStorage";
+import { getLoggedInState, setLoggedInState } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import React from 'react';
 
 type AuthState = {
     isLoggedIn: boolean;

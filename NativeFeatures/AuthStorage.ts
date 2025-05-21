@@ -8,6 +8,7 @@ export async function setLoggedInState(state:string){
 }
 
 export async function getLoggedInState() : Promise<string> {
+    await SecureStorage.deleteItemAsync(LoginStateKey);
     return await getData(LoginStateKey);
 }
 

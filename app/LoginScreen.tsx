@@ -1,5 +1,6 @@
-import LoginInput from "@/components/Auth/LoginInput";
+import LoginInput from "@/components/auth/LoginInput";
 import { Image, StyleSheet, View } from "react-native";
+import React from 'react';
 
 export default function LoginScreen() {
     return (
