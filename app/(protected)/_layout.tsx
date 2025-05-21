@@ -1,5 +1,5 @@
 import { AuthContext } from '@/context/authContext';
-import { setLoggedInState } from '@/nativeFeaturess/AuthStorage';
+import { setLoggedInState } from '@/nativeFeatures/AuthStorage';
 import { useFonts } from 'expo-font';
 import { Redirect, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
