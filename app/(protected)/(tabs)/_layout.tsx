@@ -35,20 +35,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="LoginScreen"
-        options={{
-          href: null,
-          tabBarStyle: { display: 'none' }
-        }}
-      />
-      <Tabs.Screen
-        name="RegisterScreen"
-        options={{
-          href: null,
-          tabBarStyle: { display: 'none' }
-        }}
-      />
     </Tabs>
   );
 }
