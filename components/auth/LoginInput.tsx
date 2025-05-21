@@ -2,6 +2,7 @@ import { AuthContext } from "@/context/authContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
+import React from 'react';
 
 const LoginInput = () => {
     const authContext = useContext(AuthContext);
