@@ -1,4 +1,4 @@
-import RegisterInput from "@/components/auth/RegisterInput";
+import RegisterInput from "../components/Auth/RegisterInput";
 import { StyleSheet, View } from "react-native";
 import React from 'react';
 
