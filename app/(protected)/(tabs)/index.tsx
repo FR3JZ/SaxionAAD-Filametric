@@ -1,28 +1,20 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-
-
+import Header from '../../../components/Header';
+import HomePage from '../../../components/home/HomePage';
 export default function TabOneScreen() {
   return (
-    <View>
-      <Text>Index</Text>
+    <View style={styles.container}>
+      <Header></Header>
+      <HomePage></HomePage>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "white"
   },
 });
