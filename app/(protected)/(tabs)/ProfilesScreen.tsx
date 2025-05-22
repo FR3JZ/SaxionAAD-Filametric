@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-
+import Header from '../../../components/Header';
+import ProfilePage from '../../../components/profiles/ProfilePage';
 export default function Profiles() {
   return (
     <View style={styles.container}>
-      <Text>Profiles</Text>
+      <Header></Header>
+      <ProfilePage></ProfilePage>
     </View>
   );
 }
