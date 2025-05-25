@@ -53,6 +53,13 @@ export default function TabLayout() {
           headerShown: false
         }}
       />
+      <Tabs.Screen
+        name="AddDryerScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
     </Tabs>
   );
 }

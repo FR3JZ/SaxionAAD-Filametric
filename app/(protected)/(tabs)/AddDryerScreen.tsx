@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Header from '../../../components/Header';
-import ProfilePage from '../../../components/profiles/profile-overview/ProfilePage';
-export default function Profiles() {
+import DryerAddPage from '../../..//components/dryer-add/DryerAddPage';
+export default function AddDryerScreen() {
   return (
     <View style={styles.container}>
       <Header></Header>
-      <ProfilePage></ProfilePage>
+      <DryerAddPage></DryerAddPage>
     </View>
   );
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import DryerCard from "./DryerCard";
+import { router } from "expo-router";
 
 const HomePage = () => {
 
@@ -8,7 +9,7 @@ const HomePage = () => {
         <View>
             <View style={styles.title}>
                 <Text style={styles.titleText}>My Dryers</Text>
-                <Pressable style={styles.addButton}>
+                <Pressable style={styles.addButton} onPress={() => router.push('/(protected)/(tabs)/AddDryerScreen')}>
                     <Text>+</Text>
                 </Pressable>
             </View>
