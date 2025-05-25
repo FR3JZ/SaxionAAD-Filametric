@@ -3,17 +3,17 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   StyleProp,
-  ViewStyle,
-  TextStyle
+  TextStyle,
 } from "react-native";
+import DryerCardButtons from "./dryerCardButtons"; // Adjust path as needed
 
-type DryerStatus = "Offline" | "Drying" | "Idle";
+export type DryerStatus = "Offline" | "Drying" | "Idle";
 
-interface DryerCardProps {
+export interface DryerCardProps {
   name: string;
   status: DryerStatus;
+  type: string;
   targetTemp?: number;
   actualTemp?: number;
   progress?: number;
@@ -23,6 +23,7 @@ interface DryerCardProps {
 const DryerCard: React.FC<DryerCardProps> = ({
   name,
   status,
+  type,
   targetTemp,
   actualTemp,
   progress = 0,
@@ -33,7 +34,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
   return (
     <View style={styles.card}>
       <View style={styles.header}>
-        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.title}>{name}: {type}</Text>
         <Text style={[styles.statusTag, statusStyle]}>{status}</Text>
       </View>
 
@@ -50,59 +51,35 @@ const DryerCard: React.FC<DryerCardProps> = ({
           </View>
 
           <Text style={styles.remainingText}>{timeRemaining} Remaining</Text>
-
-          <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.buttonStop}>
-              <Text style={styles.buttonText}>Stop</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSecondary}>
-              <Text style={styles.buttonText}>Profiles</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSecondary}>
-              <Text style={styles.buttonText}>Settings</Text>
-            </TouchableOpacity>
-          </View>
         </>
       )}
 
-      {status === "Idle" && (
-        <View style={styles.buttonRow}>
-          <TouchableOpacity style={styles.buttonStart}>
-            <Text style={styles.buttonText}>Start</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSecondary}>
-            <Text style={styles.buttonText}>Profiles</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonSecondary}>
-            <Text style={styles.buttonText}>Settings</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {status === "Offline" && (
-        <View style={styles.buttonRowEnd}>
-          <TouchableOpacity style={styles.buttonSecondary}>
-            <Text style={styles.buttonText}>Settings</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <DryerCardButtons
+        name={name}
+        status={status}
+        type={type}
+        targetTemp={targetTemp}
+        actualTemp={actualTemp}
+        progress={progress}
+        timeRemaining={timeRemaining}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
- card: {
-  backgroundColor: "#f3f3f3",
-  borderRadius: 12,
-  padding: 20,
-  marginBottom: 20,
-  marginHorizontal: 5, 
-  shadowColor: "#000",
-  shadowOpacity: 0.1,
-  shadowOffset: { width: 0, height: 2 },
-  shadowRadius: 4,
-  elevation: 2,
-},
+  card: {
+    backgroundColor: "#f3f3f3",
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 20,
+    marginHorizontal: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -150,43 +127,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#43a047",
     height: "100%",
   },
-  remainingText: {
-    textAlign: "center",
-    fontSize: 13,
-    marginBottom: 14,
-    fontWeight: "500",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 12,
-  },
-  buttonRowEnd: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  buttonStop: {
-    backgroundColor: "#e53935",
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 8,
-  },
-  buttonStart: {
-    backgroundColor: "#43a047",
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 8,
-  },
-  buttonSecondary: {
-    backgroundColor: "#6200ea",
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "600",
-  },
   progressText: {
     position: "absolute",
     width: "100%",
@@ -197,6 +137,12 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     lineHeight: 22,
+  },
+  remainingText: {
+    textAlign: "center",
+    fontSize: 13,
+    marginBottom: 14,
+    fontWeight: "500",
   },
   tempText: {
     marginBottom: 6,

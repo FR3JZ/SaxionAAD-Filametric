@@ -14,9 +14,9 @@ const HomePage = () => {
                 </Pressable>
             </View>
 
-            <DryerCard name="Solo" status="Drying" targetTemp={75} actualTemp={73} progress={75} timeRemaining="25min" ></DryerCard>
-            <DryerCard name="Duo" status="Offline" targetTemp={75} actualTemp={73} progress={40} timeRemaining="25min" ></DryerCard>
-            <DryerCard name="Duo" status="Idle" targetTemp={75} actualTemp={73} progress={40} timeRemaining="25min" ></DryerCard>
+            <DryerCard name="Dryer 1" type="Solo" status="Drying" targetTemp={75} actualTemp={73} progress={75} timeRemaining="25min" ></DryerCard>
+            <DryerCard name="Dryer 2" type="Duo" status="Offline"></DryerCard>
+            <DryerCard name="Dryer 3" type="Duo" status="Idle" ></DryerCard>
 
         </View>
     )
