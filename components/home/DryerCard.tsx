@@ -6,7 +6,7 @@ import {
   StyleProp,
   TextStyle,
 } from "react-native";
-import DryerCardButtons from "./dryerCardButtons"; // Adjust path as needed
+import DryerCardButtons from "./dryerCardButtons";
 
 export type DryerStatus = "Offline" | "Drying" | "Idle";
 

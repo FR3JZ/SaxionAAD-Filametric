@@ -37,7 +37,7 @@ const DryerCardActions: React.FC<DryerCardProps> = ({
   };
 
   const showProfiles = status === "Drying" || status === "Idle";
-  const showSettings = true; // Always show settings
+  const showSettings = true; 
 
   const containerStyle =
     status === "Offline" ? styles.buttonRowEnd : styles.buttonRow;

@@ -15,7 +15,6 @@ const ActiveDryerSettings: React.FC<ActiveDryerSettingsProps> = ({
     const [timeHours, setTimeHours] = useState(Math.floor(initialTimeMinutes / 60));
     const [timeMinutes, setTimeMinutes] = useState(initialTimeMinutes % 60);
 
-    // RESET state when this screen gets focus (e.g. reopened)
     useFocusEffect(
         useCallback(() => {
             setTemperature(initialTemp);
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
         padding: 7,
     },
     saveButton: {
-        backgroundColor: "#222", // Dark background (adjust as needed)
+        backgroundColor: "#222",
         paddingVertical: 12,
         paddingHorizontal: 24,
         borderRadius: 8,

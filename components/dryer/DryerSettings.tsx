@@ -6,10 +6,10 @@ type DryerSettingsProps = {
   name: string;
   status: string;
   type: string;
-  targetTemp: string;     // e.g. "85"
+  targetTemp: string;      
   actualTemp: string;
   progress: string;
-  timeRemaining: string;  // e.g. "2:20" or "145"
+  timeRemaining: string; 
 };
 
 const DryerSettings: React.FC<DryerSettingsProps> = ({
