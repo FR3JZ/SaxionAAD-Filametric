@@ -5,17 +5,33 @@ import { DryingProfile } from './../../constants/Objects';
 const ProfilePage = ({profile}: {profile: DryingProfile | null}) => {
     return (
         <View>
-            <Text>{profile!.ID}</Text>
+            <View style={styles.title}>
+              <Text style={styles.titleText}>{profile!.Name}</Text>
+            </View>
+            <View style={styles.data}>
+
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  title: {
+    marginTop: 10,
     width: "100%",
-    height: "100%",
-    backgroundColor: "white"
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
+
+  titleText: {
+    fontSize: 23
+  },
+
+  data: {
+    
+  }
+  
 });
 
 export default ProfilePage;
