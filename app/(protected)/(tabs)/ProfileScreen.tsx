@@ -4,7 +4,7 @@ import Header from '../../../components/Header';
 import ProfilePage from '@/components/profile/ProfilePage';
 import { DryingProfile } from '../../../constants/Objects';
 import { useLocalSearchParams } from 'expo-router';
-export default function Profiles() {
+export default function ProfileScreen() {
   const params = useLocalSearchParams();
   let profile: DryingProfile | null = null;
 

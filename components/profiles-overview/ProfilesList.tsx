@@ -40,7 +40,7 @@ const ProfilesList = ({ type }: { type: string }) => {
             </View>
                     
             <View style={styles.profilesContainer}>
-                {testProfiles.map((profile) => (
+                {testProfiles.filter(profile => type === "Custom" ? profile.Customizable : !profile.Customizable ).map((profile) => (
                     <View key={profile.ID} style={styles.profile}>
                         <Pressable style={styles.profileButton} onPress={() => routeToProfileScreen(profile)}>
                             <Text style={styles.profileText}>
