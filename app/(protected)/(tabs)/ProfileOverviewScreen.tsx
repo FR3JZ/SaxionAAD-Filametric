@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Header from '../../../components/Header';
-import ProfilePage from '../../../components/profiles/profile-overview/ProfilePage';
-export default function Profiles() {
+import ProfileOverviewPage from '../../../components/profiles-overview/ProfileOverviewPage';
+export default function ProfileOverviewScreen() {
   return (
     <View style={styles.container}>
       <Header></Header>
-      <ProfilePage></ProfilePage>
+      <ProfileOverviewPage></ProfileOverviewPage>
     </View>
   );
 }
