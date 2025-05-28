@@ -2,6 +2,7 @@ import { router } from "expo-router";
 import { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
 import React from 'react';
+import { Auth } from 'aws-amplify';
 
 const RegisterInput = () => {
     const [email, setEmail] = useState<string>("");
@@ -15,31 +16,46 @@ const RegisterInput = () => {
     const passwordRegex:RegExp = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{8,}$/;
     const emailRegex:RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    function CreateAccount() {
-        if(!isEmailCorrect()){
-            setEmailError("Invalid Email, Please enter a valid email address.");
-            return;
-        } else {
-            setEmailError("");
-        }
-
-        if(!isPasswordStrong()){
-            setPasswordError("Invalid Password, Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.")
-            return;
-        } else {
-            setPasswordError("");
-        }
-
-        if(!isPasswordsTheSame()){
-            setPasswordRepeatError("The password is not the same.")
-            return;
-        } else {
-            setPasswordRepeatError("")
-        }
-
-        // TODO Create backend logic
-        GoToLoginScreen()
+async function CreateAccount() {
+    if (!isEmailCorrect()) {
+        setEmailError("Invalid Email, Please enter a valid email address.");
+        return;
+    } else {
+        setEmailError("");
     }
+
+    if (!isPasswordStrong()) { // Kan uit de passwords rules van cognito worden gehaald.
+        setPasswordError("Invalid Password, Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.");
+        return;
+    } else {
+        setPasswordError("");
+    }
+
+    if (!isPasswordsTheSame()) {
+        setPasswordRepeatError("The password is not the same.");
+        return;
+    } else {
+        setPasswordRepeatError("");
+    }
+
+    try {
+        const { user } = await Auth.signUp({
+            username: email,
+            password: password,
+            attributes: {
+                email: email, // Verplicht als je e-mailverificatie gebruikt
+            },
+            autoSignIn: { enabled: false } // optioneel
+        });
+
+        GoToVerifyScreen();
+    } catch (error) {
+        console.error("Signup error:", error);
+        if (error instanceof Error) {
+            setEmailError(error.message); // input field error's laten zien?
+        }
+    }
+}
 
     function isEmailCorrect(): boolean {
         return emailRegex.test(email);
@@ -51,6 +67,10 @@ const RegisterInput = () => {
 
     function isPasswordsTheSame(): boolean {
         return password === passwordRepeat;
+    }
+
+    function GoToVerifyScreen() {
+        router.push({ pathname: "/VerifyScreen", params: { username: email } });
     }
 
     function GoToLoginScreen() {
