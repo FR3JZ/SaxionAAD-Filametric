@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput } from "react-native";
 
 
-const DryerAddInput = ({placeholder, value, onChangeText} : {placeholder: string, value: string, onChangeText: (text: string) => void}) => {
+const AddInput = ({placeholder, value, onChangeText} : {placeholder: string, value: string, onChangeText: (text: string) => void}) => {
     return (
         <View>
             <TextInput
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default DryerAddInput;
+export default AddInput;

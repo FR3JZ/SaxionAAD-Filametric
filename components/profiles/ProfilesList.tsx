@@ -63,7 +63,7 @@ function routeToProfileScreen(profile: DryingProfile) {
 }
 
 function handleAdd() {
-    console.log("Add profile");
+    router.push('/(protected)/(tabs)/CreateProfileScreen')
 }
 
 const styles = StyleSheet.create({
