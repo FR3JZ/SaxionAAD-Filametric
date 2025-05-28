@@ -54,6 +54,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="AddDryerScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
+        name="DryerSettingsScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
         name="ProfileScreen"
         options={{
           href: null,
