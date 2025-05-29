@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Header from '../../../components/Header';
-import ProfileOverviewPage from '../../../components/profiles/ProfileOverviewPage';
-export default function ProfileOverviewScreen() {
+import AddProfilePage from '../../../components/profile-add/AddProfilePage';
+export default function AddDryerScreen() {
   return (
     <View style={styles.container}>
       <Header></Header>
-      <ProfileOverviewPage></ProfileOverviewPage>
+      <AddProfilePage></AddProfilePage>
     </View>
   );
 }
