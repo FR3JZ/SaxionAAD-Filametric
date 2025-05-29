@@ -30,7 +30,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="ProfilesScreen"
+        name="ProfileOverviewScreen"
         options={{
           title: 'Profiles',
           tabBarIcon: ({ color }) => <TabBarIcon name="cube" color={color} />,
@@ -50,6 +50,34 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
+        name="AddDryerScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
+        name="DryerSettingsScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
+        name="ProfileScreen"
+        options={{
+          href: null,
+          headerShown: false
+        }}
+      />
+      <Tabs.Screen
+        name="CreateProfileScreen"
+        options={{
+          href: null,
           headerShown: false
         }}
       />
