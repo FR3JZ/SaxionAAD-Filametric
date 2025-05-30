@@ -1,14 +1,8 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-} from "react-native";
-import DryerCardButtons from "./dryerCardButtons";
+import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-export type DryerStatus = "Offline" | "Drying" | "Idle";
+export type DryerStatus = "Completed" | "Paused" | "Running";
 
 export interface DryerCardProps {
   name: string;
@@ -16,137 +10,266 @@ export interface DryerCardProps {
   type: string;
   targetTemp?: number;
   actualTemp?: number;
-  progress?: number;
+  progress?: number; // 0 to 100
   timeRemaining?: string;
+  totalTime?: string;
+  humidity?: string;
+  electricity?: string;
+  currentProfile: string;
 }
 
 const DryerCard: React.FC<DryerCardProps> = ({
   name,
   status,
   type,
-  targetTemp,
-  actualTemp,
-  progress = 0,
-  timeRemaining = "",
+  targetTemp = 80,
+  actualTemp = 23,
+  progress = 100,
+  timeRemaining = "0h 0m",
+  totalTime = "8h 0m",
+  humidity = "10%",
+  electricity = "0.39 kWh",
+  currentProfile,
 }) => {
-  const statusStyle = styles[`statusTag__${status}` as `statusTag__${DryerStatus}`] as TextStyle;
+  const statusIconName = status === "Completed" ? "moon" : "flame";
+  const statusIconColor = status === "Completed" ? "#723BFF" : "#FF5500";
 
   return (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{name}: {type}</Text>
-        <Text style={[styles.statusTag, statusStyle]}>{status}</Text>
+    <View style={styles.wrapper}>
+      <View style={styles.card}>
+        {/* Header */}
+        <View style={styles.topRow}>
+          <View style={styles.titleBlock}>
+            <Text style={styles.title}>{name}</Text>
+            <View
+              style={[
+                styles.statusTag,
+                {
+                  backgroundColor:
+                    status === "Completed"
+                      ? '#24d69f'
+                      : status === "Paused"
+                      ? '#FFD966'
+                      : '#FFA726',
+                },
+              ]}
+            >
+              <Text
+                style={[
+                  styles.statusText,
+                ]}
+              >
+                {status.toUpperCase()}
+              </Text>
+            </View>
+          </View>
+          <Ionicons name="create-outline" size={24} style={styles.iconEdit} />
+        </View>
+
+        <Text style={styles.subtitle}>Last connected: just now</Text>
+
+        {/* Temp & Time */}
+        <View style={styles.infoRow}>
+          <View style={styles.infoBlock}>
+            <Ionicons name="thermometer" size={24} style={styles.iconThermometer} />
+            <View>
+              <Text style={styles.infoText}>{actualTemp}°C</Text>
+              <Text style={styles.subInfoText}>/ {targetTemp}°C</Text>
+            </View>
+          </View>
+          <View style={styles.infoBlock}>
+            <Ionicons name="time-outline" size={24} style={styles.iconClock} />
+            <View>
+              <Text style={styles.infoText}>{timeRemaining}</Text>
+              <Text style={styles.subInfoText}>/ {totalTime}</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Humidity & Electricity */}
+        <View style={styles.infoRow}>
+          <View style={styles.infoBlock}>
+            <Ionicons name="water" size={24} style={styles.iconWater} />
+            <Text style={styles.infoText}>{humidity}</Text>
+          </View>
+          <View style={styles.infoBlock}>
+            <Ionicons name="flash-outline" size={24} style={styles.iconFlash} />
+            <Text style={styles.infoText}>{electricity}</Text>
+          </View>
+        </View>
+
+        {/* Profile row with separate status icon */}
+        <View style={styles.profileRow}>
+          <View style={styles.profileContainer}>
+            <Ionicons name="folder" size={20} style={styles.iconFolder} />
+            <Text style={styles.profileText}>{currentProfile}</Text>
+          </View>
+          <View style={styles.iconBubble}>
+            <Ionicons name={statusIconName} size={24} style={{ color: statusIconColor }} />
+          </View>
+        </View>
+
+        {/* Progress */}
+        <View style={styles.progressWrapper}>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: `${progress}%` }]} />
+          </View>
+          <Text style={styles.progressText}>{progress}%</Text>
+        </View>
       </View>
-
-      {status === "Drying" && (
-        <>
-          <View style={styles.tempBox}>
-            <Text style={styles.tempText}>Target: {targetTemp}°C</Text>
-            <Text style={styles.tempText}>Actual: {actualTemp}°C</Text>
-          </View>
-
-          <View style={styles.progressBarBackground}>
-            <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
-            <Text style={styles.progressText}>{progress}%</Text>
-          </View>
-
-          <Text style={styles.remainingText}>{timeRemaining} Remaining</Text>
-        </>
-      )}
-
-      <DryerCardButtons
-        name={name}
-        status={status}
-        type={type}
-        targetTemp={targetTemp}
-        actualTemp={actualTemp}
-        progress={progress}
-        timeRemaining={timeRemaining}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#f3f3f3",
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 20,
-    marginHorizontal: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
+  wrapper: {
+    paddingHorizontal: 6,
+    width: '100%',
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
+    marginBottom: 24,
+    width: '100%',
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  titleBlock: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   title: {
     fontSize: 18,
-    fontWeight: "600",
+    fontFamily: 'Satoshi-Medium',
+    marginRight: 10,
   },
   statusTag: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 999,
-    color: "white",
-    fontWeight: "600",
-    fontSize: 12,
-    overflow: "hidden",
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
   },
-  statusTag__Offline: {
-    backgroundColor: "#e53935",
+  statusText: {
+    fontSize: 13,
+    fontFamily: 'Satoshi-Bold',
+    color: 'white'
   },
-  statusTag__Drying: {
-    backgroundColor: "#43a047",
+  subtitle: {
+    fontSize: 13,
+    fontFamily: 'Satoshi-Light',
+    color: '#888888',
+    marginBottom: 16,
   },
-  statusTag__Idle: {
-    backgroundColor: "#66bb6a",
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
-  tempBox: {
-    backgroundColor: "#ddd",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 12,
-    justifyContent: "flex-start",
+  infoBlock: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    paddingLeft: 4,
   },
-  progressBarBackground: {
-    backgroundColor: "#ccc",
-    height: 22,
-    borderRadius: 11,
-    overflow: "hidden",
-    marginBottom: 10,
-  },
-  progressBarFill: {
-    backgroundColor: "#43a047",
-    height: "100%",
-  },
-  progressText: {
-    position: "absolute",
-    width: "100%",
-    textAlign: "center",
-    color: "black",
-    fontWeight: "700",
-    fontSize: 14,
-    top: 0,
-    bottom: 0,
+  infoText: {
+    fontSize: 18,
+    fontFamily: 'Satoshi-Medium',
     lineHeight: 22,
   },
-  remainingText: {
-    textAlign: "center",
+  subInfoText: {
     fontSize: 13,
-    marginBottom: 14,
-    fontWeight: "500",
+    fontFamily: 'Satoshi-Regular',
+    color: '#666',
+    lineHeight: 18,
   },
-  tempText: {
-    marginBottom: 6,
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 20,
+  },
+  profileContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#F1F3F6',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  profileText: {
+    fontSize: 16,
+    fontFamily: 'Satoshi-Medium',
+    color: '#5D5D5D',
+    flex: 1,
+    marginLeft: 10,
+    textAlign: 'left',
+  },
+  iconBubble: {
+    backgroundColor: '#F1F3F6',
+    borderRadius: 12,
+    padding: 12,
+    height: 48,
+    width: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  progressWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  progressBar: {
+    flex: 1,
+    height: 12,
+    backgroundColor: '#F1F3F6',
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#5D5D5D',
+  },
+  progressText: {
+    fontSize: 13,
+    fontFamily: 'Satoshi-Regular',
+    color: '#5D5D5D',
+    marginLeft: 12,
+  },
+  iconThermometer: {
+    marginRight: 8,
+    marginTop: 2,
+    color: '#FF3B30',
+  },
+  iconClock: {
+    marginRight: 8,
+    marginTop: 2,
+    color: '#00C03B',
+  },
+  iconWater: {
+    marginRight: 8,
+    marginTop: 2,
+    color: '#0086D4',
+  },
+  iconFlash: {
+    marginRight: 8,
+    marginTop: 2,
+    color: '#FF5500',
+  },
+  iconFolder: {
+    color: '#5D5D5D',
+  },
+  iconEdit: {
+    color: '#5D5D5D',
   },
 });
+
 
 export default DryerCard;
