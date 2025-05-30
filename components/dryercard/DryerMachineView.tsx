@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     marginLeft: 5,    // wider right spacing to compensate
   },
   machineImage: {
-    width: 250,
-    height: 250,
+    width: 220,
+    height: 220,
   },
 });
 

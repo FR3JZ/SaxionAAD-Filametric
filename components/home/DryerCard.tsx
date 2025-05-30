@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import DryerHeader from '../dryercard/DryerHeader';
@@ -8,6 +13,7 @@ import DryerProfileRow from '../dryercard/DryerProfileRow';
 import DryerProgressBar from '../dryercard/DryerProgressBar';
 import DryerMachineView from '../dryercard/DryerMachineView';
 import DryerActionControls from '../dryercard/DryerActionControls';
+import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
 export type DryerMachineType = 'Solo' | 'Duo';
@@ -24,6 +30,8 @@ export interface DryerCardProps {
   humidity?: string;
   electricity?: string;
   currentProfile: string;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
 }
 
 const DryerCard: React.FC<DryerCardProps> = ({
@@ -38,18 +46,22 @@ const DryerCard: React.FC<DryerCardProps> = ({
   humidity = '10%',
   electricity = '0.39 kWh',
   currentProfile,
+  isExpanded,
+  onToggleExpand,
 }) => {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showAdjustments, setShowAdjustments] = useState(false);
+  const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
+  const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.card}>
-        {/* Header and Toggle Icon */}
+        {/* Header */}
         <View style={styles.topRow}>
           <DryerHeader name={name} status={status} />
-          <TouchableOpacity onPress={() => setShowDetails(prev => !prev)}>
+          <TouchableOpacity onPress={onToggleExpand}>
             <Ionicons
-              name={showDetails ? 'return-up-back-outline' : 'create-outline'}
+              name={isExpanded ? 'return-up-back-outline' : 'create-outline'}
               size={24}
               style={styles.iconToggle}
             />
@@ -58,7 +70,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
 
         <Text style={styles.subtitle}>Last connected: just now</Text>
 
-        {/* Temperature and Time */}
+        {/* Summary Info */}
         <View style={styles.infoRow}>
           <DryerInfoBlock
             iconName="thermometer"
@@ -74,7 +86,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         </View>
 
-        {/* Humidity and Electricity */}
         <View style={styles.infoRow}>
           <DryerInfoBlock
             iconName="water"
@@ -88,32 +99,44 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         </View>
 
-        {/* Conditionally expanded detail */}
-        {showDetails && (
+        {/* Expanded Info */}
+        {isExpanded && (
           <>
             <DryerMachineView
               type={type}
               onLeftAction={() => console.log('Settings pressed')}
-              onRightAction={() => console.log('Options pressed')}
+              onRightAction={() => setShowAdjustments(true)}
             />
           </>
         )}
+
         <DryerProfileRow currentProfile={currentProfile} status={status} />
         <DryerProgressBar progress={progress} />
 
-        {showDetails && (
+        {/* Action Buttons */}
+        {isExpanded && (
           <DryerActionControls
             status={status}
             onStart={() => console.log('Start')}
             onResume={() => console.log('Resume')}
             onPause={() => console.log('Pause')}
             onStop={() => console.log('Stop')}
-            onAddHour={() => console.log('+1h')}
-            onTempDown={() => console.log('-5°C')}
-            onTempUp={() => console.log('+5°C')}
+            onAddHour={() => setAdjustedDuration(adjustedDuration + 60)}
+            onTempDown={() => setAdjustedTemp(adjustedTemp - 5)}
+            onTempUp={() => setAdjustedTemp(adjustedTemp + 5)}
           />
         )}
 
+        {/* Manual Adjustment Panel (Modal Style) */}
+        {showAdjustments && (
+          <ManualAdjustmentsPanel
+            targetTemp={adjustedTemp}
+            targetMinutes={adjustedDuration}
+            onTempChange={setAdjustedTemp}
+            onMinutesChange={setAdjustedDuration}
+            onDismiss={() => setShowAdjustments(false)}
+          />
+        )}
       </View>
     </View>
   );
