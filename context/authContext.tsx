@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
 import { Auth } from "aws-amplify";
+import { useContext } from "react";
 
 type AuthState = {
     isLoggedIn: boolean;
@@ -93,3 +94,5 @@ export function AuthProvider({ children }: PropsWithChildren) {
         </AuthContext.Provider>
     );
 }
+
+export const useAuth = () => useContext(AuthContext);

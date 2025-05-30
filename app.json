@@ -28,7 +28,8 @@
       "edgeToEdgeEnabled": true,
       "package": "com.bassaxion.SaxionAADFilametric",
       "permissions": [
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -48,6 +49,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f8922b8c-b137-4c13-8e99-762d04638af4"
+      }
+    },
+    "owner": "fr3jz"
   }
 }

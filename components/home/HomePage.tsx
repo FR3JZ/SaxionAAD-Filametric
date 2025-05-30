@@ -2,8 +2,21 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import DryerCard from "./DryerCard";
 import { router } from "expo-router";
+import { registerForPushNotificationsAsync } from "@/services/notificationsService";
+import { useAuth } from "@/context/authContext";
+import { useEffect } from "react";
+
 
 const HomePage = () => {
+
+        const { user } = useAuth(); // Zorg dat je user uit context haalt
+
+        useEffect(() => {
+            if (!user) return; // Alleen registreren als user bekend is
+
+            registerForPushNotificationsAsync();
+        }, []);
+
 
     return(
         <View>
