@@ -1,31 +1,42 @@
 import { AuthContext } from "@/context/authContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
-import React from 'react';
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import React from "react";
+import { Auth } from "aws-amplify";
 
 const LoginInput = () => {
-    const authContext = useContext(AuthContext);
+    const { setUser } = useContext(AuthContext);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const [loginError, setLoginError] = useState<string>("");
 
-    function Login() {
-        if(!isEmailFilled()) {
-            setLoginError("Please enter a email.")
+    async function Login() {
+        if (!isEmailFilled()) {
+            setLoginError("Please enter an email.");
             return;
-        } else {
-            setLoginError("");
         }
 
-        if(!isPasswordFilled()) {
-            setLoginError("Please enter a password.")
+        if (!isPasswordFilled()) {
+            setLoginError("Please enter a password.");
             return;
-        } else {
-            setLoginError("");
         }
-        authContext.logIn(email, password);
+
+        try {
+            const user = await Auth.signIn(email, password);
+            console.log("Signed in user:", user);
+
+            setUser(user);
+            router.replace("/");
+        } catch (error) {
+            console.error("Login error:", error);
+            if (error instanceof Error) {
+                setLoginError(error.message);
+            } else {
+                setLoginError("Something went wrong while signing in.");
+            }
+        }
     }
 
     function isEmailFilled(): boolean {
@@ -37,7 +48,7 @@ const LoginInput = () => {
     }
 
     function GoToRegisterScreen() {
-        router.push("/RegisterScreen")
+        router.push("/RegisterScreen");
     }
 
     return (
@@ -45,21 +56,23 @@ const LoginInput = () => {
             <TextInput
                 value={email}
                 onChangeText={setEmail}
-                placeholderTextColor={"gray"} 
-                placeholder="Email" 
+                placeholderTextColor="gray"
+                placeholder="Email"
                 style={style.textField}
-                />
-            <TextInput 
+                autoCapitalize="none"
+                keyboardType="email-address"
+            />
+            <TextInput
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry={true}
-                placeholderTextColor={"gray"} 
-                placeholder="Password" 
+                placeholderTextColor="gray"
+                placeholder="Password"
                 style={style.textField}
-                />
-            {loginError.length > 0 && 
+            />
+            {loginError.length > 0 && (
                 <Text style={style.errorText}>{loginError}</Text>
-            }
+            )}
 
             <Pressable onPress={Login} style={style.button}>
                 <Text style={style.buttonText}>Login</Text>
@@ -68,7 +81,7 @@ const LoginInput = () => {
                 <Text style={style.buttonText}>Register</Text>
             </Pressable>
         </View>
-    )
+    );
 };
 
 const style = StyleSheet.create({
@@ -79,7 +92,7 @@ const style = StyleSheet.create({
         marginTop: 4,
         marginBottom: 4,
         borderWidth: 1,
-        borderRadius: 6
+        borderRadius: 6,
     },
     buttonText: {
         color: "white",
@@ -92,8 +105,8 @@ const style = StyleSheet.create({
         borderRadius: 6,
     },
     errorText: {
-        color: "red"
+        color: "red",
     },
-})
+});
 
 export default LoginInput;

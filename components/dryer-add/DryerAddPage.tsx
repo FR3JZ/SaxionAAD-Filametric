@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import DryerAddInput from  './DryerAddInput';
+import DryerAddInput from  './AddInput';
 import QRScanner from './QRScanner';
 import { router, useFocusEffect } from 'expo-router';
 

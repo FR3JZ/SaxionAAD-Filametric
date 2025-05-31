@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { DryingProfile } from '@/constants/Objects';
+import { router } from 'expo-router';
 
 // Testdata
 const testProfiles: DryingProfile[] = [
@@ -21,7 +22,7 @@ const testProfiles: DryingProfile[] = [
         Target_duration: 240,
         Mode: "Auto",
         Storage_temperature: 25,
-        Customizable: true,
+        Customizable: false,
         User_Id: "43b22480-2922-4c34-9aa7-db780062014e"
     }
 ]
@@ -37,11 +38,11 @@ const ProfilesList = ({ type }: { type: string }) => {
                     </Pressable>
                 )}
             </View>
-
+                    
             <View style={styles.profilesContainer}>
-                {testProfiles.map((profile) => (
+                {testProfiles.filter(profile => type === "Custom" ? profile.Customizable : !profile.Customizable ).map((profile) => (
                     <View key={profile.ID} style={styles.profile}>
-                        <Pressable style={styles.profileButton} onPress={click}>
+                        <Pressable style={styles.profileButton} onPress={() => routeToProfileScreen(profile)}>
                             <Text style={styles.profileText}>
                                 {profile.Name}
                             </Text>
@@ -53,12 +54,16 @@ const ProfilesList = ({ type }: { type: string }) => {
     )
 }
 
-function click() {
-    console.log("clicked");
+function routeToProfileScreen(profile: DryingProfile) {
+    const serialized = JSON.stringify(profile);
+    router.push({
+        pathname: '/(protected)/(tabs)/ProfileScreen',
+        params: { profile: serialized }
+    })
 }
 
 function handleAdd() {
-    console.log("Add profile");
+    router.push('/(protected)/(tabs)/CreateProfileScreen')
 }
 
 const styles = StyleSheet.create({

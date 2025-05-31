@@ -1,0 +1,101 @@
+{
+  "auth": {
+    "filametricconnectd90e4f1e": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_filametricconnectd90e4f1e_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    },
+    "AMPLIFY_auth_filametricconnectd90e4f1e_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "filametricconnectd90e4f1e"
+        }
+      ]
+    }
+  }
+}

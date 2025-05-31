@@ -1,151 +1,182 @@
-import React from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  StyleProp,
-  TextStyle,
-} from "react-native";
-import DryerCardButtons from "./dryerCardButtons";
+  TouchableOpacity
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-export type DryerStatus = "Offline" | "Drying" | "Idle";
+import DryerHeader from '../dryercard/DryerHeader';
+import DryerInfoBlock from '../dryercard/DryerInfoBlock';
+import DryerProfileRow from '../dryercard/DryerProfileRow';
+import DryerProgressBar from '../dryercard/DryerProgressBar';
+import DryerMachineView from '../dryercard/DryerMachineView';
+import DryerActionControls from '../dryercard/DryerActionControls';
+import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
+
+export type DryerStatus = 'Completed' | 'Paused' | 'Running';
+export type DryerMachineType = 'Solo' | 'Duo';
 
 export interface DryerCardProps {
   name: string;
   status: DryerStatus;
-  type: string;
+  type: DryerMachineType;
   targetTemp?: number;
   actualTemp?: number;
   progress?: number;
   timeRemaining?: string;
+  totalTime?: string;
+  humidity?: string;
+  electricity?: string;
+  currentProfile: string;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
 }
 
 const DryerCard: React.FC<DryerCardProps> = ({
   name,
   status,
   type,
-  targetTemp,
-  actualTemp,
-  progress = 0,
-  timeRemaining = "",
+  targetTemp = 80,
+  actualTemp = 23,
+  progress = 100,
+  timeRemaining = '0h 0m',
+  totalTime = '8h 0m',
+  humidity = '10%',
+  electricity = '0.39 kWh',
+  currentProfile,
+  isExpanded,
+  onToggleExpand,
 }) => {
-  const statusStyle = styles[`statusTag__${status}` as `statusTag__${DryerStatus}`] as TextStyle;
+  const [showAdjustments, setShowAdjustments] = useState(false);
+  const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
+  const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
 
   return (
-    <View style={styles.card}>
-      <View style={styles.header}>
-        <Text style={styles.title}>{name}: {type}</Text>
-        <Text style={[styles.statusTag, statusStyle]}>{status}</Text>
+    <View style={styles.wrapper}>
+      <View style={styles.card}>
+        {/* Header */}
+        <View style={styles.topRow}>
+          <DryerHeader name={name} status={status} />
+          <TouchableOpacity onPress={onToggleExpand}>
+            <Ionicons
+              name={isExpanded ? 'return-up-back-outline' : 'create-outline'}
+              size={24}
+              style={styles.iconToggle}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.subtitle}>Last connected: just now</Text>
+
+        {/* Summary Info */}
+        <View style={styles.infoRow}>
+          <DryerInfoBlock
+            iconName="thermometer"
+            value={`${actualTemp}°C`}
+            subValue={`/ ${targetTemp}°C`}
+            iconColor="#FF3B30"
+          />
+          <DryerInfoBlock
+            iconName="time-outline"
+            value={timeRemaining}
+            subValue={`/ ${totalTime}`}
+            iconColor="#00C03B"
+          />
+        </View>
+
+        <View style={styles.infoRow}>
+          <DryerInfoBlock
+            iconName="water"
+            value={humidity}
+            iconColor="#0086D4"
+          />
+          <DryerInfoBlock
+            iconName="flash-outline"
+            value={electricity}
+            iconColor="#FF5500"
+          />
+        </View>
+
+        {/* Expanded Info */}
+        {isExpanded && (
+          <>
+            <DryerMachineView
+              type={type}
+              onLeftAction={() => console.log('Settings pressed')}
+              onRightAction={() => setShowAdjustments(true)}
+            />
+          </>
+        )}
+
+        <DryerProfileRow currentProfile={currentProfile} status={status} />
+        <DryerProgressBar progress={progress} />
+
+        {/* Action Buttons */}
+        {isExpanded && (
+          <DryerActionControls
+            status={status}
+            onStart={() => console.log('Start')}
+            onResume={() => console.log('Resume')}
+            onPause={() => console.log('Pause')}
+            onStop={() => console.log('Stop')}
+            onAddHour={() => setAdjustedDuration(adjustedDuration + 60)}
+            onTempDown={() => setAdjustedTemp(adjustedTemp - 5)}
+            onTempUp={() => setAdjustedTemp(adjustedTemp + 5)}
+          />
+        )}
+
+        {/* Manual Adjustment Panel (Modal Style) */}
+        {showAdjustments && (
+          <ManualAdjustmentsPanel
+            targetTemp={adjustedTemp}
+            targetMinutes={adjustedDuration}
+            onTempChange={setAdjustedTemp}
+            onMinutesChange={setAdjustedDuration}
+            onDismiss={() => setShowAdjustments(false)}
+          />
+        )}
       </View>
-
-      {status === "Drying" && (
-        <>
-          <View style={styles.tempBox}>
-            <Text style={styles.tempText}>Target: {targetTemp}°C</Text>
-            <Text style={styles.tempText}>Actual: {actualTemp}°C</Text>
-          </View>
-
-          <View style={styles.progressBarBackground}>
-            <View style={[styles.progressBarFill, { width: `${progress}%` }]} />
-            <Text style={styles.progressText}>{progress}%</Text>
-          </View>
-
-          <Text style={styles.remainingText}>{timeRemaining} Remaining</Text>
-        </>
-      )}
-
-      <DryerCardButtons
-        name={name}
-        status={status}
-        type={type}
-        targetTemp={targetTemp}
-        actualTemp={actualTemp}
-        progress={progress}
-        timeRemaining={timeRemaining}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrapper: {
+    paddingHorizontal: 6,
+    width: '100%',
+  },
   card: {
-    backgroundColor: "#f3f3f3",
-    borderRadius: 12,
+    backgroundColor: '#fff',
+    borderRadius: 16,
     padding: 20,
-    marginBottom: 20,
-    marginHorizontal: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 3,
+    marginBottom: 24,
+    width: '100%',
   },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 12,
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-  statusTag: {
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    borderRadius: 999,
-    color: "white",
-    fontWeight: "600",
-    fontSize: 12,
-    overflow: "hidden",
-  },
-  statusTag__Offline: {
-    backgroundColor: "#e53935",
-  },
-  statusTag__Drying: {
-    backgroundColor: "#43a047",
-  },
-  statusTag__Idle: {
-    backgroundColor: "#66bb6a",
-  },
-  tempBox: {
-    backgroundColor: "#ddd",
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
-    marginBottom: 12,
-    justifyContent: "flex-start",
-  },
-  progressBarBackground: {
-    backgroundColor: "#ccc",
-    height: 22,
-    borderRadius: 11,
-    overflow: "hidden",
-    marginBottom: 10,
-  },
-  progressBarFill: {
-    backgroundColor: "#43a047",
-    height: "100%",
-  },
-  progressText: {
-    position: "absolute",
-    width: "100%",
-    textAlign: "center",
-    color: "black",
-    fontWeight: "700",
-    fontSize: 14,
-    top: 0,
-    bottom: 0,
-    lineHeight: 22,
-  },
-  remainingText: {
-    textAlign: "center",
+  subtitle: {
     fontSize: 13,
-    marginBottom: 14,
-    fontWeight: "500",
+    fontFamily: 'Satoshi-Light',
+    color: '#888888',
+    marginBottom: 16,
   },
-  tempText: {
-    marginBottom: 6,
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  iconToggle: {
+    color: '#5D5D5D',
   },
 });
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import ProfilesList from './ProfilesList';
 
-const ProfilePage = () => {
+const ProfileOverviewPage = () => {
     const [activeTab, setActiveTab] = useState<"preset" | "custom">("preset");
     return (
         <View>
@@ -57,4 +57,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default ProfilePage;
+export default ProfileOverviewPage;

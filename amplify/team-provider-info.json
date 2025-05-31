@@ -1,0 +1,32 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-filametricconnect-dev-d7aba-authRole",
+      "UnauthRoleArn": "arn:aws:iam::943310794841:role/amplify-filametricconnect-dev-d7aba-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::943310794841:role/amplify-filametricconnect-dev-d7aba-authRole",
+      "Region": "eu-north-1",
+      "DeploymentBucketName": "amplify-filametricconnect-dev-d7aba-deployment",
+      "UnauthRoleName": "amplify-filametricconnect-dev-d7aba-unauthRole",
+      "StackName": "amplify-filametricconnect-dev-d7aba",
+      "StackId": "arn:aws:cloudformation:eu-north-1:943310794841:stack/amplify-filametricconnect-dev-d7aba/484caee0-3be5-11f0-8162-0eea1ab334f1",
+      "AmplifyAppId": "d2972fsb68g608"
+    },
+    "categories": {
+      "auth": {
+        "filametricconnectd90e4f1e": {
+          "userPoolId": "eu-north-1_9vrKpImh2",
+          "userPoolName": "aadfilametricconnect389d45de_userpool_389d45de-dev",
+          "webClientId": "317c0t6a1vn483jhgv9alr48us",
+          "nativeClientId": "l0n3qooa3nkhe6ijdhsrhetoj",
+          "identityPoolId": "eu-north-1:b86113cb-a16d-4049-a0b5-149d3a07d402",
+          "identityPoolName": "aadfilametricconnect389d45de_identitypool_389d45de__dev",
+          "allowUnauthenticatedIdentities": false,
+          "authRoleArn": "arn:aws:iam::943310794841:role/amplify-aadfilametricconnect-dev-508fc-authRole",
+          "authRoleName": "amplify-aadfilametricconnect-dev-508fc-authRole",
+          "unauthRoleArn": "arn:aws:iam::943310794841:role/amplify-aadfilametricconnect-dev-508fc-unauthRole",
+          "unauthRoleName": "amplify-aadfilametricconnect-dev-508fc-unauthRole"
+        }
+      }
+    }
+  }
+}
