@@ -1,34 +1,43 @@
 import React from "react";
-import { View, Image, StyleSheet } from "react-native";
-
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { router } from "expo-router";
 const Header = () => {
+
     return (
-        <View style={styles.headerContainer}>
-            <Image
-                source={require('../assets/images/Filametric_Full_Logo_v3.png')}
-                style={styles.logo}
-                resizeMode="contain"
-            />
-            <View style={styles.divider} />
+        <View style={styles.headerWrapper}>
+            <View style={styles.topBar}>
+                <TouchableOpacity>
+                    <Ionicons name="person" size={28} color="#444" />
+                </TouchableOpacity>
+
+                <Text style={styles.greeting}>Hi, Alexander</Text>
+
+                <TouchableOpacity onPress={() => router.push("/(protected)/(tabs)/AddDryerScreen")}>
+                    <Ionicons name="add-circle" size={28} color="#444" />
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    headerContainer: {
-        paddingTop: 40,
-        paddingBottom: 15,
-        backgroundColor: 'white',
+    headerWrapper: {
+        backgroundColor: "#fff",
+        paddingTop: 50,
+        paddingHorizontal: 20,
+        paddingBottom: 10,
     },
-    logo: {
-        width: 250,
-        height: 60,
+    topBar: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
     },
-    divider: {
-        height: 1,
-        backgroundColor: '#ccc',
-        alignSelf: 'stretch',
-        marginTop: 10,
+    greeting: {
+        fontSize: 20,
+        color: "#333",
+        textAlign: "center",
+        flex: 1,
     },
 });
 
