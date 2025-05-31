@@ -1,15 +1,12 @@
 import { AuthContext } from '@/context/authContext';
-import { setLoggedInState } from '@/nativeFeatures/AuthStorage';
 import { useFonts } from 'expo-font';
 import { Redirect, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import React, { useContext, useEffect } from 'react';
-import { Text as RNText } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { Text as RNText, View } from 'react-native';
 import 'react-native-reanimated';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
+// Keep splash screen visible while we load resources
 export {
   ErrorBoundary,
 } from 'expo-router';
@@ -19,35 +16,54 @@ export const unstable_settings = {
 };
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    'Satoshi-Black': require('../../assets/fonts/Satoshi-Black.ttf'),
-    'Satoshi-Bold': require('../../assets/fonts/Satoshi-Bold.ttf'),
-    'Satoshi-Medium': require('../../assets/fonts/Satoshi-Medium.ttf'),
-    'Satoshi-Regular': require('../../assets/fonts/Satoshi-Regular.ttf'),
-    'Satoshi-Light': require('../../assets/fonts/Satoshi-Light.ttf'),
-    'Satoshi-Italic': require('../../assets/fonts/Satoshi-Italic.ttf'),
-    'Satoshi-BoldItalic': require('../../assets/fonts/Satoshi-BoldItalic.ttf'),
-    'Satoshi-Variable': require('../../assets/fonts/Satoshi-Variable.ttf'),
+  const [fontsLoaded] = useFonts({
+    'Satoshi-Black': require('../../assets/fonts/Satoshi-Black.otf'),
+    'Satoshi-Bold': require('../../assets/fonts/Satoshi-Bold.otf'),
+    'Satoshi-Medium': require('../../assets/fonts/Satoshi-Medium.otf'),
+    'Satoshi-Regular': require('../../assets/fonts/Satoshi-Regular.otf'),
+    'Satoshi-Light': require('../../assets/fonts/Satoshi-Light.otf'),
+    'Satoshi-Italic': require('../../assets/fonts/Satoshi-Italic.otf'),
+    'Satoshi-BoldItalic': require('../../assets/fonts/Satoshi-BoldItalic.otf'),
+    // 'Satoshi-Variable': require('../../assets/fonts/Satoshi-Variable.otf'),
   });
 
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-    if (loaded) {
-      // Bypass TypeScript error safely
+    async function prepare() {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
       (RNText as any).defaultProps = (RNText as any).defaultProps || {};
       (RNText as any).defaultProps.style = { fontFamily: 'Satoshi-Regular' };
-      SplashScreen.hideAsync();
+      setAppIsReady(true);
     }
-  }, [loaded]);
+  }, [fontsLoaded]);
 
-  if (!loaded) {
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
     return null;
   }
 
-  return <ProtectedLayoutNav />;
+  return (
+    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+      <ProtectedLayoutNav />
+    </View>
+  );
 }
 
 function ProtectedLayoutNav() {

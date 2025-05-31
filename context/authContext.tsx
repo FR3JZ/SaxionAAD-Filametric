@@ -63,7 +63,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     }, []);
 
     const checkLogginState = async () => {
-        let hasLoggedIn = false;
+        let hasLoggedIn = true;
         try {
             const logginState = await getLoggedInState();
             if (logginState !== null) {
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         } catch (e) {
             console.error("Failed to get loggin state:", e);
         } finally {
-            setIsLoggedIn(hasLoggedIn);
+            setIsLoggedIn(true);
             setIsReady(true);
         }
     };

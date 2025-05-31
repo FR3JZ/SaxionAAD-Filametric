@@ -6,6 +6,7 @@ const ProfileOverviewPage = () => {
     const [activeTab, setActiveTab] = useState<"preset" | "custom">("preset");
     return (
         <View>
+            <Text style={styles.titleText}>Profiles</Text>
             <View style={styles.tabContainer}>
                 <Pressable style={[styles.tab, activeTab == "preset" && styles.activeTab]} onPress={() => setActiveTab("preset")}>
                     <Text style={[styles.tabText, activeTab == "preset" && styles.activeTabText]}>Preset profiles</Text>
@@ -28,6 +29,12 @@ const ProfileOverviewPage = () => {
 }
 
 const styles = StyleSheet.create({
+    titleText: {
+      fontFamily: 'Satoshi-Variable',
+      fontWeight: 'thin',
+      fontSize: 24,
+    },
+
     tabContainer: {
       flexDirection: 'row',
       justifyContent: 'center',

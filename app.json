@@ -3,6 +3,9 @@
     "name": "SaxionAAD-Filametric",
     "slug": "SaxionAAD-Filametric",
     "version": "1.0.0",
+    "assetBundlePatterns": [
+      "assets/fonts/*"
+    ],
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "saxionaadfilametric",
