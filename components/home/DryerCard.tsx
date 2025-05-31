@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -14,6 +15,7 @@ import DryerProgressBar from '../dryercard/DryerProgressBar';
 import DryerMachineView from '../dryercard/DryerMachineView';
 import DryerActionControls from '../dryercard/DryerActionControls';
 import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
+import { router } from 'expo-router';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
 export type DryerMachineType = 'Solo' | 'Duo';
@@ -52,6 +54,20 @@ const DryerCard: React.FC<DryerCardProps> = ({
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
   const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
+
+  const [machineViewHeight, setMachineViewHeight] = useState(0);
+  const animatedHeight = useRef(new Animated.Value(0)).current;
+
+  // Animate height change
+  useEffect(() => {
+    if (!isExpanded && machineViewHeight === 0) return;
+
+    Animated.timing(animatedHeight, {
+      toValue: isExpanded ? machineViewHeight : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [isExpanded, machineViewHeight]);
 
   return (
     <View style={styles.wrapper}>
@@ -99,21 +115,42 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         </View>
 
-        {/* Expanded Info */}
-        {isExpanded && (
-          <>
+        {/* Animated Expandable Section */}
+        <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
+          <View>
             <DryerMachineView
               type={type}
-              onLeftAction={() => console.log('Settings pressed')}
               onRightAction={() => setShowAdjustments(true)}
+              onLeftAction={() =>
+                router.push({
+                  pathname: "/(protected)/(tabs)/DryerSettingsScreen",
+                  params: { name },
+                })
+              }
             />
-          </>
-        )}
+          </View>
+        </Animated.View>
+
+        {/* Hidden layout measurer */}
+        <View
+          style={styles.hidden}
+          onLayout={(e) => {
+            if (machineViewHeight === 0) {
+              setMachineViewHeight(e.nativeEvent.layout.height);
+            }
+          }}
+        >
+          <DryerMachineView
+            type={type}
+            onRightAction={() => {}}
+            onLeftAction={() => {}}
+          />
+        </View>
 
         <DryerProfileRow currentProfile={currentProfile} status={status} />
         <DryerProgressBar progress={progress} />
 
-        {/* Action Buttons */}
+        {/* Controls at the bottom */}
         {isExpanded && (
           <DryerActionControls
             status={status}
@@ -127,7 +164,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         )}
 
-        {/* Manual Adjustment Panel (Modal Style) */}
         {showAdjustments && (
           <ManualAdjustmentsPanel
             targetTemp={adjustedTemp}
@@ -144,6 +180,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
 
 const styles = StyleSheet.create({
   wrapper: {
+    marginTop: 3,
     paddingHorizontal: 6,
     width: '100%',
   },
@@ -177,6 +214,12 @@ const styles = StyleSheet.create({
   },
   iconToggle: {
     color: '#5D5D5D',
+  },
+  hidden: {
+    position: 'absolute',
+    opacity: 0,
+    top: -9999,
+    left: -9999,
   },
 });
 

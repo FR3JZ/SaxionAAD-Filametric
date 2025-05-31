@@ -17,24 +17,24 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
+        tabBarActiveTintColor: '#FF5500',
+        tabBarInactiveTintColor: 'gray',
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Tabs.Screen
         name="ProfileOverviewScreen"
         options={{
           title: 'Profiles',
-          tabBarIcon: ({ color }) => <TabBarIcon name="cube" color={color} />,
-          headerShown: false
+          tabBarIcon: ({ color }) => <TabBarIcon name="folder" color={color} />,
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -42,7 +42,7 @@ export default function TabLayout() {
         options={{
           title: 'Stats',
           tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
-          headerShown: false
+          headerShown: false,
         }}
       />
       <Tabs.Screen
@@ -50,37 +50,14 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => <TabBarIcon name="gear" color={color} />,
-          headerShown: false
+          headerShown: false,
         }}
       />
-      <Tabs.Screen
-        name="AddDryerScreen"
-        options={{
-          href: null,
-          headerShown: false
-        }}
-      />
-      <Tabs.Screen
-        name="DryerSettingsScreen"
-        options={{
-          href: null,
-          headerShown: false
-        }}
-      />
-      <Tabs.Screen
-        name="ProfileScreen"
-        options={{
-          href: null,
-          headerShown: false
-        }}
-      />
-      <Tabs.Screen
-        name="CreateProfileScreen"
-        options={{
-          href: null,
-          headerShown: false
-        }}
-      />
+      {/* Hidden Screens */}
+      <Tabs.Screen name="AddDryerScreen" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="DryerSettingsScreen" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="ProfileScreen" options={{ href: null, headerShown: false }} />
+      <Tabs.Screen name="CreateProfileScreen" options={{ href: null, headerShown: false }} />
     </Tabs>
   );
 }
