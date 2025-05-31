@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Chart from '../chart/chart';
 
 interface Props {
@@ -29,7 +29,11 @@ const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
             </View>
 
             <Text style={styles.titleText}>{dataSubject} curve</Text>
-            <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject}/>
+            {Platform.OS === 'web' ? (
+                <Text style={{padding: 12}}>Chart is not available on web</Text>
+            ) : (
+                <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject}/>
+            )}
         </View>
     )
 }

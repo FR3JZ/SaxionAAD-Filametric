@@ -30,7 +30,7 @@ const DataSelectionCard: React.FC<Props> = ({dryerChanged, timeFrameChanged}) =>
     return (
         <View style={styles.container}>
             <Picker
-                style={styles.selectionBox}
+                style={[styles.selectionBox, styles.leftMargin]}
                 selectedValue={dryer}
                 onValueChange={(item, itemIndex) => changeDryer(item)}
             >
@@ -44,7 +44,7 @@ const DataSelectionCard: React.FC<Props> = ({dryerChanged, timeFrameChanged}) =>
                 ))}
             </Picker>
             <Picker
-                style={styles.selectionBox}
+                style={[styles.selectionBox, styles.rightMargin]}
                 selectedValue={timeFrame}
                 onValueChange={(item, itemIndex) => changeTimeFrame(item)}
             >
@@ -66,11 +66,17 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     selectionBox: {
-        width: "50%",
-        height: 45,
-        marginHorizontal: 14,
+        width: "45%",
+        height: 55,
         borderRadius: 8,
         borderWidth: 2,
         fontSize: 16,
+        padding: 12
+    },
+    leftMargin: {
+        marginLeft: 14
+    },
+    rightMargin: {
+        marginRight: 14
     }
 })
