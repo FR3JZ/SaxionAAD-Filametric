@@ -1,38 +1,43 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import DryerCard from "./DryerCard";
-import { router } from "expo-router";
 
 const dryers = [
-  {
-    name: "Dryer 1",
-    status: "Completed",
-    type: "Solo",
-  },
-  {
-    name: "Dryer 2",
-    status: "Running",
-    type: "Solo",
-  },
-  {
-    name: "Dryer 3",
-    status: "Paused",
-    type: "Solo",
-  },
+  { name: "Dryer 1", status: "Completed", type: "Solo" },
+  { name: "Dryer 2", status: "Running", type: "Solo" },
+  { name: "Dryer 3", status: "Paused", type: "Solo" },
 ];
 
 const HomePage = () => {
   const [expandedDryer, setExpandedDryer] = useState<string | null>(null);
+  const [collapsingDryer, setCollapsingDryer] = useState<string | null>(null);
+
+  const handleToggle = (dryerName: string) => {
+    if (expandedDryer === dryerName) {
+      // Start collapse animation
+      setCollapsingDryer(dryerName);
+      setExpandedDryer(null);
+    } else {
+      // Expand new one
+      setExpandedDryer(dryerName);
+      setCollapsingDryer(null);
+    }
+  };
 
   return (
     <ScrollView>
-        <View style={styles.title}>
-          <Text style={styles.titleText}>Dryers</Text>
-        </View>
+      <View style={styles.title}>
+        <Text style={styles.titleText}>Dryers</Text>
+      </View>
 
       {dryers.map((dryer, index) => {
         const isExpanded = expandedDryer === dryer.name;
-        if (expandedDryer && !isExpanded) return null;
+        const isCollapsing = collapsingDryer === dryer.name;
+
+        // Hide all non-expanded/collapsing cards while any animation is in progress
+        if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {
+          return null;
+        }
 
         return (
           <DryerCard
@@ -46,9 +51,8 @@ const HomePage = () => {
             timeRemaining="25min"
             currentProfile="My Profile 1"
             isExpanded={isExpanded}
-            onToggleExpand={() =>
-              setExpandedDryer(isExpanded ? null : dryer.name)
-            }
+            onToggleExpand={() => handleToggle(dryer.name)}
+            onCollapseComplete={() => setCollapsingDryer(null)}
           />
         );
       })}
@@ -69,15 +73,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 10,
     fontFamily: "Satoshi-Bold",
-  },
-  addButton: {
-    backgroundColor: "#D9D9D9",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "50%",
-    width: 30,
-    marginBottom: 5,
-    marginRight: 10,
   },
 });
 
