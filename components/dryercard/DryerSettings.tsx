@@ -28,7 +28,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
       fadeAnim.setValue(0);
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 250,
+        duration: 200,
         useNativeDriver: true,
       }).start();
     }, [])
@@ -37,7 +37,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
   const handleBackPress = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 250,
+      duration: 200,
       useNativeDriver: true,
     }).start(() => {
       router.back();
