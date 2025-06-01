@@ -1,11 +1,15 @@
+import Snackbar from '@/components/error-handling/snackbar';
 import Statistics from '@/components/stats/statistics';
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 export default function Stats() {
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  
   return (
     <View style={styles.container}>
       <Statistics></Statistics>
+      <Snackbar duration={3000} visible={snackbarVisible} message='error' onDismiss={() => setSnackbarVisible(false)}/>
     </View>
   );
 }

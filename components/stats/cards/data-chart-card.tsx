@@ -30,7 +30,9 @@ const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
 
             <Text style={styles.titleText}>{dataSubject} curve</Text>
             {Platform.OS === 'web' ? (
-                <Text style={{padding: 12}}>Chart is not available on web</Text>
+                <View>
+                    <Text style={{padding: 12}}>Chart is not available on web</Text>
+                </View>
             ) : (
                 <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject}/>
             )}
