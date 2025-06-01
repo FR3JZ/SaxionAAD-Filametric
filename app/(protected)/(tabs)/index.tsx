@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Header from '../../../components/Header';
+import Header from '../../../components/home/HomepageHeader';
 import HomePage from '../../../components/home/HomePage';
 export default function TabOneScreen() {
   return (
