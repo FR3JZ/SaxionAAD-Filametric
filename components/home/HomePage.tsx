@@ -26,17 +26,9 @@ const HomePage = () => {
 
   return (
     <ScrollView>
-      {!expandedDryer && (
         <View style={styles.title}>
           <Text style={styles.titleText}>Dryers</Text>
-          <Pressable
-            style={styles.addButton}
-            onPress={() => router.push("/(protected)/(tabs)/AddDryerScreen")}
-          >
-            <Text>+</Text>
-          </Pressable>
         </View>
-      )}
 
       {dryers.map((dryer, index) => {
         const isExpanded = expandedDryer === dryer.name;

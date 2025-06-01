@@ -7,16 +7,25 @@ interface Props {
 }
 
 const DryerHeader: React.FC<Props> = ({ name, status }) => {
-  const statusColor =
-    status === "Completed" ? '#24d69f' :
-    status === "Paused" ? '#FFD966' :
-    '#FFA726';
+  const getStatusColors = (status: Props['status']) => {
+    switch (status) {
+      case "Completed":
+        return { textAndBorder: '#00C03B', background: '#D5FFE4' };
+      case "Paused":
+        return { textAndBorder: '#F6B900', background: '#FFF8DC' };
+      case "Running":
+      default:
+        return { textAndBorder: '#006BAB', background: '#DEF2FF' };
+    }
+  };
+
+  const { textAndBorder, background } = getStatusColors(status);
 
   return (
     <View style={styles.titleBlock}>
       <Text style={styles.title}>{name}</Text>
-      <View style={[styles.statusTag, { backgroundColor: statusColor }]}>
-        <Text style={styles.statusText}>{status.toUpperCase()}</Text>
+      <View style={[styles.statusTag, { backgroundColor: background, borderColor: textAndBorder }]}>
+        <Text style={[styles.statusText, { color: textAndBorder }]}>{status.toUpperCase()}</Text>
       </View>
     </View>
   );
@@ -30,17 +39,17 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: 'Satoshi-Medium',
-    marginRight: 10,
+    marginRight: 8,
   },
   statusTag: {
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    borderWidth: 1,
   },
   statusText: {
-    fontSize: 13,
+    fontSize: 11,
     fontFamily: 'Satoshi-Bold',
-    color: 'white'
   },
 });
 
