@@ -1,12 +1,10 @@
+import DryerAddConfirmationPage from '@/components/dryer-add/DryerAddConfirmationPage';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Header from '../../../components/home/HomepageHeader';
-import ProfileOverviewPage from '../../../components/profiles/ProfileOverviewPage';
-export default function ProfileOverviewScreen() {
+export default function QRCodeScannerScreen() {
   return (
     <View style={styles.container}>
-      <Header></Header>
-      <ProfileOverviewPage></ProfileOverviewPage>
+        <DryerAddConfirmationPage></DryerAddConfirmationPage>
     </View>
   );
 }

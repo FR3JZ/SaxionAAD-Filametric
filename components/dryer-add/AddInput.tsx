@@ -7,7 +7,7 @@ const AddInput = ({placeholder, value, onChangeText} : {placeholder: string, val
         <View>
             <TextInput
                 style={styles.textField}
-                placeholderTextColor={"gray"} 
+                placeholderTextColor={"#888888"} 
                 placeholder={placeholder}
                 onChangeText={onChangeText}
                 value={value}
@@ -19,14 +19,16 @@ const AddInput = ({placeholder, value, onChangeText} : {placeholder: string, val
 
 const styles = StyleSheet.create({
     textField: {
-        width: '97%',
+        width: '93%',
         height: 50,
         marginTop: 4,
-        marginBottom: 4,
+        marginBottom: 10,
         padding: 8,
         borderWidth: 1,
-        borderRadius: 6,
-        fontSize: 17
+        borderRadius: 10,
+        fontSize: 17,
+        fontFamily: 'Satoshi-Regular',
+        borderColor: '#E7E7E7'
     },
 });
 

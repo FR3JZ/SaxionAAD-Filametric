@@ -20,14 +20,13 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    'Satoshi-Black': require('../../assets/fonts/Satoshi-Black.ttf'),
-    'Satoshi-Bold': require('../../assets/fonts/Satoshi-Bold.ttf'),
-    'Satoshi-Medium': require('../../assets/fonts/Satoshi-Medium.ttf'),
-    'Satoshi-Regular': require('../../assets/fonts/Satoshi-Regular.ttf'),
-    'Satoshi-Light': require('../../assets/fonts/Satoshi-Light.ttf'),
-    'Satoshi-Italic': require('../../assets/fonts/Satoshi-Italic.ttf'),
-    'Satoshi-BoldItalic': require('../../assets/fonts/Satoshi-BoldItalic.ttf'),
-    'Satoshi-Variable': require('../../assets/fonts/Satoshi-Variable.ttf'),
+    'Satoshi-Black': require('../../assets/fonts/Satoshi-Black.otf'),
+    'Satoshi-Bold': require('../../assets/fonts/Satoshi-Bold.otf'),
+    'Satoshi-Medium': require('../../assets/fonts/Satoshi-Medium.otf'),
+    'Satoshi-Regular': require('../../assets/fonts/Satoshi-Regular.otf'),
+    'Satoshi-Light': require('../../assets/fonts/Satoshi-Light.otf'),
+    'Satoshi-Italic': require('../../assets/fonts/Satoshi-Italic.otf'),
+    'Satoshi-BoldItalic': require('../../assets/fonts/Satoshi-BoldItalic.otf'),
   });
 
   useEffect(() => {
@@ -64,6 +63,7 @@ function ProtectedLayoutNav() {
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(dryer-add)" options={{headerShown: false}} />
     </Stack>
   );
 }
