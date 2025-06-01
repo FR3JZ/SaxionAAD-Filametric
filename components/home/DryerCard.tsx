@@ -34,6 +34,7 @@ export interface DryerCardProps {
   currentProfile: string;
   isExpanded: boolean;
   onToggleExpand: () => void;
+  onCollapseComplete?: () => void;
 }
 
 const DryerCard: React.FC<DryerCardProps> = ({
@@ -50,6 +51,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
   currentProfile,
   isExpanded,
   onToggleExpand,
+  onCollapseComplete,
 }) => {
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
@@ -58,7 +60,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
   const [machineViewHeight, setMachineViewHeight] = useState(0);
   const animatedHeight = useRef(new Animated.Value(0)).current;
 
-  // Animate height change
   useEffect(() => {
     if (!isExpanded && machineViewHeight === 0) return;
 
@@ -66,13 +67,16 @@ const DryerCard: React.FC<DryerCardProps> = ({
       toValue: isExpanded ? machineViewHeight : 0,
       duration: 300,
       useNativeDriver: false,
-    }).start();
+    }).start(() => {
+      if (!isExpanded && onCollapseComplete) {
+        onCollapseComplete();
+      }
+    });
   }, [isExpanded, machineViewHeight]);
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.card}>
-        {/* Header */}
         <View style={styles.topRow}>
           <DryerHeader name={name} status={status} />
           <TouchableOpacity onPress={onToggleExpand}>
@@ -86,7 +90,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
 
         <Text style={styles.subtitle}>Last connected: just now</Text>
 
-        {/* Summary Info */}
         <View style={styles.infoRow}>
           <DryerInfoBlock
             iconName="thermometer"
@@ -103,19 +106,10 @@ const DryerCard: React.FC<DryerCardProps> = ({
         </View>
 
         <View style={styles.infoRow}>
-          <DryerInfoBlock
-            iconName="water"
-            value={humidity}
-            iconColor="#0086D4"
-          />
-          <DryerInfoBlock
-            iconName="flash-outline"
-            value={electricity}
-            iconColor="#FF5500"
-          />
+          <DryerInfoBlock iconName="water" value={humidity} iconColor="#0086D4" />
+          <DryerInfoBlock iconName="flash-outline" value={electricity} iconColor="#FF5500" />
         </View>
 
-        {/* Animated Expandable Section */}
         <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
           <View>
             <DryerMachineView
@@ -131,7 +125,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
           </View>
         </Animated.View>
 
-        {/* Hidden layout measurer */}
         <View
           style={styles.hidden}
           onLayout={(e) => {
@@ -140,17 +133,12 @@ const DryerCard: React.FC<DryerCardProps> = ({
             }
           }}
         >
-          <DryerMachineView
-            type={type}
-            onRightAction={() => {}}
-            onLeftAction={() => {}}
-          />
+          <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
         </View>
 
         <DryerProfileRow currentProfile={currentProfile} status={status} />
         <DryerProgressBar progress={progress} />
 
-        {/* Controls at the bottom */}
         {isExpanded && (
           <DryerActionControls
             status={status}

@@ -17,8 +17,6 @@ interface ManualAdjustmentsPanelProps {
   onDismiss: () => void;
 }
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-
 const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
   targetTemp,
   targetMinutes,
@@ -26,22 +24,37 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
   onMinutesChange,
   onDismiss,
 }) => {
-  const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+  const fadeAnim = useRef(new Animated.Value(0)).current; // for panel
+  const overlayFadeAnim = useRef(new Animated.Value(0)).current; // for background
 
   useEffect(() => {
-    Animated.timing(slideAnim, {
-      toValue: 0,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+    Animated.parallel([
+      Animated.timing(overlayFadeAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
   }, []);
 
   const handleClose = () => {
-    Animated.timing(slideAnim, {
-      toValue: SCREEN_HEIGHT,
-      duration: 250,
-      useNativeDriver: true,
-    }).start(() => {
+    Animated.parallel([
+      Animated.timing(overlayFadeAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
       onDismiss();
     });
   };
@@ -51,13 +64,13 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
 
   return (
     <TouchableWithoutFeedback onPress={handleClose}>
-      <View style={styles.overlay}>
+      <Animated.View style={[styles.overlay, { opacity: overlayFadeAnim }]}>
         <TouchableWithoutFeedback>
           <Animated.View
             style={[
               styles.panel,
               {
-                transform: [{ translateY: slideAnim }],
+                opacity: fadeAnim,
               },
             ]}
           >
@@ -124,7 +137,7 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
             </Text>
           </Animated.View>
         </TouchableWithoutFeedback>
-      </View>
+      </Animated.View>
     </TouchableWithoutFeedback>
   );
 };
@@ -140,11 +153,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     zIndex: 999,
     borderRadius: 17,
-
   },
   panel: {
     backgroundColor: '#fff',
-    borderRadius: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     paddingVertical: 24,
     paddingHorizontal: 28,
     alignItems: 'center',
