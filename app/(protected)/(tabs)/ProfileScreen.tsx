@@ -1,12 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Header from '../../../components/home/HomepageHeader';
 import ProfilePage from '@/components/profile/ProfilePage';
 import { DryingProfile } from '../../../constants/Objects';
 import { useLocalSearchParams } from 'expo-router';
+import Snackbar from '@/components/error-handling/snackbar';
 export default function ProfileScreen() {
   const params = useLocalSearchParams();
   let profile: DryingProfile | null = null;
+
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
   if(typeof params.profile === 'string') {
     try {
@@ -20,6 +23,7 @@ export default function ProfileScreen() {
     <View style={styles.container}>
       <Header></Header>
       <ProfilePage profile={profile}></ProfilePage>
+      <Snackbar duration={3000} visible={snackbarVisible} message='error' onDismiss={() => setSnackbarVisible(false)}/>
     </View>
   );
 }
