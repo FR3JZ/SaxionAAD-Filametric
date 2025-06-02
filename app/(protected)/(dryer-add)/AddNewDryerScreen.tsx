@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import DryerAddPage from '../../..//components/dryer-add/DryerAddPage';
 import DryerAddHeader from '@/components/dryer-add/DryerAddHeader';
-export default function AddDryerScreen() {
+import DryerAddPage from '@/components/dryer-add/DryerAddPage';
+export default function AddNewDryerInstructionScreen() {
   return (
     <View style={styles.container}>
-      <DryerAddHeader titleText='QR Code Scanner'></DryerAddHeader>
+      <DryerAddHeader titleText='Add New Solo'></DryerAddHeader>
       <DryerAddPage></DryerAddPage>
     </View>
   );

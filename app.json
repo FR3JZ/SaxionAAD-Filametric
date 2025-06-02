@@ -17,7 +17,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.bassaxion.SaxionAADFilametric",
       "infoPlist": {
-        "NSCameraUsageDescription": "This app permissions to open the camera for adding dryers using QR-Codes"
+        "NSCameraUsageDescription": "This app needs permissions to open the camera for adding dryers using QR-Codes"
       }
     },
     "android": {
