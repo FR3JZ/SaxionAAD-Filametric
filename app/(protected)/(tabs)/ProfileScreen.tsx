@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Header from '../../../components/Header';
+import Header from '../../../components/home/HomepageHeader';
 import ProfilePage from '@/components/profile/ProfilePage';
 import { DryingProfile } from '../../../constants/Objects';
 import { useLocalSearchParams } from 'expo-router';

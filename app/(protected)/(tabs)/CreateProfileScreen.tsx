@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Header from '../../../components/Header';
+import Header from '../../../components/home/HomepageHeader';
 import AddProfilePage from '../../../components/profile-add/AddProfilePage';
 import Snackbar from '@/components/error-handling/snackbar';
 export default function AddDryerScreen() {

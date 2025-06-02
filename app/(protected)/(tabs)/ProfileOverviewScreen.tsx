@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Header from '../../../components/Header';
+import Header from '../../../components/home/HomepageHeader';
 import ProfileOverviewPage from '../../../components/profiles/ProfileOverviewPage';
 import Snackbar from '@/components/error-handling/snackbar';
 export default function ProfileOverviewScreen() {
