@@ -40,7 +40,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="StatsScreen"
         options={{
-          title: 'Stats',
+          title: 'Metrics',
           tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />,
           headerShown: false,
         }}
