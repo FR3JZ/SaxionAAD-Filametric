@@ -1,5 +1,3 @@
-// FilametricPicker.tsx
-
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
@@ -30,7 +28,7 @@ const FilametricPicker: React.FC<FilametricPickerProps> = ({
           selectedValue={selectedValue}
           onValueChange={onValueChange}
           style={styles.picker}
-          dropdownIconColor="#555" // native chevron color
+          dropdownIconColor="#555" 
           mode="dropdown"
         >
           {options.map((opt) => (
