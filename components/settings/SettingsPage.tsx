@@ -1,5 +1,3 @@
-// SettingsPage.tsx
-
 import React from 'react';
 import { ScrollView, StyleSheet, View, Text } from 'react-native';
 import NotificationSettings from './NotificationSettings';
