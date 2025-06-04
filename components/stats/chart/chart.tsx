@@ -2,7 +2,7 @@ import * as React from "react";
 import { View } from "react-native";
 import { CartesianChart, Line } from "victory-native";
 import { useFont } from "@shopify/react-native-skia";
-import satoshi from "../../../assets/fonts/Satoshi-Black.ttf"; // It imports it without problem. This is a code editor mistake.
+import satoshi from "../../../assets/fonts/Satoshi-Black.otf"; // It imports it without problem. This is a code editor mistake.
 
 interface Props {
     dryer: string;
