@@ -1,27 +1,15 @@
 import React, {useState} from 'react';
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import ProfilesList from './ProfilesList';
+import { Ionicons } from '@expo/vector-icons';
 
 const ProfileOverviewPage = () => {
-    const [activeTab, setActiveTab] = useState<"preset" | "custom">("preset");
+    const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
     return (
         <View>
             <View style={styles.tabContainer}>
-                <Pressable style={[styles.tab, activeTab == "preset" && styles.activeTab]} onPress={() => setActiveTab("preset")}>
-                    <Text style={[styles.tabText, activeTab == "preset" && styles.activeTabText]}>Preset profiles</Text>
-                </Pressable>
-    
-                <Pressable style={[styles.tab, activeTab == "custom" && styles.activeTab]} onPress={() => setActiveTab("custom")}>
-                    <Text style={[styles.tabText, activeTab == "custom" && styles.activeTabText]}>Custom profiles</Text>
-                </Pressable>
-            </View>
-
-            <View>
-                {activeTab == "preset" ? (
-                    <ProfilesList type="Preset"></ProfilesList>
-                ) : (
-                    <ProfilesList type="Custom"></ProfilesList>
-                )}
+              <TouchableOpacity><Ionicons name="star-outline" size={25} color={'#000'}/><Text>Preset</Text></TouchableOpacity>
+              <TouchableOpacity><Ionicons name="person-outline" size={25} color={'#000'}/><Text>Custom</Text></TouchableOpacity>
             </View>
         </View>
     )
@@ -31,7 +19,6 @@ const styles = StyleSheet.create({
     tabContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
-      marginVertical: 2
     }, 
   
     tab:  {
