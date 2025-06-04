@@ -3,6 +3,7 @@ import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AddInput from "./AddInput";
+import ErrorMessageText from "../error-handling/ErrorMessageText";
 
 const DryerAddPage = () => {
   const params = useLocalSearchParams();
@@ -10,6 +11,7 @@ const DryerAddPage = () => {
   const [dryerName, setDryerName] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+  const [dryerNameError, setDryerNameError] = useState<string>("");
 
   useFocusEffect(
     useCallback(() => {
@@ -20,8 +22,18 @@ const DryerAddPage = () => {
   );
 
   function addDryer() {
+    if(dryerHasValidName()) {
+      router.push('/(protected)/(dryer-add)/AddDryerConfirmationScreen');
+    }
+  }
 
-    router.push('/(protected)/(dryer-add)/AddDryerConfirmationScreen');
+  function dryerHasValidName(): boolean {
+    if (dryerName.length < 1) {
+      setDryerNameError("Please enter a name for the dryer");
+      return false;
+    }
+    setDryerNameError("");
+    return true;
   }
 
   return (
@@ -31,6 +43,7 @@ const DryerAddPage = () => {
         <View style={styles.dryerInfoInputs}>
           <Text style={styles.dryerInfoInputTitle}>Dryer Name *</Text>
           <AddInput placeholder="E.g. Solo Unit #3" value={dryerName} onChangeText={setDryerName}></AddInput>
+          <ErrorMessageText message={dryerNameError}/>
           <Text style={styles.dryerInfoInputTitle}>Location</Text>
           <AddInput placeholder="E.g. Workshop" value={location} onChangeText={setLocation}></AddInput>
           <Text style={styles.dryerInfoInputTitle}>Description</Text>

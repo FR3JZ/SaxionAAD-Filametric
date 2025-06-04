@@ -1,10 +1,16 @@
 import React, { useCallback, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable, TouchableOpacity, ScrollView } from "react-native";
 import AddInput from '../dryer-add/AddInput';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import ErrorMessageText from '../error-handling/ErrorMessageText';
+
+interface Mode {
+  name: string;
+  id: string;
+}
 
 const AddProfilePage = () => {
-  const modes = [
+  const modes:Mode[] = [
     { name: 'test', id: 'd779451e-62c9-48c5-aab2-71f5451f537e'},
     { name: 'test2', id: 'a74ba26b-6159-4937-863c-ea5304099fc2'}
   ]
@@ -13,28 +19,100 @@ const AddProfilePage = () => {
   const [targetTemp, setTargetTemp] = useState<string>('');
   const [targetTimeDuration, setTargetTimeDuration] = useState<string>('');
   const [storageModeTemp, setStorageModeTemp] = useState<string>('');
-  const [selectedMode, setSelectedMode] = useState<string>();
+  const [selectedMode, setSelectedMode] = useState<Mode>();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [switchStorage, setSwitchStorage] = useState(false);
 
+  const [nameError, setNameError] = useState<string>("");
+  const [targetTempError, setTargetTempError] = useState<string>("");
+  const [targetTimeError, setTargetTimeError] = useState<string>("");
+  const [storeModeTempError, setStoreModeTempError] = useState<string>("");
+
   useFocusEffect(
     useCallback(() => {
-      setName('');
-      setTargetTemp('');
-      setTargetTimeDuration('');
-      setStorageModeTemp('');
-      setIsDropdownOpen(false);
-      setSwitchStorage(false);
+      resetInputs();
     }, [])
   );
 
-  const handleModeSelect = (mode) => {
+  const handleModeSelect = (mode:Mode) => {
     setSelectedMode(mode);
     setIsDropdownOpen(false);
   };
 
+  function createNewProfile() {
+    if(isNewProfileValid()) {
+      resetInputs();
+      router.push('/(protected)/(tabs)/ProfileOverviewScreen')
+    }
+  }
+
+  function isNewProfileValid():boolean {
+    let isProfileValid: boolean = true;
+    if(!isNameValid()){
+      isProfileValid = false;
+    }
+    if(!isTargetTempValid()){
+      isProfileValid = false;
+    }
+    if(!isTargetTimeDurationValid()){
+      isProfileValid = false;
+    }
+    if(!isStorageModeTempValid()){
+      isProfileValid = false;
+    }
+
+    console.log(isNameValid() + " " + isTargetTempValid() + " " + isTargetTimeDurationValid() + " " + isStorageModeTempValid())
+
+    return isProfileValid;
+  }
+
+  function resetInputs() {
+    setName("");
+    setTargetTemp("");
+    setTargetTimeDuration("");
+    setSelectedMode(modes[0]);
+    setSwitchStorage(false);
+    setStorageModeTemp("");
+  }
+
+  function isNameValid():boolean {
+    if(!name) {
+      setNameError("Please enter a name.")
+      return false;
+    }
+    setNameError("")
+    return true;
+  }
+
+  function isTargetTempValid():boolean {
+    if(!targetTemp) {
+      setTargetTempError("Please enter a target temperature.")
+      return false;
+    }
+    setTargetTempError("")
+    return true;
+  }
+
+  function isTargetTimeDurationValid():boolean {
+    if(!targetTimeDuration) {
+      setTargetTimeError("Please enter a target time duration.");
+      return false;
+    }
+    setTargetTimeError("");
+    return true;
+  }
+
+  function isStorageModeTempValid(): boolean {
+    if(!storageModeTemp) {
+      setStoreModeTempError("Please enter a storage mode temperature.");
+      return false;
+    }
+    setStoreModeTempError("");
+    return true;
+  }
+
   return (
-    <View>
+    <ScrollView>
       <View style={styles.title}>
         <Text style={styles.titleText}>Create custom profile</Text>
       </View>
@@ -45,6 +123,7 @@ const AddProfilePage = () => {
             <AddInput placeholder='' value={name} onChangeText={setName}></AddInput>
           </View>
         </View>
+        <ErrorMessageText message={nameError}/>
         
         <View style={styles.input}>
           <Text style={styles.titleText}>Target temperature:</Text>
@@ -52,14 +131,16 @@ const AddProfilePage = () => {
             <AddInput placeholder='in °C' value={targetTemp} onChangeText={setTargetTemp}></AddInput>
           </View>
         </View>
-        
+        <ErrorMessageText message={targetTempError}/>
+
         <View style={styles.input}>
           <Text style={styles.titleText}>Target time duration:</Text>
           <View style={styles.targetTimeDurationInput}>
             <AddInput placeholder='in minutes' value={targetTimeDuration} onChangeText={setTargetTimeDuration}></AddInput>
           </View>
         </View>
-        
+        <ErrorMessageText message={targetTimeError}/>
+
         <View style={styles.input}>
           <Text style={styles.titleText}>Mode:</Text>
           <View style={styles.modeDropdown}>
@@ -118,11 +199,13 @@ const AddProfilePage = () => {
             <AddInput placeholder='in °C' value={storageModeTemp} onChangeText={setStorageModeTemp}></AddInput>
           </View>
         </View>
-        <TouchableOpacity style={styles.createContainer}>
+        <ErrorMessageText message={storeModeTempError}/>
+
+        <TouchableOpacity onPress={createNewProfile} style={styles.createContainer}>
             <Text style={styles.createText}>Create</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
