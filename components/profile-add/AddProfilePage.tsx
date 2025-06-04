@@ -61,8 +61,6 @@ const AddProfilePage = () => {
       isProfileValid = false;
     }
 
-    console.log(isNameValid() + " " + isTargetTempValid() + " " + isTargetTimeDurationValid() + " " + isStorageModeTempValid())
-
     return isProfileValid;
   }
 
