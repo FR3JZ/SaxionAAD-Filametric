@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
 
 interface Option {
   label: string;
@@ -23,19 +23,14 @@ const FilametricPicker: React.FC<FilametricPickerProps> = ({
   return (
     <View style={styles.wrapper}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.pickerWrapper}>
-        <Picker
-          selectedValue={selectedValue}
-          onValueChange={onValueChange}
-          style={styles.picker}
-          dropdownIconColor="#555" 
-          mode="dropdown"
-        >
-          {options.map((opt) => (
-            <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
-          ))}
-        </Picker>
-      </View>
+      <RNPickerSelect
+        onValueChange={onValueChange}
+        items={options}
+        value={selectedValue}
+        useNativeAndroidPickerStyle={false} // allow styling
+        style={pickerSelectStyles}
+        placeholder={{ label: 'Select an option...', value: null }}
+      />
     </View>
   );
 };
@@ -48,24 +43,38 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    fontFamily: 'Satoshi-Medium',
     color: '#000',
+    fontFamily: 'Satoshi-Medium',
     marginBottom: 6,
   },
-  pickerWrapper: {
-    borderWidth: 1,
-    borderColor: '#CFCFCF',
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
     height: 48,
-    paddingLeft: 12,
-  },
-  picker: {
-    height: 55,
+    borderRadius: 10,
+    borderColor: '#CFCFCF',
+    borderWidth: 1,
+    paddingHorizontal: 12,
     fontSize: 15,
     fontFamily: 'Satoshi-Medium',
     color: '#000',
-    width: '100%',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  inputAndroid: {
+    height: 48,
+    borderRadius: 10,
+    borderColor: '#CFCFCF',
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    fontSize: 15,
+    fontFamily: 'Satoshi-Medium',
+    color: '#000',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+  },
+  placeholder: {
+    color: '#888',
   },
 });
