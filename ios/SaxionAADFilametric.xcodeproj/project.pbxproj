@@ -10,23 +10,23 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		1A604A5958AACD6A4A6B684B /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD608814DA8D55C6F88B162 /* ExpoModulesProvider.swift */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		7C6E5D02283418095D2E0F12 /* libPods-SaxionAADFilametric.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 715D4F768DCC520EC1102A2C /* libPods-SaxionAADFilametric.a */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		D84F004F3E19FC1FF0729869 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 34896BB6EBD276CD0B0A58F7 /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F692FEB31448DDC264EB4978 /* libPods-SaxionAADFilametric.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21C92A51D08189CCF4BBD943 /* libPods-SaxionAADFilametric.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* SaxionAADFilametric.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaxionAADFilametric.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SaxionAADFilametric/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = SaxionAADFilametric/Info.plist; sourceTree = "<group>"; };
+		21C92A51D08189CCF4BBD943 /* libPods-SaxionAADFilametric.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SaxionAADFilametric.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		30098EA5C357B6C49789C54E /* Pods-SaxionAADFilametric.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SaxionAADFilametric.release.xcconfig"; path = "Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric.release.xcconfig"; sourceTree = "<group>"; };
 		34896BB6EBD276CD0B0A58F7 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = SaxionAADFilametric/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		53FCE2E396E6B300F6F53891 /* Pods-SaxionAADFilametric.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SaxionAADFilametric.debug.xcconfig"; path = "Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric.debug.xcconfig"; sourceTree = "<group>"; };
-		715D4F768DCC520EC1102A2C /* libPods-SaxionAADFilametric.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SaxionAADFilametric.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = SaxionAADFilametric/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		C1253FF48CDF00C7E3B5D642 /* Pods-SaxionAADFilametric.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SaxionAADFilametric.release.xcconfig"; path = "Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		ED7B44FB6A378EF84BE69A73 /* Pods-SaxionAADFilametric.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SaxionAADFilametric.debug.xcconfig"; path = "Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric.debug.xcconfig"; sourceTree = "<group>"; };
 		EDD608814DA8D55C6F88B162 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-SaxionAADFilametric/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = SaxionAADFilametric/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* SaxionAADFilametric-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "SaxionAADFilametric-Bridging-Header.h"; path = "SaxionAADFilametric/SaxionAADFilametric-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C6E5D02283418095D2E0F12 /* libPods-SaxionAADFilametric.a in Frameworks */,
+				F692FEB31448DDC264EB4978 /* libPods-SaxionAADFilametric.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,19 +70,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				715D4F768DCC520EC1102A2C /* libPods-SaxionAADFilametric.a */,
+				21C92A51D08189CCF4BBD943 /* libPods-SaxionAADFilametric.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		562243625BA3B10E2603D9D3 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				53FCE2E396E6B300F6F53891 /* Pods-SaxionAADFilametric.debug.xcconfig */,
-				C1253FF48CDF00C7E3B5D642 /* Pods-SaxionAADFilametric.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -99,8 +89,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				562243625BA3B10E2603D9D3 /* Pods */,
 				ADE00E99AE471F766D4499F9 /* ExpoModulesProviders */,
+				A951E5B884DF0B8B453F1C79 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -113,6 +103,16 @@
 				13B07F961A680F5B00A75B9A /* SaxionAADFilametric.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A951E5B884DF0B8B453F1C79 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				ED7B44FB6A378EF84BE69A73 /* Pods-SaxionAADFilametric.debug.xcconfig */,
+				30098EA5C357B6C49789C54E /* Pods-SaxionAADFilametric.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		ADE00E99AE471F766D4499F9 /* ExpoModulesProviders */ = {
@@ -139,14 +139,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "SaxionAADFilametric" */;
 			buildPhases = (
-				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
+				B8054B9136D7A2229D7F1DD0 /* [CP] Check Pods Manifest.lock */,
 				D2442DE26440B17B5582B4C7 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				7F44DCAD18C31A0E58B20A3B /* [CP] Embed Pods Frameworks */,
+				BB1BFE9F467EC242F706CFEA /* [CP] Embed Pods Frameworks */,
+				8D2A666774295AEA186C7393 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -218,7 +218,49 @@
 			shellPath = /bin/sh;
 			shellScript = "if [[ -f \"$PODS_ROOT/../.xcode.env\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env\"\nfi\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n# The project root by default is one level up from the ios directory\nexport PROJECT_ROOT=\"$PROJECT_DIR\"/..\n\nif [[ \"$CONFIGURATION\" = *Debug* ]]; then\n  export SKIP_BUNDLING=1\nfi\nif [[ -z \"$ENTRY_FILE\" ]]; then\n  # Set the entry JS file using the bundler's entry resolution.\n  export ENTRY_FILE=\"$(\"$NODE_BINARY\" -e \"require('expo/scripts/resolveAppEntry')\" \"$PROJECT_ROOT\" ios absolute | tail -n 1)\"\nfi\n\nif [[ -z \"$CLI_PATH\" ]]; then\n  # Use Expo CLI\n  export CLI_PATH=\"$(\"$NODE_BINARY\" --print \"require.resolve('@expo/cli', { paths: [require.resolve('expo/package.json')] })\")\"\nfi\nif [[ -z \"$BUNDLE_COMMAND\" ]]; then\n  # Default Expo CLI command for bundling\n  export BUNDLE_COMMAND=\"export:embed\"\nfi\n\n# Source .xcode.env.updates if it exists to allow\n# SKIP_BUNDLING to be unset if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.updates\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.updates\"\nfi\n# Source local changes to allow overrides\n# if needed\nif [[ -f \"$PODS_ROOT/../.xcode.env.local\" ]]; then\n  source \"$PODS_ROOT/../.xcode.env.local\"\nfi\n\n`\"$NODE_BINARY\" --print \"require('path').dirname(require.resolve('react-native/package.json')) + '/scripts/react-native-xcode.sh'\"`\n\n";
 		};
-		08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */ = {
+		8D2A666774295AEA186C7393 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/lottie-ios/LottiePrivacyInfo.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/lottie-react-native/Lottie_React_Native_Privacy.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/LottiePrivacyInfo.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Lottie_React_Native_Privacy.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B8054B9136D7A2229D7F1DD0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -240,7 +282,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7F44DCAD18C31A0E58B20A3B /* [CP] Embed Pods Frameworks */ = {
+		BB1BFE9F467EC242F706CFEA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -256,42 +298,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric-resources.sh",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoFileSystem/ExpoFileSystem_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RCT-Folly/RCT-Folly_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/boost/boost_privacy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/glog/glog_privacy.bundle",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoFileSystem_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RCT-Folly_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/boost_privacy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/glog_privacy.bundle",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SaxionAADFilametric/Pods-SaxionAADFilametric-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D2442DE26440B17B5582B4C7 /* [Expo] Configure project */ = {
@@ -330,7 +336,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53FCE2E396E6B300F6F53891 /* Pods-SaxionAADFilametric.debug.xcconfig */;
+			baseConfigurationReference = ED7B44FB6A378EF84BE69A73 /* Pods-SaxionAADFilametric.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -366,7 +372,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C1253FF48CDF00C7E3B5D642 /* Pods-SaxionAADFilametric.release.xcconfig */;
+			baseConfigurationReference = 30098EA5C357B6C49789C54E /* Pods-SaxionAADFilametric.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;

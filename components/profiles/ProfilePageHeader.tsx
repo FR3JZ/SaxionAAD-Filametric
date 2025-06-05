@@ -1,14 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
 
 const DryerAddHeader = () => {
     return (
         <View style={styles.headerContainer}>
             <View style={styles.topBar}>
+                <View style={styles.placeholder} />
                 <Text style={styles.titleText}>Profiles</Text>
-                <Ionicons name="add-circle" size={35} color={'#747474'}/>
+                <TouchableOpacity>
+                    <Ionicons name="add-circle" size={35} color={'#747474'} />
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -27,18 +29,15 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         paddingHorizontal: 20,
     },
-    backButton: {
-        width: 28, 
-        height: 28,
-        justifyContent: "center",
-        alignItems: "center",
+    placeholder: {
+        width: 35, 
+        height: 35,
     },
     titleText: {
         fontSize: 23,
-        fontFamily: "Satoshi-Bold",
+        fontFamily: "Satoshi-Medium",
         color: "#000",
         textAlign: "center",
-        flex: 1,
     },
 });
 
