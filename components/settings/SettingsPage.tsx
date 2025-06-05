@@ -13,7 +13,7 @@ const SettingsPage = () => {
         <Text style={styles.title}>Settings</Text>
       </View>
 
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}   keyboardShouldPersistTaps="handled" > 
         <NotificationSettings />
         <UnitsFormatSettings />
         <AppearanceSettings />

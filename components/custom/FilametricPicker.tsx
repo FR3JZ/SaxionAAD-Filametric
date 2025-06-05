@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Option {
   label: string;
@@ -27,9 +28,12 @@ const FilametricPicker: React.FC<FilametricPickerProps> = ({
         onValueChange={onValueChange}
         items={options}
         value={selectedValue}
-        useNativeAndroidPickerStyle={false} // allow styling
+        useNativeAndroidPickerStyle={false}
         style={pickerSelectStyles}
         placeholder={{ label: 'Select an option...', value: null }}
+        Icon={() => (
+          <Ionicons name="chevron-down-outline" size={20} color="#555" />
+        )}
       />
     </View>
   );
@@ -43,8 +47,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 15,
-    color: '#000',
     fontFamily: 'Satoshi-Medium',
+    color: '#000',
     marginBottom: 6,
   },
 });
@@ -76,5 +80,9 @@ const pickerSelectStyles = StyleSheet.create({
   },
   placeholder: {
     color: '#888',
+  },
+  iconContainer: {
+    top: 14,
+    right: 12,
   },
 });
