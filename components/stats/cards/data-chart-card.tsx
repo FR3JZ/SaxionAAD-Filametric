@@ -9,10 +9,16 @@ interface Props {
 
 const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
     const [dataSubject, setDataSubject] = useState<string>("Temprature");
+    const [dataTitle, setDataTitle] = useState<string>("Temprature");
     const dataSubjects:string[] = ["Temprature", "Humidity", "Energy", "Materials"];
 
     function changeDataSubject(newSubject:string) {
-        setDataSubject(newSubject);
+        if(newSubject === "Materials") {
+            setDataTitle(newSubject +  " Pie")
+        } else {
+            setDataTitle(newSubject +  " Curve");
+        }
+        setDataSubject(newSubject)
     }
 
     return (
@@ -28,7 +34,7 @@ const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
                 ))}
             </View>
 
-            <Text style={styles.titleText}>{dataSubject} curve</Text>
+            <Text style={styles.titleText}>{dataTitle}</Text>
             {Platform.OS === 'web' ? (
                 <Text style={{padding: 12}}>Chart is not available on web</Text>
             ) : (
@@ -42,28 +48,34 @@ export default DataChartCard;
 
 const styles = StyleSheet.create({
     card: {
-        borderWidth: 1,
-        borderRadius: 10,
         marginHorizontal: 14,
         marginVertical: 6,
-        padding: 4
+        padding: 4,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        overflow: 'hidden',
+        elevation: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
     },
     titleText: {
         fontSize: 24,
         marginLeft: 12,
     },
     buttonRow: {
-        backgroundColor: "#F6F6F6",
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 6,
         marginHorizontal: 6,
+        marginTop: 4,
     },
     button: {
         marginHorizontal: 2,
         padding: 4,
     },
     selectedButton: {
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "#F6F6F6"
     }
 })

@@ -2,10 +2,10 @@ import { AuthProvider } from "@/context/authContext";
 import { Stack } from "expo-router";
 import React from "react";
 
-
 import { Amplify } from 'aws-amplify';
 import awsconfig from '@/src/aws-exports'
 import { ErrorSnackbarProvider } from "@/context/errorMessageContext";
+import { StatusBar } from "expo-status-bar";
 Amplify.configure(awsconfig);
 
 export default function RootLayout() {
@@ -13,6 +13,7 @@ export default function RootLayout() {
         <AuthProvider>
             <ErrorSnackbarProvider>
                 <React.Fragment>
+                    <StatusBar style="dark" backgroundColor="#FFFFFF" />
                     <Stack>
                         <Stack.Screen name="(protected)" options={{
                             headerShown: false

@@ -18,7 +18,7 @@ const Statistics = () => {
     }
 
     return (
-        <ScrollView>
+        <ScrollView style={styles.container}>
             <View style={styles.titleArea}>
                 <Text style={styles.titleText}>Metrics</Text>
             </View>
@@ -38,15 +38,20 @@ const Statistics = () => {
 export default Statistics;
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "#F9F9F9"
+    },
     titleArea: {
-        marginTop: 40,
+        padding: 20,
         flex: 1,
         justifyContent: "center",
-        alignContent: "center"
+        alignContent: "center",
+        backgroundColor: "#FFFFFF",
     },
     titleText: {
         fontSize: 24,
-        fontWeight: "bold",
-        alignSelf: "center"
+        alignSelf: "center",
+        fontFamily: "Satoshi",
+        marginTop: 15
     },
 })

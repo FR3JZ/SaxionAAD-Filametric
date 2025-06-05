@@ -32,11 +32,17 @@ const styles = StyleSheet.create({
         color: "#0086D4",
     },
     card: {
-        borderWidth: 1,
-        borderRadius: 10,
         marginHorizontal: 14,
         marginVertical: 6,
-        padding: 4
+        padding: 4,
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        overflow: 'hidden',
+        elevation: 1,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
     },
     titleContainer: {
         marginVertical: 16,
@@ -44,11 +50,14 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     titleText: {
-        fontSize: 24
+        fontSize: 24,
+        fontWeight: "500",
+        fontFamily: 'Satoshi',
     },
     statText: {
         fontSize: 32,
-        fontWeight: "bold",
+        fontFamily: 'Satoshi',
+        fontWeight: "500",
         marginLeft: 8
     },
     changeText: {
@@ -56,5 +65,7 @@ const styles = StyleSheet.create({
         color: "#009632",
         marginLeft: 8,
         paddingBottom: 6,
+        fontFamily: 'Satoshi',
+        fontWeight: "400"
     }
 })
