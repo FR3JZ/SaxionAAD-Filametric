@@ -7,8 +7,8 @@ import { Auth } from "aws-amplify";
 import { Ionicons } from "@expo/vector-icons";
 
 const LoginInput = () => {
-    const { setUser } = useContext(AuthContext);
-    const [email, setEmail] = useState<string>("");
+    const { logIn } = useContext(AuthContext);
+    const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const [secureText, setSecureText] = useState(true);
@@ -17,8 +17,8 @@ const LoginInput = () => {
     const [loginError, setLoginError] = useState<string>("");
 
     async function Login() {
-        if (!isEmailFilled()) {
-            setLoginError("Please enter an email.");
+        if (!isUsernameFilled()) {
+            setLoginError("Please enter an username.");
             return;
         }
 
@@ -28,10 +28,7 @@ const LoginInput = () => {
         }
 
         try {
-            const user = await Auth.signIn(email, password);
-            console.log("Signed in user:", user);
-
-            setUser(user);
+            logIn(username, password);
             router.replace("/");
         } catch (error) {
             console.error("Login error:", error);
@@ -43,8 +40,8 @@ const LoginInput = () => {
         }
     }
 
-    function isEmailFilled(): boolean {
-        return email.length > 0;
+    function isUsernameFilled(): boolean {
+        return username.length > 0;
     }
 
     function isPasswordFilled(): boolean {
@@ -58,8 +55,8 @@ const LoginInput = () => {
     return (
         <View>
             <TextInput
-                value={email}
-                onChangeText={setEmail}
+                value={username}
+                onChangeText={setUsername}
                 placeholderTextColor="gray"
                 placeholder="Email Address"
                 style={style.textField}
@@ -72,6 +69,7 @@ const LoginInput = () => {
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={secureText}
+                    autoCapitalize="none"
                     placeholderTextColor="gray"
                     placeholder="Password"
                     style={{flex: 1}}

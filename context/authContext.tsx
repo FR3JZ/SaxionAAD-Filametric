@@ -1,4 +1,3 @@
-import { getLoggedInState, setLoggedInState } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
@@ -9,7 +8,7 @@ type AuthState = {
     isReady: boolean;
     user: any;
     setUser: (user: any) => void;
-    logIn: (email: string, password: string) => void;
+    logIn: (username: string, password: string) => void;
     logOut: () => void;
 };
 
@@ -28,12 +27,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
 
-    const logIn = async (email: string, password: string) => {
+    const logIn = async (username: string, password: string) => {
         try {
-            const user = await Auth.signIn(email, password);
-            console.log("Signed in user:", user);
-
-            await setLoggedInState("LoggedIn");
+            const user = await Auth.signIn(username, password);
             setIsLoggedIn(true);
             setUser(user);
             router.replace("/");
@@ -47,14 +43,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const logOut = async () => {
         try {
             await Auth.signOut();
-            await setLoggedInState("LoggedOut");
-        } catch (e) {
-            console.error("Failed to log out:", e);
-        } finally {
             setIsLoggedIn(false);
             setUser(null);
             setIsReady(false);
             router.replace("/LoginScreen");
+        } catch (e) {
+            console.error("Failed to log out:", e);
         }
     };
 
@@ -65,10 +59,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const checkLogginState = async () => {
         let hasLoggedIn = false;
         try {
-            const logginState = await getLoggedInState();
-            if (logginState !== null) {
-                hasLoggedIn = logginState === "LoggedIn";
-            }
+            const logginState = true;
 
             if (hasLoggedIn) {
                 try {
