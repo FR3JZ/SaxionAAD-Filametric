@@ -11,6 +11,8 @@ import { Slider } from "@react-native-assets/slider";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import SwitchToggle from "react-native-switch-toggle";
+import LabeledSwitchRow from "../custom/LabeledSwitchRow";
+import LabeledSliderRow from "../custom/LabeledSliderRow";
 
 interface DryerSettingsProps {
   name: string;
@@ -20,6 +22,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
   const [sleepMode, setSleepMode] = useState(false);
   const [brightness, setBrightness] = useState(75);
   const [enableSounds, setEnableSounds] = useState(false);
+  const [autoUpdateFirmware, setAutoUpdateFirmware] = useState(false);
 
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -66,7 +69,15 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
             />
             <Text style={styles.sectionTitle}>Firmware</Text>
           </View>
-
+          <LabeledSwitchRow
+            title="Auto update new firmware"
+            description="Automatically search and push firmware updates to your dryer(s)"
+            value={autoUpdateFirmware}
+            onChange={(val) => {
+              setAutoUpdateFirmware(val);
+              console.log("Auto update firmware:", val);
+            }}
+          />
           <View style={styles.versionRow}>
             <Text style={styles.versionLabel}>Current version</Text>
             <View style={styles.versionTagWhite}>
@@ -107,115 +118,42 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
               color="black"
               style={styles.icon}
             />
-            <Text style={styles.sectionTitle}>Display Settings</Text>
+            <Text style={styles.sectionTitle}>Device Settings</Text>
           </View>
-          <View style={[styles.row, { marginVertical: 6 }]}>
-            <View>
-              <Text style={styles.text}>Sleep mode after 5 minutes</Text>
-              <Text style={styles.caption}>
-                Display automatically turns off after inactivity
-              </Text>
-            </View>
-            <SwitchToggle
-              switchOn={sleepMode}
-              onPress={() => setSleepMode(!sleepMode)}
-              circleColorOff="#fff"
-              circleColorOn="#fff"
-              backgroundColorOn="black"
-              backgroundColorOff="#E7E7E7"
-              containerStyle={{
-                width: 52,
-                height: 30,
-                borderRadius: 30,
-                padding: 3,
-              }}
-              circleStyle={{
-                width: 23,
-                height: 23,
-                borderRadius: 11,
-                marginLeft: -4,
-              }}
-            />
-          </View>
+
+          <LabeledSwitchRow
+            title="Device sounds"
+            description="Sounds from the dryer for reminders, notifications and warnings"
+            value={enableSounds}
+            onChange={(val) => {
+              setEnableSounds(val);
+              console.log("Device sounds:", val);
+            }}
+          />
 
           <View style={styles.divider} />
-
-          <View style={[styles.brightnessContainer, { marginTop: 6 }]}>
-            <View style={styles.brightnessLabelRow}>
-              <Text style={styles.text}>Brightness</Text>
-              <Text style={styles.brightnessPercent}>{brightness}%</Text>
-            </View>
-            <Slider
-              value={brightness}
-              onValueChange={setBrightness}
-              minimumValue={0}
-              maximumValue={100}
-              step={1}
-              thumbSize={25}
-              trackHeight={15}
-              thumbTintColor="#5D5D5D"
-              minimumTrackTintColor="#5D5D5D"
-              maximumTrackTintColor="#E7E7E7"
-              thumbStyle={{
-                borderWidth: 3,
-                borderColor: "#5D5D5D",
-                backgroundColor: "#FFFFFF",
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-                elevation: 3,
+          <View style={styles.row}>
+            <LabeledSwitchRow
+              title="Display sleep after 5 minutes"
+              description="Automatically turns off the display after 5 minutes inactivity"
+              value={sleepMode}
+              onChange={(val) => {
+                setSleepMode(val);
+                console.log("Sleep mode:", val);
               }}
             />
-          </View>
 
-          <View style={styles.divider} />
+          </View>
+          <LabeledSliderRow
+            title="Display brightness"
+            value={brightness}
+            onChange={setBrightness}
+          />
 
           <TouchableOpacity style={styles.turnOffButton}>
             <Text style={styles.turnOffButtonText}>Turn off display</Text>
           </TouchableOpacity>
-          <Text style={styles.caption}>Turns off the display immediately</Text>
-        </View>
-
-        {/* Sound Settings */}
-        <View style={styles.section}>
-          <View style={styles.headerRow}>
-            <Ionicons
-              name="volume-high-outline"
-              size={24}
-              color="black"
-              style={styles.icon}
-            />
-            <Text style={styles.sectionTitle}>Sound Settings</Text>
-          </View>
-          <View style={[styles.row, { marginVertical: 6 }]}>
-            <View>
-              <Text style={styles.text}>Enable sounds</Text>
-              <Text style={styles.caption}>
-                Beeps for notifications and warnings
-              </Text>
-            </View>
-            <SwitchToggle
-              switchOn={enableSounds}
-              onPress={() => setEnableSounds(!enableSounds)}
-              circleColorOff="#fff"
-              circleColorOn="#fff"
-              backgroundColorOn="black"
-              backgroundColorOff="#E7E7E7"
-              containerStyle={{
-                width: 52,
-                height: 30,
-                borderRadius: 30,
-                padding: 3,
-              }}
-              circleStyle={{
-                width: 23,
-                height: 23,
-                borderRadius: 11,
-                marginLeft: -4,
-              }}
-            />
-          </View>
+          <Text style={styles.caption}>Immediately turns of the dryer's display</Text>
         </View>
       </Animated.View>
     </View>
@@ -233,7 +171,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingBottom: 16,
-    paddingTop: 35,
+    paddingTop: 30,
   },
   headerText: {
     fontSize: 24,
@@ -256,7 +194,7 @@ const styles = StyleSheet.create({
   headerRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 6,
+    marginBottom: 2,
   },
   icon: {
     marginRight: 8,
@@ -266,21 +204,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-  brightnessLabelRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  brightnessPercent: {
-    fontSize: 14,
-    color: "#888",
-    fontFamily: "Satoshi-Light",
-  },
-  text: {
-    fontFamily: "Satoshi-Medium",
-    fontSize: 14,
   },
   caption: {
     marginTop: 6,
@@ -315,9 +238,9 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 16,
-    backgroundColor: "#723BFF",
+    backgroundColor: "#00C03B",
     borderWidth: 1,
-    borderColor: "#723BFF",
+    borderColor: "#00C03B",
   },
   versionTextWhite: {
     color: "#fff",
@@ -326,10 +249,10 @@ const styles = StyleSheet.create({
   },
   updateButton: {
     marginTop: 12,
-    backgroundColor: "#723BFF",
+    backgroundColor: "#00C03B",
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 24,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -343,31 +266,27 @@ const styles = StyleSheet.create({
   },
   updateButtonText: {
     color: "white",
-    fontSize: 14,
+    fontSize: 17,
     fontFamily: "Satoshi-Medium",
   },
   turnOffButton: {
-    marginTop: 12,
-    backgroundColor: "#FF5500",
+    marginTop: 2,
+    backgroundColor: "#723BFF",
     padding: 12,
-    borderRadius: 24,
+    borderRadius: 10,
     alignItems: "center",
   },
   turnOffButtonText: {
     color: "white",
-    fontSize: 14,
+    fontSize: 17,
     fontFamily: "Satoshi-Medium",
   },
-  slider: {
-    width: "100%",
-    height: 80,
-  },
-  brightnessContainer: {},
   divider: {
     height: 1,
     backgroundColor: "#e0e0e0",
-    marginVertical: 10,
+    marginTop: 5,
   },
 });
+
 
 export default DryerSettings;
