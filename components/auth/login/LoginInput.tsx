@@ -1,18 +1,19 @@
 import { AuthContext } from "@/context/authContext";
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Auth } from "aws-amplify";
 import { Ionicons } from "@expo/vector-icons";
 
 const LoginInput = () => {
     const { logIn } = useContext(AuthContext);
+    const [sendingLoginRequest, setSendingLoginRequest] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const [secureText, setSecureText] = useState(true);
-    const [checked, setChecked] = useState(false);
+    const [rememberUser, setRememberUser] = useState(false);
 
     const [loginError, setLoginError] = useState<string>("");
 
@@ -28,15 +29,27 @@ const LoginInput = () => {
         }
 
         try {
-            logIn(username, password);
+            setSendingLoginRequest(true);
+            const signedInUser = await Auth.signIn(username, password);
+            await logIn(signedInUser, rememberUser);
             router.replace("/");
         } catch (error) {
             console.error("Login error:", error);
             if (error instanceof Error) {
-                setLoginError(error.message);
+                handleLoginError(error)
             } else {
                 setLoginError("Something went wrong while signing in.");
             }
+        } finally {
+            setSendingLoginRequest(false);
+        }
+    }
+
+    function handleLoginError(error:Error) {
+        if(error.message === "User does not exist."){
+            setLoginError("Incorrect username or password.");
+        } else {
+            setLoginError(error.message);
         }
     }
 
@@ -48,8 +61,12 @@ const LoginInput = () => {
         return password.length > 0;
     }
 
-    function GoToRegisterScreen() {
+    function goToRegisterScreen() {
         router.push("/RegisterScreen");
+    }
+
+    function goToPasswordReset() {
+        router.push("/PasswordReset")
     }
 
     return (
@@ -58,7 +75,7 @@ const LoginInput = () => {
                 value={username}
                 onChangeText={setUsername}
                 placeholderTextColor="gray"
-                placeholder="Email Address"
+                placeholder="Username"
                 style={style.textField}
                 autoCapitalize="none"
                 keyboardType="email-address"
@@ -79,20 +96,26 @@ const LoginInput = () => {
                 </TouchableOpacity>
             </View>
 
+            {loginError ? <Text style={style.errorText}>{loginError}</Text> : null}
+
             <View style={style.optionsRow}>
-                <Pressable style={style.checkboxContainer} onPress={() => setChecked(!checked)}>
-                    <View style={[style.checkbox, checked && style.checked]} />
+                <Pressable style={style.checkboxContainer} onPress={() => setRememberUser(!rememberUser)}>
+                    <View style={[style.checkbox, rememberUser && style.checked]} />
                     <Text style={style.label}>Remember me</Text>
                 </Pressable>
-                <Pressable onPress={() => router.push("/")}>
+                <Pressable onPress={() => goToPasswordReset()}>
                     <Text style={style.forgotPasswordText}>Forgot Password?</Text>
                 </Pressable>
             </View>
 
-            {loginError ? <Text style={style.errorText}>{loginError}</Text> : null}
+            
 
             <Pressable onPress={Login} style={style.button}>
-                <Text style={style.buttonText}>Login</Text>
+                {!sendingLoginRequest ? 
+                    <Text style={style.buttonText}>Login</Text> 
+                : 
+                    <ActivityIndicator style={style.loginIndicator} color="white"/>
+                }
             </Pressable>
 
             <View style={style.dividerContainer}>
@@ -103,7 +126,7 @@ const LoginInput = () => {
 
             <View style={style.signUpRow}>
                 <Text style={style.signUpQuestionText}>No Filametric account yet?</Text>
-                <Pressable onPress={GoToRegisterScreen} >
+                <Pressable onPress={goToRegisterScreen} >
                     <Text style={style.signUpText} >Sign up</Text>
                 </Pressable>
             </View>
@@ -240,6 +263,10 @@ const style = StyleSheet.create({
         fontFamily: 'Satoshi',
         color: "#FF5500",
         fontWeight: "700"
+    },
+    loginIndicator: {
+        width: 16,
+        height: 16
     }
 });
 

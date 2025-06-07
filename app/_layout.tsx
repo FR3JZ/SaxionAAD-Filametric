@@ -6,6 +6,7 @@ import { Amplify } from 'aws-amplify';
 import awsconfig from '@/src/aws-exports'
 import { ErrorSnackbarProvider } from "@/context/errorMessageContext";
 import { StatusBar } from "expo-status-bar";
+
 Amplify.configure(awsconfig);
 
 export default function RootLayout() {
@@ -22,6 +23,9 @@ export default function RootLayout() {
                             headerShown: false
                         }}/>
                         <Stack.Screen name="RegisterScreen" options={{
+                            headerShown: false
+                        }}/>
+                        <Stack.Screen name="PasswordReset" options={{
                             headerShown: false
                         }}/>
                     </Stack>
