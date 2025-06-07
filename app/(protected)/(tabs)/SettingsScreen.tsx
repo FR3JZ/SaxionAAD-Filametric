@@ -4,8 +4,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import SettingsPage from '@/components/settings/SettingsPage';
 
 export default function Settings() {
-  const auth = useContext(AuthContext);
-
   return (
     <View style={styles.container}>
       <SettingsPage/>
