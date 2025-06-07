@@ -1,4 +1,4 @@
-import VerifyInput from "../components/auth/VerifyInput";
+import VerifyInput from "../components/auth/register/VerifyInput";
 import { StyleSheet, View } from "react-native";
 import React from 'react';
 
