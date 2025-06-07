@@ -1,4 +1,3 @@
-// File: StatsScreen.tsx
 import Statistics from '@/components/stats/statistics';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';

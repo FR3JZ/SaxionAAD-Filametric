@@ -1,16 +1,14 @@
-import { AuthContext } from '@/context/authContext';
-import React, { useContext } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import SettingsPage from '@/components/settings/SettingsPage';
 
 export default function Settings() {
   const auth = useContext(AuthContext);
 
   return (
     <View style={styles.container}>
-      <Text>Settings</Text>
-      <Pressable onPress={auth.logOut}>
-        <Text>Log out</Text>
-      </Pressable>
+      <SettingsPage/>
     </View>
   );
 }
