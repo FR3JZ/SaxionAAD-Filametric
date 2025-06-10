@@ -1,15 +1,20 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { Auth } from 'aws-amplify';
 
 const DryerAddHeader = () => {
 
     const handlePostRequest = async () => {
+        const session = await Auth.currentSession();
+        const token = session.getIdToken().getJwtToken();
         try {
-            const response = await fetch('https://hkp9clnxq6.execute-api.eu-north-1.amazonaws.com/dev/profiles/add', {
+            console.log(token);
+            const response = await fetch('https://hkp9clnxq6.execute-api.eu-north-1.amazonaws.com/dev/profiles', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
               },
               body: JSON.stringify({
                 "name": "PETG Quick Dry",
@@ -21,13 +26,12 @@ const DryerAddHeader = () => {
                 "storage_temperature": 30.0
               }),
             });
-      
+            
+            console.log(response);
             const data = await response.json();
             console.log('Server response:', data);
-            Alert.alert('Succes', 'POST request verstuurd!');
           } catch (error) {
             console.error('Fout bij POST request:', error);
-            Alert.alert('Fout', 'Er ging iets mis bij het versturen.');
           }
     }
 
@@ -36,7 +40,7 @@ const DryerAddHeader = () => {
             <View style={styles.topBar}>
                 <View style={styles.placeholder} />
                 <Text style={styles.titleText}>Profiles</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handlePostRequest}>
                     <Ionicons name="add-circle" size={35} color={'#747474'} />
                 </TouchableOpacity>
             </View>
