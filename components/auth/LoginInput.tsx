@@ -1,50 +1,53 @@
-import { AuthContext } from "@/context/authContext";
+import { AuthContext } from "@/context/authContext"; // Zorg dat dit pad correct is
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View, Alert } from "react-native"; // Importeer Alert voor foutmeldingen
 import React from "react";
-import { Auth } from "aws-amplify";
+// De Auth import is hier niet meer nodig, want we gebruiken de AuthContext's logIn functie
+// import { Auth } from "aws-amplify"; // Deze lijn kan verwijderd worden
 
 const LoginInput = () => {
-    const { setUser } = useContext(AuthContext);
+    // Haal de 'logIn' functie op uit de AuthContext
+    // 'setUser' is hier niet meer nodig, omdat logIn dit intern afhandelt
+    const { logIn } = useContext(AuthContext);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const [loginError, setLoginError] = useState<string>("");
 
-    async function Login() {
-        if (!isEmailFilled()) {
-            setLoginError("Please enter an email.");
+    async function handleLogin() { // Naam gewijzigd naar handleLogin voor duidelijkheid
+        setLoginError(""); // Reset foutmelding bij elke poging
+
+        if (!email) { // Kortere controle
+            setLoginError("Vul alsjeblieft een e-mailadres in.");
             return;
         }
 
-        if (!isPasswordFilled()) {
-            setLoginError("Please enter a password.");
+        if (!password) { // Kortere controle
+            setLoginError("Vul alsjeblieft een wachtwoord in.");
             return;
         }
 
         try {
-            const user = await Auth.signIn(email, password);
-            console.log("Signed in user:", user);
-
-            setUser(user);
-            router.replace("/");
-        } catch (error) {
-            console.error("Login error:", error);
+            // Roep de logIn functie van de AuthContext aan
+            await logIn(email, password);
+            console.log("LoginInput: Inloggen succesvol via AuthContext.");
+            // Navigatie wordt al afgehandeld in AuthContext (router.replace("/(protected)");)
+            // Dus hier hoef je geen aparte router.replace() te doen, tenzij je een specifieke afwijking wilt.
+            // Als je wilt dat deze component expliciet navigeert, zorg dan dat de AuthContext géén navigatie doet.
+            // Voor nu houden we de navigatie centraal in AuthContext, dus deze regel is hier niet nodig.
+            // router.replace("/(protected)");
+        } catch (error: any) {
+            console.error("LoginInput: Fout bij inloggen:", error);
+            // Gebruik de ErrorSnackbarProvider of een Alert om de fout te tonen
             if (error instanceof Error) {
-                setLoginError(error.message);
+                setLoginError(error.message); // Toon de specifieke fout van Cognito/Amplify
+                Alert.alert("Inlogfout", error.message); // Optioneel: toon een Alert
             } else {
-                setLoginError("Something went wrong while signing in.");
+                setLoginError("Er is iets misgegaan tijdens het inloggen.");
+                Alert.alert("Inlogfout", "Er is iets misgegaan tijdens het inloggen.");
             }
         }
-    }
-
-    function isEmailFilled(): boolean {
-        return email.length > 0;
-    }
-
-    function isPasswordFilled(): boolean {
-        return password.length > 0;
     }
 
     function GoToRegisterScreen() {
@@ -67,14 +70,14 @@ const LoginInput = () => {
                 onChangeText={setPassword}
                 secureTextEntry={true}
                 placeholderTextColor="gray"
-                placeholder="Password"
+                placeholder="Wachtwoord"
                 style={style.textField}
             />
             {loginError.length > 0 && (
                 <Text style={style.errorText}>{loginError}</Text>
             )}
 
-            <Pressable onPress={Login} style={style.button}>
+            <Pressable onPress={handleLogin} style={style.button}> {/* Gebruik handleLogin */}
                 <Text style={style.buttonText}>Login</Text>
             </Pressable>
             <Pressable onPress={GoToRegisterScreen} style={style.button}>

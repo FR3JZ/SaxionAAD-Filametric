@@ -1,16 +1,17 @@
+// context/authContext.tsx
 import { getLoggedInState, setLoggedInState } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
-import { Auth } from "aws-amplify";
+import { Auth, Hub } from "aws-amplify"; // Importeer Hub
 
 type AuthState = {
     isLoggedIn: boolean;
-    isReady: boolean;
-    user: any;
+    isReady: boolean; // Geeft aan dat de initiële authenticatiecheck is voltooid
+    user: any; // Kun je specifieker maken met CognitoUser type indien gewenst
     setUser: (user: any) => void;
-    logIn: (email: string, password: string) => void;
-    logOut: () => void;
+    logIn: (email: string, password: string) => Promise<void>; // Maak dit een Promise
+    logOut: () => Promise<void>; // Maak dit een Promise
 };
 
 export const AuthContext = createContext<AuthState>({
@@ -18,8 +19,8 @@ export const AuthContext = createContext<AuthState>({
     isReady: false,
     user: null,
     setUser: () => {},
-    logIn: () => {},
-    logOut: () => {},
+    logIn: async () => {}, // Voeg async toe voor Promise
+    logOut: async () => {}, // Voeg async toe voor Promise
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -30,62 +31,98 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     const logIn = async (email: string, password: string) => {
         try {
-            const user = await Auth.signIn(email, password);
-            console.log("Signed in user:", user);
+            const cognitoUser = await Auth.signIn(email, password);
+            console.log("Signed in user:", cognitoUser);
 
-            await setLoggedInState("LoggedIn");
-            setIsLoggedIn(true);
-            setUser(user);
-            router.replace("/");
-        } catch (error) {
+            // De Hub listener zal de state hieronder correct bijwerken.
+            // Je kunt hier eventueel een navigatie doen, maar het is beter om de lay-out te laten reageren.
+            // Voor directere navigatie na een login via een formulier:
+            router.replace("/(protected)/(tabs)"); 
+        } catch (error: any) { // Specificeer het type error als 'any' of een specifieker type
             console.error("Login failed:", error);
-        } finally {
-            setIsReady(true);
+            // Gooi de fout opnieuw zodat de component die logIn aanroept deze kan afhandelen
+            throw error;
         }
+        // finally blok is hier niet nodig, Hub listener en initiële check handelen isReady af
     };
 
     const logOut = async () => {
         try {
             await Auth.signOut();
-            await setLoggedInState("LoggedOut");
+            // De Hub listener zal de state hieronder correct bijwerken.
         } catch (e) {
             console.error("Failed to log out:", e);
-        } finally {
-            setIsLoggedIn(false);
-            setUser(null);
-            setIsReady(false);
-            router.replace("/LoginScreen");
+            throw e; // Hergooi de fout
         }
+        // finally blok is hier niet nodig, Hub listener handelen isReady, isLoggedIn, user af
     };
 
-    useEffect(() => {
-        checkLogginState();
-    }, []);
-
-    const checkLogginState = async () => {
-        let hasLoggedIn = false;
+    // Functie om de initiële authenticatiestatus te controleren
+    const checkAuthenticationStatus = async () => {
+        let authenticated = false;
         try {
-            const logginState = await getLoggedInState();
-            if (logginState !== null) {
-                hasLoggedIn = logginState === "LoggedIn";
-            }
-
-            if (hasLoggedIn) {
-                try {
-                    const currentUser = await Auth.currentAuthenticatedUser();
-                    setUser(currentUser);
-                } catch {
-                    setUser(null);
-                    hasLoggedIn = false;
-                }
-            }
+            // Controleer of er een geldige sessie is
+            const cognitoUser = await Auth.currentAuthenticatedUser();
+            setUser(cognitoUser);
+            authenticated = true;
+            console.log('checkAuthenticationStatus: Gebruiker is al ingelogd:', cognitoUser.username);
+            await setLoggedInState("LoggedIn"); // Update je lokale opslag
         } catch (e) {
-            console.error("Failed to get loggin state:", e);
+            setUser(null);
+            authenticated = false;
+            console.log('checkAuthenticationStatus: Geen actieve sessie of sessie verlopen.');
+            await setLoggedInState("LoggedOut"); // Zorg ervoor dat je lokale opslag consistent is
         } finally {
-            setIsLoggedIn(hasLoggedIn);
-            setIsReady(true);
+            setIsLoggedIn(authenticated);
+            setIsReady(true); // Belangrijk: De initiële check is voltooid
         }
     };
+
+    // Effect voor het luisteren naar Amplify Auth gebeurtenissen en de initiële check
+    useEffect(() => {
+        // Initieel de authenticatiestatus controleren
+        checkAuthenticationStatus();
+
+        // Listener voor Amplify Auth gebeurtenissen
+        const listener = (data: any) => {
+            console.log('Auth Hub event:', data.payload.event);
+            switch (data.payload.event) {
+                case 'signIn':
+                    setUser(data.payload.data);
+                    setIsLoggedIn(true);
+                    setLoggedInState("LoggedIn");
+                    console.log('Auth Hub: Gebruiker succesvol ingelogd:', data.payload.data.username);
+                    // Optioneel: Navigeer hier als je zeker wilt zijn van de redirect
+                    // router.replace("/(protected)");
+                    break;
+                case 'signOut':
+                    setUser(null);
+                    setIsLoggedIn(false);
+                    setLoggedInState("LoggedOut");
+                    console.log('Auth Hub: Gebruiker uitgelogd');
+                    router.replace("/LoginScreen"); // Navigeer naar login na uitloggen
+                    break;
+                case 'signIn_failure':
+                    console.error('Auth Hub: Login mislukt:', data.payload.data);
+                    setUser(null);
+                    setIsLoggedIn(false);
+                    setLoggedInState("LoggedOut");
+                    // Geen directe navigatie hier, de LoginScreen behandelt fouten.
+                    break;
+                case 'autoSignIn': // Als auto-login plaatsvindt (bijv. met een ververst token)
+                case 'autoSignIn_failure':
+                    // checkAuthenticationStatus() zal deze gevallen afvangen
+                    checkAuthenticationStatus();
+                    break;
+                // Voeg andere relevante events toe indien nodig
+            }
+        };
+
+        Hub.listen('auth', listener); // Luister naar 'auth' categorie events
+
+        // Cleanup functie: Verwijder de listener wanneer de component unmount
+        return () => Hub.remove('auth', listener);
+    }, []); // Lege dependency array zorgt ervoor dat dit effect slechts één keer runt (bij mount)
 
     return (
         <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut }}>

@@ -2,7 +2,7 @@ import RegisterInput from "../components/auth/RegisterInput";
 import { StyleSheet, View } from "react-native";
 import React from 'react';
 
-export default function Register() {
+export default function RegisterScreen() {
     return (
         <View style={screenStyle.container}>
             <RegisterInput/>
