@@ -84,7 +84,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
   return (
     <View style={style.container}>
         <View style={style.header}>
-            <Image style={style.image} source={require('../../../assets/images/Filametric_F_logo.png')} />
+            <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
             <Text style={style.titleText}>Enter the 6-digit code we emailed you</Text>
         </View>
 
@@ -133,8 +133,7 @@ const style = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 32,
-        marginTop: 32
+        marginTop: 60
     },
     titleText: {
         fontFamily: "Satoshi",
@@ -144,8 +143,8 @@ const style = StyleSheet.create({
         textAlign: 'center'
     },
     image: {
-        width: 57,
-        height: 54,
+        width: 100,
+        height: 90,
         resizeMode: 'contain',
     },
     container: {
@@ -166,12 +165,12 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
     buttonTextCodeSend: {
         color: "#5D5D5D",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
     errorText: {
@@ -212,7 +211,7 @@ const style = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 16,
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "500",
     },
     promptText: {

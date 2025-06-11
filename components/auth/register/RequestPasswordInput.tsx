@@ -44,7 +44,7 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
     return (
         <View>
             <View style={style.header}>
-                <Image style={style.image} source={require('../../../assets/images/Filametric_F_logo.png')} />
+                <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
                 <Text style={style.titleText}>Create a password</Text>
             </View>
 
@@ -65,29 +65,29 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
                     autoCapitalize="none"
                     placeholderTextColor="gray"
                     placeholder="Password"
-                    style={{ flex: 1 }}
+                    style={{ flex: 1, fontSize: 20}}
                 />
                 <TouchableOpacity onPress={() => setSecureText1(!secureText1)} style={style.toggle}>
                     {secureText1 ? <Ionicons size={24} name='eye-sharp' /> : <Ionicons size={24} name='eye-off-sharp' />}
                 </TouchableOpacity>
             </View>
 
-            <View>
+            <View style={style.checkRows}>
                 <View style={style.checkRow}>
                     <Ionicons style={[style.icon, { color: isCorrectLength ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
-                    <Text>A minimum of 8 characters</Text>
+                    <Text style={style.checkRowText}>A minimum of 8 characters</Text>
                 </View>
                 <View style={style.checkRow}>
                     <Ionicons style={[style.icon, { color: hasLowerAndUpercase ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
-                    <Text>Lower and uppercase letter</Text>
+                    <Text style={style.checkRowText}>Lower and uppercase letter</Text>
                 </View>
                 <View style={style.checkRow}>
                     <Ionicons style={[style.icon, { color: hasNumber ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
-                    <Text>At least 1 number</Text>
+                    <Text style={style.checkRowText}>At least 1 number</Text>
                 </View>
                 <View style={style.checkRow}>
                     <Ionicons style={[style.icon, { color: hasSymbol ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
-                    <Text>At least 1 symbol</Text>
+                    <Text style={style.checkRowText}>At least 1 symbol</Text>
                 </View>
             </View>
 
@@ -106,19 +106,18 @@ const style = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 32,
-        marginTop: 32
+        marginTop: 60
     },
     titleText: {
         fontFamily: "Satoshi",
         fontSize: 32,
         fontWeight: "700",
-        marginTop: 24,
+        marginTop: 40,
         textAlign: 'center'
     },
     image: {
-        width: 57,
-        height: 54,
+        width: 100,
+        height: 90,
         resizeMode: 'contain',
     },
     button: {
@@ -138,7 +137,7 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
     textField: {
@@ -178,24 +177,37 @@ const style = StyleSheet.create({
     },
     icon: {
         color: "#888888",
+        marginRight: 10
     },
+
+    checkRows: {
+        marginTop: 20,
+        marginBottom: 20
+    },
+
     checkRow: {
         flexDirection: "row",
         alignItems: "center",
         padding: 6,
     },
+
+    checkRowText: {
+        fontSize: 16,
+    },
+
     goBackText: {
         alignSelf: 'center',
         marginTop: 24,
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "500",
     },
     textContainer: {
         justifyContent: "center",
         alignItems: "center",
-        padding: 4,
         marginVertical: 4,
+        marginTop: 15,
+        marginBottom: 30
     },
     pageText: {
         fontFamily: "Satoshi",

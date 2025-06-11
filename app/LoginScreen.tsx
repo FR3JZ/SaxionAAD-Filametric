@@ -5,7 +5,7 @@ import React from 'react';
 export default function LoginScreen() {
     return (
         <View style={styles.container}>
-            <Image style={styles.image} source = {require('../assets/images/filametric_f_logo.png')} />
+            <Image style={styles.image} source = {require('../assets/images/Filametric_F_Logo.png')} />
             <Text style={styles.title}>Log in or sign up</Text>
             <LoginInput></LoginInput>
         </View>

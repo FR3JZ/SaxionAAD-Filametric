@@ -73,7 +73,7 @@ const LoginInput = () => {
                     autoCapitalize="none"
                     placeholderTextColor="gray"
                     placeholder="Password"
-                    style={{flex: 1}}
+                    style={style.passwordInput}
                 />
                 <TouchableOpacity onPress={() => setSecureText(!secureText)} style={style.toggle}>
                     {secureText ? <Ionicons size={24} name='eye-sharp'/>: <Ionicons size={24} name='eye-off-sharp'/>}
@@ -152,7 +152,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#E7E7E7",
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 20,
         backgroundColor: "white",
     },
     passwordContainer: {
@@ -168,10 +168,15 @@ const style = StyleSheet.create({
         borderRadius: 16,
         borderWidth: 1,
         borderColor: "#E7E7E7",
-        fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 25,
         backgroundColor: "white",
     },
+
+    passwordInput: {
+        flex: 1,
+        fontSize: 20
+    },
+
     toggle: {
         paddingHorizontal: 10,
     },
@@ -194,8 +199,7 @@ const style = StyleSheet.create({
         backgroundColor: '#000000',
     },
     label: {
-        fontSize: 16,
-        fontFamily: "Satoshi",
+        fontSize: 18
     },
     errorText: {
         color: 'red',
@@ -210,7 +214,7 @@ const style = StyleSheet.create({
     },
     forgotPasswordText: {
         color: '#000000',
-        fontSize: 16,
+        fontSize: 18,
         fontFamily: 'Satoshi',
         textDecorationLine: 'underline',
     },

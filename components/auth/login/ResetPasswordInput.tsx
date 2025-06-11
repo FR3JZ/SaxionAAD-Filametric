@@ -70,7 +70,7 @@ const PasswordResetInput = () => {
     return (
         <View style={style.container}>
             <View style={style.header}>
-                <Image style={style.image} source={require('../../../assets/images/Filametric_F_logo.png')} />
+                <Image style={style.image} source={require('@/assets/images/Filametric_F_Logo.png')} />
                 <Text style={style.titleText}>Reset your password</Text>
             </View>
 
@@ -158,7 +158,7 @@ const PasswordResetInput = () => {
             }
 
             <Pressable onPress={() => router.push("/LoginScreen")}>
-                <Text style={style.goBackText}>Go back to login</Text> 
+                <Text style={style.goBackText}>Go back</Text> 
             </Pressable>
         </View>
     )
@@ -206,7 +206,7 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
     textField: {
@@ -221,7 +221,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#E7E7E7",
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 20,
         backgroundColor: "white",
     },
     loadingIndicator: {
@@ -252,7 +252,7 @@ const style = StyleSheet.create({
         alignSelf: 'center',
         marginTop: 24,
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: "500",
     },
     icon: {

@@ -11,7 +11,7 @@ const WelcomeUser: React.FC<Props> = ({username, goToLogin}) => {
     return (
         <View>
             <View style={style.header}>
-                <Image style={style.imageLogo} source={require('../../../assets/images/Filametric_F_logo.png')} />
+                <Image style={style.imageLogo} source={require('../../../assets/images/Filametric_F_Logo.png')} />
                 <Text style={style.titleText}>Hi, {username}!</Text>
             </View>
 
@@ -41,8 +41,7 @@ const style = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 32,
-        marginTop: 32
+        marginTop: 60
     },
     titleText: {
         fontFamily: "Satoshi",
@@ -52,8 +51,8 @@ const style = StyleSheet.create({
         textAlign: 'center'
     },
     imageLogo: {
-        width: 57,
-        height: 54,
+        width: 100,
+        height: 90,
         resizeMode: 'contain',
     },
     textContainer: {
@@ -76,7 +75,8 @@ const style = StyleSheet.create({
     },
     soloImage: {
         width: 300,
-        height: 300
+        height: 300,
+        marginTop: 40
     },
     button: {
         height: 64,
@@ -95,7 +95,7 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
 })

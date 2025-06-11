@@ -34,7 +34,7 @@ const UsernameInput: React.FC<Props> = ({setNewUsername, sendDetails, goBack, is
     return (
         <View>
             <View style={style.header}>
-                <Image style={style.image} source={require('../../../assets/images/Filametric_F_logo.png')} />
+                <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
                 <Text style={style.titleText}>How can we call you?</Text>
             </View>
 
@@ -72,19 +72,17 @@ const style = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 32,
-        marginTop: 32
+        marginTop: 60,
     },
     titleText: {
-        fontFamily: "Satoshi",
+        fontFamily: "Satoshi-Bold",
         fontSize: 32,
-        fontWeight: "700",
         marginTop: 24,
         textAlign: 'center'
     },
     image: {
-        width: 57,
-        height: 54,
+        width: 100,
+        height: 90,
         resizeMode: 'contain',
     },
     button: {
@@ -92,7 +90,7 @@ const style = StyleSheet.create({
         backgroundColor: "#FF5500",
         justifyContent: 'center',
         alignItems: "center",
-        marginTop: 8,
+        marginTop: 20,
         marginBottom: 4,
         borderWidth: 1,
         borderRadius: 16,
@@ -104,7 +102,7 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
+        fontSize: 20,
         fontFamily: "Satoshi",
     },
     textField: {
@@ -118,14 +116,14 @@ const style = StyleSheet.create({
         borderRadius: 16,
         borderWidth: 1,
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 20,
         backgroundColor: "white",
     },
     goBackText: {
         alignSelf: 'center',
         marginTop: 24,
         fontFamily: "Satoshi",
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: "500",
     },
     textContainer: {
@@ -139,7 +137,8 @@ const style = StyleSheet.create({
         fontSize: 16,
         fontWeight: "500",
         color: "#888888",
-        textAlign: 'center'
+        textAlign: 'center',
+        marginBottom: 20
     },
     activity: {
         height: 16,
