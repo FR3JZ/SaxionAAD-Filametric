@@ -1,14 +1,27 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, ScrollView } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import ProfilesList from './ProfilesList';
 import ProfileService from '@/services/profileService';
+import { useFocusEffect } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 
 const ProfileOverviewPage = () => {
   const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
   const [profiles, setProfiles] = useState<any[]>([]);
+
+  
+  const fetchProfiles = async () => {
+    const json = await ProfileService.getProfiles();
+    setProfiles(json['profiles']);
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchProfiles();
+    }, [])
+  );
 
   useEffect(() => {
     const fetchProfiles = async () => {

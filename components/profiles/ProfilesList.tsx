@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
 
 const ProfilesList = ({ profiles }: { profiles: any[] }) => {
     const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
     const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
-    useEffect(() => {
-        const newAnimations: { [key: string]: Animated.Value } = {};
-        profiles.forEach((profile: any) => {
+    useFocusEffect(
+        useCallback(() => {
+            setOpenStates({});
+            setAnimations({});
+
+            const newAnimations: { [key: string]: Animated.Value } = {};
+            profiles.forEach(profile => {
             newAnimations[profile.id] = new Animated.Value(0);
-        });
-        setAnimations(newAnimations);
-    }, []);
-    
+            });
+
+            setAnimations(newAnimations);
+        }, [profiles])
+    );
 
     const toggleProfile = (profileID: string) => {
         const isOpen = openStates[profileID];
@@ -46,7 +52,11 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
                             <View key={profile.id} style={styles.closedProfile}>
                                 <View style={styles.closedProfileTitle}>
                                     <View style={styles.closedProfileTitleName}>
-                                        <Ionicons name="star-outline" size={25} color={'#F6B900'} />
+                                        <Ionicons
+                                            name={profile.customizable ? 'person-outline' : 'star-outline'}
+                                            size={25}
+                                            color={profile.customizable ? '#723BFF' : '#F6B900'} // Paars
+                                        />
                                         <Text style={styles.closedProfileTitleText}>{profile.name}</Text>
                                     </View>
                                     <Pressable onPress={() => toggleProfile(profile.id)}>
