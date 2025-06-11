@@ -47,7 +47,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
   timeRemaining = '0h 0m',
   totalTime = '8h 0m',
   humidity = '10%',
-  electricity = '0.39 kWh',
+  electricity = '0',
   currentProfile,
   isExpanded,
   onToggleExpand,
