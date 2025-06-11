@@ -20,12 +20,12 @@ const LoginInput = () => {
         setLoginError("");
 
         if (!username) {
-            setLoginError("Vul alsjeblieft een e-mailadres in.");
+            setLoginError("Please enter a username");
             return;
         }
 
         if (!password) {
-            setLoginError("Vul alsjeblieft een wachtwoord in.");
+            setLoginError("Please enter a password");
             return;
         }
 
@@ -96,7 +96,7 @@ const LoginInput = () => {
 
             <TouchableOpacity onPress={handleLogin} style={style.button}>
                 {!sendingLoginRequest ? 
-                    <Text style={style.buttonText}>Login</Text> 
+                    <Text style={style.buttonText}>Sign in</Text> 
                 : 
                     <ActivityIndicator style={style.loginIndicator} color="white"/>
                 }
@@ -137,8 +137,8 @@ const style = StyleSheet.create({
     },
     buttonText: {
         color: "white",
-        fontSize: 16,
-        fontFamily: "Satoshi",
+        fontSize: 20,
+        fontFamily: "Satoshi-Medium",
     },
     textField: {
         marginTop: 4,
@@ -183,7 +183,7 @@ const style = StyleSheet.create({
     checkbox: {
         width: 24,
         height: 24,
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: '#000000',
         marginRight: 10,
         justifyContent: 'center',
