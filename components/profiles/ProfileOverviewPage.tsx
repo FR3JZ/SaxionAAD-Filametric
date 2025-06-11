@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#F9F9F9',
     paddingVertical: 8,
     borderRadius: 10,
     alignSelf: 'center',
@@ -79,12 +78,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    width: '90%'
+    width: '100%',
+    height: 80
   },
 
   tab: {
-    width: '48%',
-    height: 40,
+    width: '43%',
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -93,7 +93,12 @@ const styles = StyleSheet.create({
   },
 
   activeTab: {
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 }, 
+    shadowOpacity: 0.1,          
+    shadowRadius: 4,             
+    elevation: 2, 
   },
 
   tabText: {
