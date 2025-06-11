@@ -80,7 +80,7 @@ const PasswordResetInput = () => {
                         value={username}
                         onChangeText={setUsername}
                         placeholderTextColor="gray"
-                        placeholder="Please your username"
+                        placeholder="Name"
                         style={style.textField}
                         autoCapitalize="none"
                     />
@@ -101,7 +101,7 @@ const PasswordResetInput = () => {
                         value={resetCode}
                         onChangeText={setResetCode}
                         placeholderTextColor="gray"
-                        placeholder="Please the code that you where send"
+                        placeholder="Reset code"
                         style={style.textField}
                         autoCapitalize="none"
                     />
@@ -118,8 +118,8 @@ const PasswordResetInput = () => {
                             secureTextEntry={secureText1}
                             autoCapitalize="none"
                             placeholderTextColor="gray"
-                            placeholder="Password"
-                            style={{ flex: 1 }}
+                            placeholder="New password"
+                            style={{ flex: 1, fontSize: 20 }}
                         />
                         <TouchableOpacity onPress={() => setSecureText1(!secureText1)} style={style.toggle}>
                             {secureText1 ? <Ionicons size={24} name='eye-sharp' /> : <Ionicons size={24} name='eye-off-sharp' />}
