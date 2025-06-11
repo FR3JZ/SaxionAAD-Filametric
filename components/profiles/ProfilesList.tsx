@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import ProfileService from '../../services/profileService';
 
-const ProfilesList = ({ type }: { type: string }) => {
-    const [profiles, setProfiles] = useState<any[]>([]);
+const ProfilesList = ({ profiles }: { profiles: any[] }) => {
     const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
     const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
     useEffect(() => {
-        const fetchProfiles = async () => {
-            const json = await ProfileService.getProfiles();
-            const profilesArray = json['profiles'];
-            setProfiles(profilesArray);
-    
-            const newAnimations: { [key: string]: Animated.Value } = {};
-            profilesArray.forEach((profile: any) => {
-                newAnimations[profile.id] = new Animated.Value(0);
-            });
-            setAnimations(newAnimations);
-        };
-    
-        fetchProfiles();
+        const newAnimations: { [key: string]: Animated.Value } = {};
+        profiles.forEach((profile: any) => {
+            newAnimations[profile.id] = new Animated.Value(0);
+        });
+        setAnimations(newAnimations);
     }, []);
     
 
@@ -41,17 +31,8 @@ const ProfilesList = ({ type }: { type: string }) => {
 
     return (
         <View>
-            <View style={styles.titleContainer}>
-                <Text style={styles.titleText}>{type} profiles</Text>
-                <View style={styles.titleProfileAmount}>
-                    <Text style={styles.titleProfileAmountText}>{profiles.length} profiles</Text>
-                </View>
-            </View>
-
             <View style={styles.profilesContainer}>
-                {profiles
-                    .filter(profile => type === "Custom" ? profile.Customizable : !profile.Customizable)
-                    .map(profile => {
+                {profiles.map(profile => {
                         const animatedHeight = animations[profile.id]
                             ? animations[profile.id].interpolate({
                                 inputRange: [0, 1],

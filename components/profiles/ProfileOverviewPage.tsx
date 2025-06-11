@@ -2,14 +2,24 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, ScrollView } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import ProfilesList from './ProfilesList';
+import ProfileService from '@/services/profileService';
 
 const screenWidth = Dimensions.get('window').width;
 
 const ProfileOverviewPage = () => {
   const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
+  const [profiles, setProfiles] = useState<any[]>([]);
 
+  useEffect(() => {
+    const fetchProfiles = async () => {
+        const json = await ProfileService.getProfiles();
+        setProfiles(json['profiles']);
+    };
+
+    fetchProfiles();
+}, []);
+  
   const translateX = useRef(new Animated.Value(0)).current;
-
   const handleTabSwitch = (newTab: "Preset" | "Custom") => {
     if (newTab === activeTab) return;
 
@@ -25,14 +35,6 @@ const ProfileOverviewPage = () => {
     }).start();
   };
 
-  const renderTabContent = () => {
-    if (activeTab === "Preset") {
-      return <ProfilesList type='Preset' />;
-    } else {
-      return <ProfilesList type='Custom' />;
-    }
-  };
-
   return (
     <ScrollView>
       <View style={styles.tabContainer}>
@@ -41,7 +43,7 @@ const ProfileOverviewPage = () => {
           style={[styles.tab, activeTab === "Preset" && styles.activeTab]}
         >
           <Ionicons name="star-outline" size={22} color={activeTab === "Preset" ? '#000' : '#B0B0B0'} />
-          <Text style={[styles.tabText, activeTab === "Preset" && styles.activeTabText]}>Preset</Text>
+          <Text style={[styles.tabText, activeTab === "Preset" && styles.activeTabText]}>Preset ({profiles.filter(profile => profile.customizable === false).length})</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -49,15 +51,15 @@ const ProfileOverviewPage = () => {
           style={[styles.tab, activeTab === "Custom" && styles.activeTab]}
         >
           <Ionicons name="person-outline" size={22} color={activeTab === "Custom" ? '#000' : '#B0B0B0'} />
-          <Text style={[styles.tabText, activeTab === "Custom" && styles.activeTabText]}>Custom</Text>
+          <Text style={[styles.tabText, activeTab === "Custom" && styles.activeTabText]}>Custom ({profiles.filter(profile => profile.customizable === true).length})</Text>
         </TouchableOpacity>
       </View>
 
       <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
         {activeTab === "Preset" ? (
-          <ProfilesList type="Preset" />
+          <ProfilesList profiles={profiles.filter(profile => profile.customizable === false)} />
         ) : (
-          <ProfilesList type="Custom" />
+          <ProfilesList profiles={profiles.filter(profile => profile.customizable === true)} />
         )}
     </Animated.View>
     </ScrollView>
