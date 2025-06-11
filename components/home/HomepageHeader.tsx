@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { AuthContext } from "@/context/authContext";
 const Header = () => {
-
+    const auth = useContext(AuthContext)
     return (
         <View style={styles.headerWrapper}>
             <View style={styles.topBar}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => auth.logOut()}>
                     <Ionicons name="person" size={28} color="#444" />
                 </TouchableOpacity>
 
