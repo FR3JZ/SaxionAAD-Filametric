@@ -1,60 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from "react-native"
-import { Picker } from '@react-native-picker/picker';
+import { StyleSheet, View } from 'react-native';
+import FilametricPicker from '../../custom/FilametricPicker';
 
 interface Props {
-    dryerChanged: (dryer: string) => void;
-    timeFrameChanged: (timeFrame: string) => void;
+  dryerChanged: (dryer: string) => void;
+  timeFrameChanged: (timeFrame: string) => void;
 }
 
-const DataSelectionCard: React.FC<Props> = ({dryerChanged, timeFrameChanged}) => {
-    const [dryer, setDryer] = useState<string>("All dryers");
-    const [timeFrame, setTimeFrame] = useState<string>("1 day");
-    const [dryers, setDryers] = useState<string[]>([]);
+const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) => {
+  const [dryer, setDryer] = useState<string>('All dryers');
+  const [timeFrame, setTimeFrame] = useState<string>('1 Day');
+  const [dryers, setDryers] = useState<string[]>([]);
 
-    function changeDryer(dryer:string) {
-        dryerChanged(dryer);
-        setDryer(dryer);
-    }
+  function changeDryer(dryer: string) {
+    dryerChanged(dryer);
+    setDryer(dryer);
+  }
 
-    function changeTimeFrame(timeFrame:string) {
-        timeFrameChanged(timeFrame),
-        setTimeFrame(timeFrame)
-    }
+  function changeTimeFrame(timeFrame: string) {
+    timeFrameChanged(timeFrame);
+    setTimeFrame(timeFrame);
+  }
 
-    useEffect(() => {
-        dryerChanged(dryer);
-        timeFrameChanged(timeFrame);
-    }, []);
+  useEffect(() => {
+    dryerChanged(dryer);
+    timeFrameChanged(timeFrame);
 
-    return (
-        <View style={styles.container}>
-            <View style={[styles.selectionWrapper, styles.leftMargin]}>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={dryer}
-                    onValueChange={(item, itemIndex) => changeDryer(item)}
-                >
-                    <Picker.Item label="All dryers" value="All dryers" />
-                    {dryers.map((item, index) => (
-                    <Picker.Item key={index} label={item} value={item} />
-                    ))}
-                </Picker>
-                </View>
-                <View style={[styles.selectionWrapper, styles.rightMargin]}>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={timeFrame}
-                    onValueChange={(item, itemIndex) => changeTimeFrame(item)}
-                >
-                    <Picker.Item label="1 Day" value="1 Day" />
-                    <Picker.Item label="7 Days" value="7 Days" />
-                    <Picker.Item label="31 Days" value="31 Days" />
-                </Picker>
-            </View>
-        </View>
-    );
-}
+    // Simulate fetching dryer options; replace with real data fetch if needed
+    setDryers(['Dryer A', 'Dryer B', 'Dryer C']);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <View style={[styles.pickerWrapper, styles.leftMargin]}>
+        <FilametricPicker
+          label="Dryer"
+          selectedValue={dryer}
+          onValueChange={changeDryer}
+          options={[{ label: 'All dryers', value: 'All dryers' }, ...dryers.map(d => ({ label: d, value: d }))]}
+        />
+      </View>
+      <View style={[styles.pickerWrapper, styles.rightMargin]}>
+        <FilametricPicker
+          label="Time Frame"
+          selectedValue={timeFrame}
+          onValueChange={changeTimeFrame}
+          options={[
+            { label: '1 Day', value: '1 Day' },
+            { label: '7 Days', value: '7 Days' },
+            { label: '31 Days', value: '31 Days' },
+          ]}
+        />
+      </View>
+    </View>
+  );
+};
 
 export default DataSelectionCard;
 
@@ -65,22 +65,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flex: 1,
   },
-  selectionWrapper: {
+  pickerWrapper: {
     width: '45%',
-    height: 55,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    overflow: 'hidden',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-  },
-  picker: {
-    width: '100%',
-    height: '100%',
-    fontFamily: "Satoshi"
   },
   leftMargin: {
     marginLeft: 14,
