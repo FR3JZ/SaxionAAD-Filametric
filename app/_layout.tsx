@@ -1,11 +1,10 @@
 import { AuthProvider } from "@/context/authContext";
 import { Stack } from "expo-router";
 import React from "react";
-
-
 import { Amplify } from 'aws-amplify';
 import awsconfig from '@/src/aws-exports'
 import { ErrorSnackbarProvider } from "@/context/errorMessageContext";
+
 Amplify.configure(awsconfig);
 
 export default function RootLayout() {
@@ -21,6 +20,9 @@ export default function RootLayout() {
                             headerShown: false
                         }}/>
                         <Stack.Screen name="RegisterScreen" options={{
+                            headerShown: false
+                        }}/>
+                        <Stack.Screen name="PasswordReset" options={{
                             headerShown: false
                         }}/>
                     </Stack>

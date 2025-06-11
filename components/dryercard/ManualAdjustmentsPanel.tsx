@@ -102,6 +102,9 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
                   </TouchableOpacity>
                 </View>
               </View>
+              <Text style={styles.footerText}>
+                Range: 40°C - 90°C
+              </Text>
             </View>
 
             {/* Duration Controls */}
@@ -115,7 +118,9 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
                   >
                     <Text style={styles.buttonText}>–</Text>
                   </TouchableOpacity>
+
                 </View>
+
                 <View style={styles.controlItem}>
                   <View style={styles.valueBox}>
                     <Text style={styles.valueText}>{targetMinutes} min</Text>
@@ -130,11 +135,10 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
                   </TouchableOpacity>
                 </View>
               </View>
+              <Text style={styles.footerText}>
+                Total: {hours}h {minutes}m
+              </Text>
             </View>
-
-            <Text style={styles.footerText}>
-              Total: {hours}h {minutes}m
-            </Text>
           </Animated.View>
         </TouchableWithoutFeedback>
       </Animated.View>
@@ -225,9 +229,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   footerText: {
+    fontFamily: "Satoshi-Light",
     fontSize: 13,
-    color: '#666',
     marginTop: 10,
+    color: '#666',
     textAlign: 'center',
   },
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-
+import SettingsPage from '@/components/settings/SettingsPage';
 export default function Settings() {
   return (
     <View style={styles.container}>
-      <Text>Settings</Text>
+      <SettingsPage/>
     </View>
   );
 }
