@@ -1,18 +1,18 @@
 import React from "react";
 import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
-import LottieView from "lottie-react-native";
+// import LottieView from "lottie-react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 const DryerAddConfirmationPage = () => {
   return (
     <View style={styles.container}>
-      <LottieView
+      {/* <LottieView
         source={require('../../assets/animations/checkmark.json')}
         autoPlay
         loop={true}
         style={styles.checkAnimation}
-      />
+      /> */}
       <Text style={styles.successText}>Success!</Text>
       <Text style={styles.successSubtext}>Your dryer is successfully paired</Text>
       <Image 
