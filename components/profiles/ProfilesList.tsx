@@ -42,7 +42,7 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
                         const animatedHeight = animations[profile.id]
                             ? animations[profile.id].interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [0, 350]
+                                outputRange: [0, 380]
                             })
                             : new Animated.Value(0);
 
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
     },
     openedProfileModes: {
         marginTop: 10,
-        marginLeft: 15,
+        marginLeft: 10,
         width: '92%',
         borderBottomWidth: 1,
         borderBottomColor: '#D1D1D1',
@@ -260,13 +260,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginTop: 15,
-        flexWrap: 'nowrap',
-        gap: 5
+        flexWrap: 'nowrap'
     },
     openedProfileTitle: {
         flexDirection: 'row',
         alignItems: 'center',
-        flex: 1.5,
+        flex: 1.3,
         flexShrink: 1
     },
     openedProfileTemp: {
@@ -284,7 +283,7 @@ const styles = StyleSheet.create({
     openedProfileModeText: {
         color: '#5D5D5D',
         fontSize: 16,
-        marginLeft: 4,
+        marginLeft: 1,
         flexShrink: 1,
         flexWrap: 'nowrap'
     },
