@@ -52,13 +52,13 @@ export default function RootLayout() {
 function ProtectedLayoutNav() {
   const authState = useContext(AuthContext);
 
-  // if (!authState.isReady) {
-  //   return null;
-  // }
+  if (!authState.isReady) {
+    return null;
+  }
 
-  // if (!authState.isLoggedIn) {
-  //   return <Redirect href="/LoginScreen" />;
-  // }
+  if (!authState.isLoggedIn) {
+    return <Redirect href="/LoginScreen" />;
+  }
 
   return (
     <Stack>
