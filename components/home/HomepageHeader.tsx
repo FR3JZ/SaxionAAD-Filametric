@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <View style={styles.headerWrapper}>
             <View style={styles.topBar}>
-                <TouchableOpacity onPress={() => auth.logOut()}>
+                <TouchableOpacity onPress={() => router.push("/(protected)/(tabs)/UserProfileScreen")}>
                     <Ionicons name="person" size={28} color="#444" />
                 </TouchableOpacity>
 
