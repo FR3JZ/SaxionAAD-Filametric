@@ -83,7 +83,7 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
                                     </View>
                                 )}
 
-                                <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
+                                <Animated.View style={[{ overflow: 'hidden', height: animatedHeight }, styles.shadow]}>
                                     <View style={styles.openedProfileModes}>
                                         <View style={styles.openedProfileModesContent}>
                                             <Text style={styles.openedProfileText}>Available modes:</Text>
@@ -196,7 +196,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
         padding: 10,
         borderRadius: 15,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 3,
     },
     closedProfileTitle: {
         flexDirection: 'row',
@@ -321,6 +326,13 @@ const styles = StyleSheet.create({
         color: '#5D5D5D',
         marginTop: 10,
         fontSize: 15
+    },
+    shadow: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     }
 });
 
