@@ -56,8 +56,6 @@ export default function TabLayout() {
       {/* Hidden Screens */}
       <Tabs.Screen name="AddDryerScreen" options={{ href: null, headerShown: false }} />
       <Tabs.Screen name="DryerSettingsScreen" options={{ href: null, headerShown: false }} />
-      <Tabs.Screen name="ProfileScreen" options={{ href: null, headerShown: false }} />
-      <Tabs.Screen name="CreateProfileScreen" options={{ href: null, headerShown: false }} />
     </Tabs>
   );
 }
