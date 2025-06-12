@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
     },
     closedProfileTemperature: {
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: 80
     },
     closedProfileTime: {
         flexDirection: 'row',
