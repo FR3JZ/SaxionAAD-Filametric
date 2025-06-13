@@ -7,8 +7,8 @@ import DryerService from '@/services/dryerService';
 export default function TabOneScreen() {
 
   const fetchDryers = async() => {
-    const dryers = await DryerService.getDryers();
-    console.log(dryers);
+    const devices = await DryerService.getDryers();
+    console.log(devices.devices[0]);
   }
 
   useFocusEffect(
