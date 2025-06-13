@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native"
 import DataSelectionCard from "./cards/data-selection-card";
 import HumidityDataCard from "./cards/humidity-data-card";
 import CyclesDataCard from "./cards/cycles-data-card";
 import DataChartCard from "./cards/data-chart-card";
+import StatsService from "@/services/statsService";
 
 const Statistics = () => {
     const [currentDryer, setCurrentDryer] = useState<string>("")
@@ -16,6 +17,10 @@ const Statistics = () => {
     function timeFrameChanged(timeFrame:string) {
         setCurrentTimeFrame(timeFrame);
     }
+
+    useEffect(() => {
+        StatsService.getStatsData();
+    }, [])
 
     return (
         <ScrollView style={styles.container}>
