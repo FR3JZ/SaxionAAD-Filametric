@@ -7,7 +7,7 @@ const SelectProfileScreen = () => {
     return (
         <View style={styles.container}>
             <ProfilePageHeader backArrow={true} title="Select Profile"></ProfilePageHeader>
-            <ProfileOverviewPage></ProfileOverviewPage>
+            <ProfileOverviewPage selection={true}></ProfileOverviewPage>
         </View>
     )
 }

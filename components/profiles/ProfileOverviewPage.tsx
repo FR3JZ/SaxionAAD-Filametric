@@ -5,9 +5,11 @@ import ProfilesList from './ProfilesList';
 import ProfileService from '@/services/profileService';
 import { useFocusEffect } from 'expo-router';
 
+
 const screenWidth = Dimensions.get('window').width;
 
-const ProfileOverviewPage = () => {
+const ProfileOverviewPage = ({selection} : {selection: boolean}) => {
+  const [selected, setSelected] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
   const [profiles, setProfiles] = useState<any[]>([]);
 
@@ -61,9 +63,15 @@ const ProfileOverviewPage = () => {
 
       <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
         {activeTab === "Preset" ? (
-          <ProfilesList profiles={profiles.filter(profile => profile.customizable === false)} />
+          <ProfilesList 
+            profiles={profiles.filter(profile => profile.customizable === false)} 
+            {...(selection ? {selected, setSelected: setSelected} : {})}
+          />
         ) : (
-          <ProfilesList profiles={profiles.filter(profile => profile.customizable === true)} />
+          <ProfilesList 
+            profiles={profiles.filter(profile => profile.customizable === true)} 
+            {...(selection ? {selected, setSelected: setSelected} : {})}
+          />
         )}
     </Animated.View>
     </ScrollView>

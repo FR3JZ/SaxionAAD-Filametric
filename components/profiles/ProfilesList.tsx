@@ -5,12 +5,11 @@ import { useFocusEffect } from 'expo-router';
 
 type ProfilesListProps = {
     profiles: any[];
-    selectable?: boolean;
     selected?: any;
     setSelected?: (profile: any) => void;
   };
 
-const ProfilesList = ({ profiles, selectable, selected, setSelected }: ProfilesListProps) => {
+const ProfilesList = ({ profiles, selected, setSelected }: ProfilesListProps) => {
     const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
     const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
@@ -45,6 +44,7 @@ const ProfilesList = ({ profiles, selectable, selected, setSelected }: ProfilesL
     const selectProfile = (profile: any) => {
         if(setSelected) {
             setSelected!(profile);
+            console.log(selected);
         }
     }
 
@@ -62,7 +62,7 @@ const ProfilesList = ({ profiles, selectable, selected, setSelected }: ProfilesL
                         const isOpen = openStates[profile.id];
 
                         return (
-                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={styles.closedProfile}>
+                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={[styles.closedProfile, selected === profile && styles.selectedProfile]}>
                                 <View style={styles.closedProfileTitle}>
                                     <View style={styles.closedProfileTitleName}>
                                         <Ionicons
@@ -216,6 +216,12 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 3,
     },
+    selectedProfile: {
+        backgroundColor: '#EFF9FF',
+        borderWidth: 1,
+        borderColor: '#006BAB'
+    },
+
     closedProfileTitle: {
         flexDirection: 'row',
         marginTop: 10,

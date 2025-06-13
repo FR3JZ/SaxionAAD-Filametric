@@ -6,7 +6,7 @@ export default function ProfileOverviewScreen() {
   return (
     <View style={styles.container}>
       <ProfilePageHeader backArrow={false} title="Profiles"></ProfilePageHeader>
-      <ProfileOverviewPage></ProfileOverviewPage>
+      <ProfileOverviewPage selection={false}></ProfileOverviewPage>
     </View>
   );
 }
