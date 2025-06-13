@@ -1,14 +1,14 @@
-
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 class API {
   static async request(
     endpoint: string,
     method: string,
+    token: string,
     body?: any,
   ): Promise<any> {
     const headers = {
-    //   Authorization: `Bearer ${}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
     const options: RequestInit = {

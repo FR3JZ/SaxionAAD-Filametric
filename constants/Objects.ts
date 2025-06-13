@@ -4,10 +4,15 @@
 export type DryingProfile = {
     ID: string,
     Name: string,
+    Mode: string,
+    Customizable: boolean,
+    User_id: string,
+    Drying_profile_mode_id: string
+}
+
+export type DryingMode = {
+    ID: string,
+    Name: string,
     Target_temperature: number,
     Target_duration: number,
-    Mode: string,
-    Storage_temperature: number,
-    Customizable: boolean,
-    User_Id: string
 }

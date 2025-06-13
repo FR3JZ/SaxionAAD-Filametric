@@ -59,7 +59,7 @@ const LoginInput = () => {
                 value={username}
                 onChangeText={setUsername}
                 placeholderTextColor="gray"
-                placeholder="Username"
+                placeholder="Name"
                 style={style.textField}
                 autoCapitalize="none"
                 keyboardType="email-address"
