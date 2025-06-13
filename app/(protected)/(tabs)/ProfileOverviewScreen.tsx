@@ -1,12 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Header from '@/components/profiles/ProfilePageHeader'
 import ProfileOverviewPage from '../../../components/profiles/ProfileOverviewPage';
 import ProfilePageHeader from '@/components/profiles/ProfilePageHeader';
 export default function ProfileOverviewScreen() {
   return (
     <View style={styles.container}>
-      <ProfilePageHeader></ProfilePageHeader>
+      <ProfilePageHeader backArrow={false} title="Profiles"></ProfilePageHeader>
       <ProfileOverviewPage></ProfileOverviewPage>
     </View>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 interface Props {
   currentProfile: string;
@@ -8,15 +9,22 @@ interface Props {
 }
 
 const DryerProfileRow: React.FC<Props> = ({ currentProfile, status }) => {
+
+  const routeToSelectProfile = () => {
+    if(status === "Completed") {
+      router.push("/(protected)/(profiles)/SelectProfileScreen")
+    }
+  }
+
   const statusIconName = status === "Completed" ? "moon" : "flame";
   const statusIconColor = status === "Completed" ? "#723BFF" : "#FF5500";
 
   return (
     <View style={styles.row}>
-      <View style={styles.profileContainer}>
+      <TouchableOpacity style={styles.profileContainer} onPress={routeToSelectProfile}>
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
         <Text style={styles.profileText}>{currentProfile}</Text>
-      </View>
+      </TouchableOpacity>
       <View style={styles.iconBubble}>
         <Ionicons name={statusIconName} size={24} style={{ color: statusIconColor }} />
       </View>

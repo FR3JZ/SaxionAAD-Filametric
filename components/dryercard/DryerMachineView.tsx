@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F3F6',
     borderRadius: 12,
     padding: 12,
-    marginRight: -15,   // tighter left spacing
+    marginRight: -15, 
   },
   rightButton: {
     backgroundColor: '#F1F3F6',

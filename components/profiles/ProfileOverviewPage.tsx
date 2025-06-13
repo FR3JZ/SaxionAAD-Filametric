@@ -22,15 +22,6 @@ const ProfileOverviewPage = () => {
       fetchProfiles();
     }, [])
   );
-
-  useEffect(() => {
-    const fetchProfiles = async () => {
-        const json = await ProfileService.getProfiles();
-        setProfiles(json['profiles']);
-    };
-
-    fetchProfiles();
-}, []);
   
   const translateX = useRef(new Animated.Value(0)).current;
   const handleTabSwitch = (newTab: "Preset" | "Custom") => {
