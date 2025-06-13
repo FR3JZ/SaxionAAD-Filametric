@@ -8,6 +8,11 @@ export type DryerData = {
   temperature: number;
   humidity: number;
   timestamp: number;
+  status?: "Running" | "Paused" | "Completed";
+  targetTemp?: number;
+  timeRemaining?: number; // in minutes
+  totalTime?: number;     // in minutes
+  currentProfile?: string;
 };
 
 export const useDryerWebSocket = () => {
@@ -26,10 +31,11 @@ export const useDryerWebSocket = () => {
         ws.current = new WebSocket(url);
 
         ws.current.onmessage = (e: WebSocketMessageEvent) => {
-            console.log(e)
           try {
             const message = JSON.parse(e.data);
+            console.log(message);
 
+            // --- Handle "environment" message ---
             if (message.type === "environment" && message.serial && message.data) {
               const { serial, data } = message;
 
@@ -38,12 +44,67 @@ export const useDryerWebSocket = () => {
               setDryerMap(prev => ({
                 ...prev,
                 [serial]: {
+                  ...prev[serial],
                   serial,
                   temperature: data.temperature?.value || 0,
                   humidity: data.humidity?.value || 0,
                   timestamp: data.timestamp
                 }
               }));
+            }
+
+            // --- Handle "events" message ---
+            if (message.type === "events" && message.serial && message.data) {
+              const { serial, data } = message;
+
+              // 1. Handle cycle_started
+              if (data.event === "cycle_started") {
+                const targetTemp = parseFloat(data.temp);
+                const timestamp = new Date(data.timestamp).getTime();
+
+                if (!isMounted) return;
+
+                setDryerMap(prev => ({
+                  ...prev,
+                  [serial]: {
+                    ...prev[serial],
+                    serial,
+                    status: "Running",
+                    targetTemp,
+                    totalTime: data.time, // minutes
+                    timestamp
+                  }
+                }));
+                return;
+              }
+
+              // 2. Handle status_report
+              if (data.event === "status_report") {
+                const status =
+                  data.isRunning ? "Running" :
+                  data.isPaused ? "Paused" : "Completed";
+
+                const timeRemainingMin = data.remainingTime; // in minutes
+                const profileName = data.selectedProfile?.id;
+
+                if (!isMounted) return;
+
+                setDryerMap(prev => ({
+                  ...prev,
+                  [serial]: {
+                    ...prev[serial],
+                    serial,
+                    status,
+                    targetTemp: data.targetTemp,
+                    timeRemaining: timeRemainingMin,
+                    totalTime: data.time ?? prev[serial]?.totalTime,
+                    currentProfile: profileName,
+                    temperature: data.currentTemp ?? prev[serial]?.temperature ?? 0,
+                    humidity: data.currentHumidity ?? prev[serial]?.humidity ?? 0,
+                    timestamp: new Date(data.timestamp).getTime()
+                  }
+                }));
+              }
             }
           } catch (err) {
             console.error("Invalid WebSocket message", err);

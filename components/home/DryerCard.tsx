@@ -26,9 +26,8 @@ export interface DryerCardProps {
   type: DryerMachineType;
   targetTemp?: number;
   actualTemp?: number;
-  progress?: number;
-  timeRemaining?: string;
-  totalTime?: string;
+  timeRemaining?: number; // in minutes
+  totalTime?: number; // in minutes
   humidity?: string;
   electricity?: string;
   currentProfile: string;
@@ -43,10 +42,9 @@ const DryerCard: React.FC<DryerCardProps> = ({
   type,
   targetTemp = 80,
   actualTemp = 23,
-  progress = 100,
-  timeRemaining = '0h 0m',
-  totalTime = '8h 0m',
-  humidity = '10%',
+  timeRemaining = 0,
+  totalTime = 0,
+  humidity = '0%',
   electricity = '0',
   currentProfile,
   isExpanded,
@@ -55,7 +53,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
 }) => {
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
-  const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
+  const [adjustedDuration, setAdjustedDuration] = useState(480);
 
   const [machineViewHeight, setMachineViewHeight] = useState(0);
   const animatedHeight = useRef(new Animated.Value(0)).current;
@@ -73,6 +71,19 @@ const DryerCard: React.FC<DryerCardProps> = ({
       }
     });
   }, [isExpanded, machineViewHeight]);
+
+  const formatMinutesToTime = (minutes: number): string => {
+    const h = Math.floor(minutes / 60);
+    const m = Math.floor(minutes % 60);
+    return `${h}h ${m}m`;
+  };
+
+  const calculateProgress = (): number => {
+    if (!totalTime || totalTime <= 0) return 0;
+    const used = totalTime - timeRemaining;
+    const progress = (used / totalTime) * 100;
+    return Math.min(Math.max(Math.floor(progress), 0), 100);
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -99,8 +110,8 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
           <DryerInfoBlock
             iconName="time-outline"
-            value={timeRemaining}
-            subValue={`/ ${totalTime}`}
+            value={formatMinutesToTime(timeRemaining)}
+            subValue={`/ ${formatMinutesToTime(totalTime)}`}
             iconColor="#00C03B"
           />
         </View>
@@ -137,7 +148,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
         </View>
 
         <DryerProfileRow currentProfile={currentProfile} status={status} />
-        <DryerProgressBar progress={progress} />
+        <DryerProgressBar progress={calculateProgress()} />
 
         {isExpanded && (
           <DryerActionControls

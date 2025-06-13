@@ -29,7 +29,6 @@ const HomePage = () => {
         .map((dryer) => {
           const isExpanded = expandedDryer === dryer.serial;
           const isCollapsing = collapsingDryer === dryer.serial;
-
           if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {
             return null;
           }
@@ -38,14 +37,14 @@ const HomePage = () => {
             <DryerCard
               key={dryer.serial}
               name={dryer.serial}
-              status="Running"
+              status={dryer.status || "Running"}
               type="Solo"
-              targetTemp={75}
+              targetTemp={dryer.targetTemp}
               actualTemp={dryer.temperature}
-              humidity={dryer.humidity + "%"}
-              progress={75}
-              timeRemaining="25min"
-              currentProfile="My Profile 1"
+              humidity={`${dryer.humidity}%`}
+              totalTime={dryer.totalTime || 0}
+              timeRemaining={dryer.timeRemaining || 0}
+              currentProfile={dryer.currentProfile || "Unknown"}
               isExpanded={isExpanded}
               onToggleExpand={() => handleToggle(dryer.serial)}
               onCollapseComplete={() => setCollapsingDryer(null)}
