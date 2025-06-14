@@ -8,7 +8,12 @@ import { useFocusEffect } from 'expo-router';
 
 const screenWidth = Dimensions.get('window').width;
 
-const ProfileOverviewPage = ({selection} : {selection: boolean}) => {
+type ProfileOverviewPageProps = {
+  selection: boolean
+  dryerId?: string;
+};
+
+const ProfileOverviewPage = ({selection, dryerId} : ProfileOverviewPageProps) => {
   const [selected, setSelected] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
   const [profiles, setProfiles] = useState<any[]>([]);
@@ -65,12 +70,12 @@ const ProfileOverviewPage = ({selection} : {selection: boolean}) => {
         {activeTab === "Preset" ? (
           <ProfilesList 
             profiles={profiles.filter(profile => profile.customizable === false)} 
-            {...(selection ? {selected, setSelected: setSelected} : {})}
+            {...(selection ? {selected, setSelected: setSelected, dryerId} : {})}
           />
         ) : (
           <ProfilesList 
             profiles={profiles.filter(profile => profile.customizable === true)} 
-            {...(selection ? {selected, setSelected: setSelected} : {})}
+            {...(selection ? {selected, setSelected: setSelected, dryerId} : {})}
           />
         )}
     </Animated.View>

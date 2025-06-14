@@ -1,13 +1,17 @@
 import ProfileOverviewPage from "@/components/profiles/ProfileOverviewPage";
 import ProfilePageHeader from "@/components/profiles/ProfilePageHeader";
+import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
+
 const SelectProfileScreen = () => {
+    const params = useLocalSearchParams();
+
     return (
         <View style={styles.container}>
             <ProfilePageHeader backArrow={true} title="Select Profile"></ProfilePageHeader>
-            <ProfileOverviewPage selection={true}></ProfileOverviewPage>
+            <ProfileOverviewPage dryerId={params.dryerId as string} selection={true}></ProfileOverviewPage>
         </View>
     )
 }

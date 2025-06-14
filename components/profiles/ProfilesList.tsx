@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
+import { saveProfile } from '@/stores/profileStore';
 
 type ProfilesListProps = {
     profiles: any[];
     selected?: any;
     setSelected?: (profile: any) => void;
+    dryerId?: string;
   };
 
-const ProfilesList = ({ profiles, selected, setSelected }: ProfilesListProps) => {
+const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesListProps) => {
     const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
     const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
@@ -41,10 +43,13 @@ const ProfilesList = ({ profiles, selected, setSelected }: ProfilesListProps) =>
         }
     };
 
-    const selectProfile = (profile: any) => {
+    const selectProfile = async (profile: any) => {
         if(setSelected) {
             setSelected!(profile);
-            console.log(selected);
+
+            if(dryerId) {
+                await saveProfile(dryerId, profile)
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,8 @@ import DryerProgressBar from '../dryercard/DryerProgressBar';
 import DryerMachineView from '../dryercard/DryerMachineView';
 import DryerActionControls from '../dryercard/DryerActionControls';
 import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
-import { router } from 'expo-router';
+import { getSavedProfile } from '@/stores/profileStore';
+import { router, useFocusEffect } from 'expo-router';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
 export type DryerMachineType = 'Solo' | 'Duo';
@@ -31,7 +32,6 @@ export interface DryerCardProps {
   totalTime?: string;
   humidity?: string;
   electricity?: string;
-  currentProfile: string;
   isExpanded: boolean;
   onToggleExpand: () => void;
   onCollapseComplete?: () => void;
@@ -48,7 +48,6 @@ const DryerCard: React.FC<DryerCardProps> = ({
   totalTime = '8h 0m',
   humidity = '10%',
   electricity = '0.39 kWh',
-  currentProfile,
   isExpanded,
   onToggleExpand,
   onCollapseComplete,
@@ -58,7 +57,23 @@ const DryerCard: React.FC<DryerCardProps> = ({
   const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
 
   const [machineViewHeight, setMachineViewHeight] = useState(0);
+  const [profile, setProfile] = useState<any>({});
   const animatedHeight = useRef(new Animated.Value(0)).current;
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchProfile = async () => {
+        const storedProfile = await getSavedProfile(name);
+        console.log(storedProfile);
+        if (storedProfile !== null) {
+          setProfile(storedProfile);
+        } else {
+          setProfile({ name: 'Dryer A' });
+        }
+      };
+      fetchProfile();
+    }, [name])
+  )
 
   useEffect(() => {
     if (!isExpanded && machineViewHeight === 0) return;
@@ -136,7 +151,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
           <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
         </View>
 
-        <DryerProfileRow currentProfile={currentProfile} status={status} />
+        <DryerProfileRow dryerId={name} currentProfile={profile} status={status} />
         <DryerProgressBar progress={progress} />
 
         {isExpanded && (

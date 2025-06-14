@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 
 interface Props {
-  currentProfile: string;
+  dryerId: string,
+  currentProfile: any;
   status: "Completed" | "Paused" | "Running";
 }
 
-const DryerProfileRow: React.FC<Props> = ({ currentProfile, status }) => {
-
+const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, status }) => {
   const routeToSelectProfile = () => {
     if(status === "Completed") {
-      router.push("/(protected)/(profiles)/SelectProfileScreen")
+      router.push({
+        pathname: '/(protected)/(profiles)/SelectProfileScreen',
+        params: { dryerId: dryerId}
+      });
     }
   }
 
@@ -23,7 +26,7 @@ const DryerProfileRow: React.FC<Props> = ({ currentProfile, status }) => {
     <View style={styles.row}>
       <TouchableOpacity style={styles.profileContainer} onPress={routeToSelectProfile}>
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
-        <Text style={styles.profileText}>{currentProfile}</Text>
+        <Text style={styles.profileText}>{currentProfile.name}</Text>
       </TouchableOpacity>
       <View style={styles.iconBubble}>
         <Ionicons name={statusIconName} size={24} style={{ color: statusIconColor }} />
