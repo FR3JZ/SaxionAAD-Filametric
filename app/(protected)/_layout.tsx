@@ -65,6 +65,7 @@ function ProtectedLayoutNav() {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="(dryer-add)" options={{headerShown: false}} />
       <Stack.Screen name="(profiles)" options={{headerShown: false}} />
+      <Stack.Screen name="(user)" options={{headerShown: false, animation: 'slide_from_left'}} />
     </Stack>
   );
 }
