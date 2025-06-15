@@ -1,15 +1,16 @@
 import React, { useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
 
 interface Props {
   dryerId: string,
   currentProfile: any;
+  currentMode: string;
   status: "Completed" | "Paused" | "Running";
 }
 
-const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, status }) => {
+const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, currentMode, status }) => {
   const routeToSelectProfile = () => {
     if(status === "Completed") {
       router.push({
@@ -19,8 +20,25 @@ const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, status }) =
     }
   }
 
+  const routeToSelectModus = () => {
+    if(status === "Completed") {
+      router.push({
+        pathname: '/(protected)/(profiles)/SelectProfileModeScreen',
+        params: { dryerId: dryerId, profileId: currentProfile.id}
+      })
+    }
+  }
+
   const statusIconName = status === "Completed" ? "moon" : "flame";
   const statusIconColor = status === "Completed" ? "#723BFF" : "#FF5500";
+
+  const modeIcons = {
+    normal: require('../../assets/images/normal_mode_icon.png'),
+    silent: require('../../assets/images/silent_mode_icon.png'),
+    storage: require('../../assets/images/storage_mode_icon.png')
+  }
+
+  const icon = (modeIcons as any)[currentMode];
 
   return (
     <View style={styles.row}>
@@ -28,9 +46,9 @@ const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, status }) =
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
         <Text style={styles.profileText}>{currentProfile.name}</Text>
       </TouchableOpacity>
-      <View style={styles.iconBubble}>
-        <Ionicons name={statusIconName} size={24} style={{ color: statusIconColor }} />
-      </View>
+      <TouchableOpacity style={styles.iconBubble} onPress={routeToSelectModus}>
+        <Image source={icon} style={styles.modeIcon} resizeMode="contain" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -71,6 +89,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  modeIcon: {
+    width: 30,
+    height: 30
+  }
 });
 
 export default DryerProfileRow;

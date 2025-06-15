@@ -2,7 +2,6 @@ import * as SecureStore from 'expo-secure-store';
 
 export const saveProfile = async (dryer_id: string, profile: any) => {
   try {
-    console.log(dryer_id);
     await SecureStore.setItemAsync(formatId(dryer_id), JSON.stringify(profile));
   } catch (e) {
     console.error("Failed to save profile", e);

@@ -16,6 +16,7 @@ import DryerMachineView from '../dryercard/DryerMachineView';
 import DryerActionControls from '../dryercard/DryerActionControls';
 import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
 import { getSavedProfile } from '@/stores/profileStore';
+import { getSavedMode } from '@/stores/modeStore';
 import { router, useFocusEffect } from 'expo-router';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
@@ -54,24 +55,55 @@ const DryerCard: React.FC<DryerCardProps> = ({
 }) => {
   const [showAdjustments, setShowAdjustments] = useState(false);
   const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
-  const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
+  const [adjustedDuration, setAdjustedDuration] = useState(480);
 
   const [machineViewHeight, setMachineViewHeight] = useState(0);
   const [profile, setProfile] = useState<any>({});
+  const [mode, setMode] = useState<string>("normal");
   const animatedHeight = useRef(new Animated.Value(0)).current;
+
+  const testProfile = {
+    id: '25b28a50-fa42-4f93-a6be-f92cad9033cf', 
+    name: 'Dryer A',
+    description: 'Een profiel voor een droger',
+    normal: {
+      duration: 7200,
+      target_temperature: 80
+    },
+    silent: {
+      duration: 8400,
+      target_temperature: 90
+    },
+    storage: {
+      duration: 10800,
+      target_temperature: 70
+    },
+    switch_to_storage: true
+  };
 
   useFocusEffect(
     useCallback(() => {
       const fetchProfile = async () => {
         const storedProfile = await getSavedProfile(name);
-        console.log(storedProfile);
         if (storedProfile !== null) {
           setProfile(storedProfile);
         } else {
-          setProfile({ name: 'Dryer A' });
+          setProfile(testProfile);
         }
       };
+      const fetchMode = async () => {
+        const storedMode = await getSavedMode(name, profile.id);
+        if(storedMode !== null) {
+          setMode(storedMode);
+        } else {
+          setMode('normal');
+        }
+      }
+
       fetchProfile();
+      fetchMode();
+
+
     }, [name])
   )
 
@@ -151,7 +183,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
           <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
         </View>
 
-        <DryerProfileRow dryerId={name} currentProfile={profile} status={status} />
+        <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} />
         <DryerProgressBar progress={progress} />
 
         {isExpanded && (

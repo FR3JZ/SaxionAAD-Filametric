@@ -67,7 +67,8 @@ const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesList
                         const isOpen = openStates[profile.id];
 
                         return (
-                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={[styles.closedProfile, selected === profile && styles.selectedProfile]}>
+                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={[styles.closedProfile, selected?.id === profile.id && styles.selectedProfile]}>
+
                                 <View style={styles.closedProfileTitle}>
                                     <View style={styles.closedProfileTitleName}>
                                         <Ionicons

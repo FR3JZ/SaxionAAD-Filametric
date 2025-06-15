@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, ScrollV
 import { Ionicons } from '@expo/vector-icons';
 import ProfilesList from './ProfilesList';
 import ProfileService from '@/services/profileService';
+import { getSavedProfile } from '@/stores/profileStore';
 import { useFocusEffect } from 'expo-router';
 
 
@@ -24,9 +25,19 @@ const ProfileOverviewPage = ({selection, dryerId} : ProfileOverviewPageProps) =>
     setProfiles(json['profiles']);
   };
 
+  const setSelectedProfile = async () => {
+    if(dryerId) {
+      const activeProfile = await getSavedProfile(dryerId);
+      if(activeProfile !== null) {
+        setSelected(activeProfile);
+      }
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchProfiles();
+      setSelectedProfile();
     }, [])
   );
   

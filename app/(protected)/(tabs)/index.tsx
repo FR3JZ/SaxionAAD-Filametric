@@ -8,13 +8,11 @@ export default function TabOneScreen() {
 
   const fetchDryers = async() => {
     const devices = await DryerService.getDryers();
-    console.log(devices.devices[0]);
   }
 
   useFocusEffect(
     useCallback(() => {
       fetchDryers();
-      
     }, [])
   );
 
