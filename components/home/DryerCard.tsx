@@ -103,8 +103,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
       fetchProfile();
       fetchMode();
 
-
-    }, [name])
+    }, [name, profile])
   )
 
   useEffect(() => {
