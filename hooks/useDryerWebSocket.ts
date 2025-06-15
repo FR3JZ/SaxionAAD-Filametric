@@ -33,7 +33,6 @@ export const useDryerWebSocket = () => {
         ws.current.onmessage = (e: WebSocketMessageEvent) => {
           try {
             const message = JSON.parse(e.data);
-            console.log(message);
 
             // --- Handle "environment" message ---
             if (message.type === "environment" && message.serial && message.data) {
@@ -61,20 +60,28 @@ export const useDryerWebSocket = () => {
               if (data.event === "cycle_started") {
                 const targetTemp = parseFloat(data.temp);
                 const timestamp = new Date(data.timestamp).getTime();
+                const totalTime = data.time;
 
                 if (!isMounted) return;
 
-                setDryerMap(prev => ({
-                  ...prev,
-                  [serial]: {
-                    ...prev[serial],
-                    serial,
-                    status: "Running",
-                    targetTemp,
-                    totalTime: data.time, // minutes
-                    timestamp
-                  }
-                }));
+                setDryerMap(prev => {
+                  const previous = prev[serial];
+                  const isResumingFromPause = previous?.status === "Paused";
+
+                  return {
+                    ...prev,
+                    [serial]: {
+                      ...previous,
+                      serial,
+                      status: "Running",
+                      targetTemp,
+                      totalTime: isResumingFromPause ? previous.totalTime : totalTime,
+                      timeRemaining: isResumingFromPause ? previous.timeRemaining : totalTime,
+                      timestamp
+                    }
+                  };
+                });
+
                 return;
               }
 
@@ -82,7 +89,7 @@ export const useDryerWebSocket = () => {
               if (data.event === "status_report") {
                 const status =
                   data.isRunning ? "Running" :
-                  data.isPaused ? "Paused" : "Completed";
+                    data.isPaused ? "Paused" : "Completed";
 
                 const timeRemainingMin = data.remainingTime; // in minutes
                 const profileName = data.selectedProfile?.id;

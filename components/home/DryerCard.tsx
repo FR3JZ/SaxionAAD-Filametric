@@ -18,6 +18,7 @@ import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
 import { getSavedProfile } from '@/stores/profileStore';
 import { getSavedMode } from '@/stores/modeStore';
 import { router, useFocusEffect } from 'expo-router';
+import DryerService from '@/services/dryerService';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
 export type DryerMachineType = 'Solo' | 'Duo';
@@ -52,8 +53,8 @@ const DryerCard: React.FC<DryerCardProps> = ({
   onCollapseComplete,
 }) => {
   const [showAdjustments, setShowAdjustments] = useState(false);
-  const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
-  const [adjustedDuration, setAdjustedDuration] = useState(480);
+  const [adjustedTemp, setAdjustedTemp] = useState<number | null>(null);
+  const [adjustedTime, setAdjustedTime] = useState<number | null>(null);
 
   const [machineViewHeight, setMachineViewHeight] = useState(0);
   const [profile, setProfile] = useState<any>({});
@@ -61,7 +62,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
   const animatedHeight = useRef(new Animated.Value(0)).current;
 
   const testProfile = {
-    id: '25b28a50-fa42-4f93-a6be-f92cad9033cf', 
+    id: '25b28a50-fa42-4f93-a6be-f92cad9033cf',
     name: 'Dryer A',
     description: 'Een profiel voor een droger',
     normal: {
@@ -83,30 +84,19 @@ const DryerCard: React.FC<DryerCardProps> = ({
     useCallback(() => {
       const fetchProfile = async () => {
         const storedProfile = await getSavedProfile(name);
-        if (storedProfile !== null) {
-          setProfile(storedProfile);
-        } else {
-          setProfile(testProfile);
-        }
+        setProfile(storedProfile ?? testProfile);
       };
       const fetchMode = async () => {
         const storedMode = await getSavedMode(name, profile.id);
-        if(storedMode !== null) {
-          setMode(storedMode);
-        } else {
-          setMode('normal');
-        }
-      }
-
+        setMode(storedMode ?? 'normal');
+      };
       fetchProfile();
       fetchMode();
-
     }, [name, profile])
-  )
+  );
 
   useEffect(() => {
     if (!isExpanded && machineViewHeight === 0) return;
-
     Animated.timing(animatedHeight, {
       toValue: isExpanded ? machineViewHeight : 0,
       duration: 300,
@@ -117,6 +107,13 @@ const DryerCard: React.FC<DryerCardProps> = ({
       }
     });
   }, [isExpanded, machineViewHeight]);
+
+  useEffect(() => {
+    if (!showAdjustments) {
+      setAdjustedTemp(targetTemp);
+      setAdjustedTime(timeRemaining);
+    }
+  }, [targetTemp, timeRemaining, showAdjustments]);
 
   const formatMinutesToTime = (minutes: number): string => {
     const h = Math.floor(minutes / 60);
@@ -168,18 +165,16 @@ const DryerCard: React.FC<DryerCardProps> = ({
         </View>
 
         <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
-          <View>
-            <DryerMachineView
-              type={type}
-              onRightAction={() => setShowAdjustments(true)}
-              onLeftAction={() =>
-                router.push({
-                  pathname: "/(protected)/(tabs)/DryerSettingsScreen",
-                  params: { name },
-                })
-              }
-            />
-          </View>
+          <DryerMachineView
+            type={type}
+            onRightAction={() => setShowAdjustments(true)}
+            onLeftAction={() =>
+              router.push({
+                pathname: "/(protected)/(tabs)/DryerSettingsScreen",
+                params: { name },
+              })
+            }
+          />
         </Animated.View>
 
         <View
@@ -190,7 +185,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
             }
           }}
         >
-          <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
+          <DryerMachineView type={type} onRightAction={() => { }} onLeftAction={() => { }} />
         </View>
 
         <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} isExpanded={isExpanded} />
@@ -199,23 +194,38 @@ const DryerCard: React.FC<DryerCardProps> = ({
         {isExpanded && (
           <DryerActionControls
             status={status}
-            onStart={() => console.log('Start')}
-            onResume={() => console.log('Resume')}
-            onPause={() => console.log('Pause')}
-            onStop={() => console.log('Stop')}
-            onAddHour={() => setAdjustedDuration(adjustedDuration + 60)}
-            onTempDown={() => setAdjustedTemp(adjustedTemp - 5)}
-            onTempUp={() => setAdjustedTemp(adjustedTemp + 5)}
+            onStart={() => DryerService.startDryer(name, profile.id, mode)}
+            onResume={() => DryerService.startDryer(name, profile.id, mode)}
+            onPause={() => DryerService.pauseDryer(name)}
+            onStop={() => DryerService.stopDryer(name)}
+            onAddHour={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining + 60, targetTemp)
+            }
+            onTempDown={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp - 5)
+            }
+            onTempUp={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp + 5)
+            }
           />
         )}
 
         {showAdjustments && (
           <ManualAdjustmentsPanel
-            targetTemp={adjustedTemp}
-            targetMinutes={adjustedDuration}
+            targetTemp={adjustedTemp ?? targetTemp}
+            timeRemaining={adjustedTime ?? timeRemaining}
             onTempChange={setAdjustedTemp}
-            onMinutesChange={setAdjustedDuration}
-            onDismiss={() => setShowAdjustments(false)}
+            onTimeChange={setAdjustedTime}
+            onDismiss={() => {
+              setShowAdjustments(false);
+
+              const tempChanged = adjustedTemp !== null && adjustedTemp !== targetTemp;
+              const timeChanged = adjustedTime !== null && adjustedTime !== timeRemaining;
+
+              if (tempChanged || timeChanged) {
+                DryerService.changeDryerWhileRunning(name, adjustedTime!, adjustedTemp!);
+              }
+            }}
           />
         )}
       </View>
