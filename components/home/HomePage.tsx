@@ -35,38 +35,21 @@ const HomePage = () => {
 
         return (
           <DryerCard
-            key={index}
-            name={dryer.name}
-            status={dryer.status as any}
-            type={dryer.type as any}
-            targetTemp={75}
-            actualTemp={73}
-            progress={75}
-            timeRemaining="25min"
+            key={dryer.serial}
+            name={dryer.serial}
+            status={dryer.status || "Completed"}
+            type={"Solo"}
+            targetTemp={dryer.targetTemp}
+              actualTemp={dryer.temperature}
+              humidity={`${dryer.humidity}%`}
+              timeRemaining={dryer.timeRemaining || 0}
+              totalTime={dryer.totalTime}
             isExpanded={isExpanded}
-            onToggleExpand={() => handleToggle(dryer.name)}
+            onToggleExpand={() => handleToggle(dryer.serial)}
             onCollapseComplete={() => setCollapsingDryer(null)}
           />
         );
       })}
-          return (
-            <DryerCard
-              key={dryer.serial}
-              name={dryer.serial}
-              status={dryer.status || "Running"}
-              type="Solo"
-              targetTemp={dryer.targetTemp}
-              actualTemp={dryer.temperature}
-              humidity={`${dryer.humidity}%`}
-              totalTime={dryer.totalTime || 0}
-              timeRemaining={dryer.timeRemaining || 0}
-              currentProfile={dryer.currentProfile || "Unknown"}
-              isExpanded={isExpanded}
-              onToggleExpand={() => handleToggle(dryer.serial)}
-              onCollapseComplete={() => setCollapsingDryer(null)}
-            />
-          );
-        })}
     </ScrollView>
   );
 };

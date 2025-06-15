@@ -1,4 +1,4 @@
-import React, { useCallback }, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Auth } from 'aws-amplify'; // Make sure this is installed and configured
 import Header from '../../../components/home/HomepageHeader';

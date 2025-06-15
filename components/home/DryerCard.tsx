@@ -194,7 +194,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
         </View>
 
         <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} isExpanded={isExpanded} />
-        <DryerProgressBar progress={progress} />
+        <DryerProgressBar progress={calculateProgress()} />
 
         {isExpanded && (
           <DryerActionControls
