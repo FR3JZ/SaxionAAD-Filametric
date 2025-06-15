@@ -182,7 +182,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
           <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
         </View>
 
-        <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} />
+        <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} isExpanded={isExpanded} />
         <DryerProgressBar progress={progress} />
 
         {isExpanded && (

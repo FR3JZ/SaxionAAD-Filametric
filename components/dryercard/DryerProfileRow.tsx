@@ -1,42 +1,46 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router, useFocusEffect } from 'expo-router';
+import { router } from 'expo-router';
 
 interface Props {
-  dryerId: string,
+  dryerId: string;
   currentProfile: any;
   currentMode: string;
-  status: "Completed" | "Paused" | "Running";
+  status: 'Completed' | 'Paused' | 'Running';
+  isExpanded: boolean;
 }
 
-const DryerProfileRow: React.FC<Props> = ({ dryerId, currentProfile, currentMode, status }) => {
+const DryerProfileRow: React.FC<Props> = ({
+  dryerId,
+  currentProfile,
+  currentMode,
+  status,
+  isExpanded,
+}) => {
   const routeToSelectProfile = () => {
-    if(status === "Completed") {
+    if (isExpanded && status === 'Completed') {
       router.push({
         pathname: '/(protected)/(profiles)/SelectProfileScreen',
-        params: { dryerId: dryerId}
+        params: { dryerId },
       });
     }
-  }
+  };
 
   const routeToSelectModus = () => {
-    if(status === "Completed") {
+    if (isExpanded && status === 'Completed') {
       router.push({
         pathname: '/(protected)/(profiles)/SelectProfileModeScreen',
-        params: { dryerId: dryerId, profileId: currentProfile.id}
-      })
+        params: { dryerId, profileId: currentProfile.id },
+      });
     }
-  }
-
-  const statusIconName = status === "Completed" ? "moon" : "flame";
-  const statusIconColor = status === "Completed" ? "#723BFF" : "#FF5500";
+  };
 
   const modeIcons = {
     normal: require('../../assets/images/normal_mode_icon.png'),
     silent: require('../../assets/images/silent_mode_icon.png'),
-    storage: require('../../assets/images/storage_mode_icon.png')
-  }
+    storage: require('../../assets/images/storage_mode_icon.png'),
+  };
 
   const icon = (modeIcons as any)[currentMode];
 
@@ -89,11 +93,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   modeIcon: {
     width: 30,
-    height: 30
-  }
+    height: 30,
+  },
 });
 
 export default DryerProfileRow;
