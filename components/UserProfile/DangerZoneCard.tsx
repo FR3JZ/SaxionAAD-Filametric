@@ -1,64 +1,72 @@
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const DangerZoneCard = () => {
     return (
-        <View style={styles.card}>
-            <View>
-                <View style={styles.row}>
-                    <Ionicons color="#FF2323" size={32} name="warning-outline"/>
-                    <Text style={styles.dangerTitle}>Danger zone</Text>
-                </View>
-                <Text style={styles.dangerText}>These actions cannot be undone. Please proceed with caution.</Text>
-            </View>
-
-            <View style={styles.seperator}/>
-
-            <View>
-                <View style={styles.spacing}>
-                    <Text style={styles.headingText}>Delete Dryers</Text>
-                    <Text style={styles.text}>Remove all registered dryers and their settings</Text>
-                    <TouchableOpacity style={styles.minorDangerButton}>
-                        <Ionicons color="#FF2323" size={24} name="trash-outline"/>
-                        <Text style={styles.minorDangerButtonText}>Delete all dryers</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.spacing}> 
-                    <Text style={styles.headingText}>Delete Custom Profiles</Text>
-                    <Text style={styles.text}>Remove all your custom filament profiles</Text>
-                    <TouchableOpacity style={styles.minorDangerButton}>
-                        <Ionicons color="#FF2323" size={24} name="trash-outline"/>
-                        <Text style={styles.minorDangerButtonText}>Delete All Custom Profiles</Text>
-                    </TouchableOpacity>
-                </View>
+        <SafeAreaView edges={['bottom']} style={styles.safeArea}>
+            <View style={styles.card}>
                 <View>
-                    <Text style={styles.headingText}>Reset All Settings</Text>
-                    <Text style={styles.text}>Reset all preferences, notification settings and app configuration</Text>
-                    <TouchableOpacity style={styles.minorDangerButton}>
-                        <Ionicons color="#FF2323" size={24} name="reload-outline"/>
-                        <Text style={styles.minorDangerButtonText}>Reset All Settings</Text>
-                    </TouchableOpacity>
+                    <View style={styles.row}>
+                        <Ionicons color="#FF2323" size={32} name="warning-outline"/>
+                        <Text style={styles.dangerTitle}>Danger zone</Text>
+                    </View>
+                    <Text style={styles.dangerText}>
+                        These actions cannot be undone. Please proceed with caution.
+                    </Text>
                 </View>
-            </View>
 
-            <View style={styles.seperator}/>
+                <View style={styles.seperator}/>
+
+                <View>
+                    <View style={styles.spacing}>
+                        <Text style={styles.headingText}>Delete Dryers</Text>
+                        <Text style={styles.text}>Remove all registered dryers and their settings</Text>
+                        <TouchableOpacity style={styles.minorDangerButton}>
+                            <Ionicons color="#FF2323" size={24} name="trash-outline"/>
+                            <Text style={styles.minorDangerButtonText}>Delete all dryers</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.spacing}> 
+                        <Text style={styles.headingText}>Delete Custom Profiles</Text>
+                        <Text style={styles.text}>Remove all your custom filament profiles</Text>
+                        <TouchableOpacity style={styles.minorDangerButton}>
+                            <Ionicons color="#FF2323" size={24} name="trash-outline"/>
+                            <Text style={styles.minorDangerButtonText}>Delete All Custom Profiles</Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View>
+                        <Text style={styles.headingText}>Reset All Settings</Text>
+                        <Text style={styles.text}>Reset all preferences, notification settings and app configuration</Text>
+                        <TouchableOpacity style={styles.minorDangerButton}>
+                            <Ionicons color="#FF2323" size={24} name="reload-outline"/>
+                            <Text style={styles.minorDangerButtonText}>Reset All Settings</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View style={styles.seperator}/>
+
                 <Text style={styles.bigDangerHeadingText}>Permanently Delete Account</Text>
                 <Text style={styles.text}>Permanently delete your Filametric account including all data and usage history</Text>
                 <TouchableOpacity style={styles.bigDangerButton}>
                     <Ionicons color="#FFFFFF" size={24} name="trash-outline"/>
                     <Text style={styles.bigDangerButtonText}>Delete Account</Text>
                 </TouchableOpacity>
-            <View>
-                
             </View>
-        </View>
-    )
-}
+        </SafeAreaView>
+    );
+};
 
 export default DangerZoneCard;
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+    },
     card: {
         padding: 16,
         marginTop: 16,
@@ -135,7 +143,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,  
         columnGap: 8,   
         marginTop: 8,
-        marginBottom: 4,
+        marginBottom: 16, // extra marge onderin
         borderWidth: 1,
         borderRadius: 10,
         borderColor: "#FF2323",

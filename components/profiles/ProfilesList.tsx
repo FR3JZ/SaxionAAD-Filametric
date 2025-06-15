@@ -1,9 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Image } from "react-native";
+import React, { useCallback, useState } from 'react';
+import { View, Text, StyleSheet, Pressable, Animated, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
+import { saveProfile } from '@/stores/profileStore';
 
-const ProfilesList = ({ profiles }: { profiles: any[] }) => {
+type ProfilesListProps = {
+    profiles: any[];
+    selected?: any;
+    setSelected?: (profile: any) => void;
+    dryerId?: string;
+  };
+
+const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesListProps) => {
     const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
     const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
@@ -35,6 +43,16 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
         }
     };
 
+    const selectProfile = async (profile: any) => {
+        if(setSelected) {
+            setSelected!(profile);
+
+            if(dryerId) {
+                await saveProfile(dryerId, profile)
+            }
+        }
+    }
+
     return (
         <View>
             <View style={styles.profilesContainer}>
@@ -49,13 +67,14 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
                         const isOpen = openStates[profile.id];
 
                         return (
-                            <View key={profile.id} style={styles.closedProfile}>
+                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={[styles.closedProfile, selected?.id === profile.id && styles.selectedProfile]}>
+
                                 <View style={styles.closedProfileTitle}>
                                     <View style={styles.closedProfileTitleName}>
                                         <Ionicons
                                             name={profile.customizable ? 'person-outline' : 'star-outline'}
                                             size={25}
-                                            color={profile.customizable ? '#723BFF' : '#F6B900'} // Paars
+                                            color={profile.customizable ? '#723BFF' : '#F6B900'} 
                                         />
                                         <Text style={styles.closedProfileTitleText}>{profile.name}</Text>
                                     </View>
@@ -151,7 +170,7 @@ const ProfilesList = ({ profiles }: { profiles: any[] }) => {
                                         <Text style={styles.openedProfileNotesText}>Water-soluble support material.</Text>
                                     </View>
                                 </Animated.View>
-                            </View>
+                            </View></TouchableOpacity>
                         );
                     })}
             </View>
@@ -203,6 +222,12 @@ const styles = StyleSheet.create({
         shadowRadius: 3,
         elevation: 3,
     },
+    selectedProfile: {
+        backgroundColor: '#EFF9FF',
+        borderWidth: 1,
+        borderColor: '#006BAB'
+    },
+
     closedProfileTitle: {
         flexDirection: 'row',
         marginTop: 10,

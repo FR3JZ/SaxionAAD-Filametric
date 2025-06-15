@@ -49,7 +49,6 @@ const HomePage = () => {
             actualTemp={73}
             progress={75}
             timeRemaining="25min"
-            currentProfile="My Profile 1"
             isExpanded={isExpanded}
             onToggleExpand={() => handleToggle(dryer.name)}
             onCollapseComplete={() => setCollapsingDryer(null)}

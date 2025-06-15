@@ -3,11 +3,19 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Animated, ScrollV
 import { Ionicons } from '@expo/vector-icons';
 import ProfilesList from './ProfilesList';
 import ProfileService from '@/services/profileService';
+import { getSavedProfile } from '@/stores/profileStore';
 import { useFocusEffect } from 'expo-router';
+
 
 const screenWidth = Dimensions.get('window').width;
 
-const ProfileOverviewPage = () => {
+type ProfileOverviewPageProps = {
+  selection: boolean
+  dryerId?: string;
+};
+
+const ProfileOverviewPage = ({selection, dryerId} : ProfileOverviewPageProps) => {
+  const [selected, setSelected] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState<"Preset" | "Custom">("Preset");
   const [profiles, setProfiles] = useState<any[]>([]);
 
@@ -17,20 +25,21 @@ const ProfileOverviewPage = () => {
     setProfiles(json['profiles']);
   };
 
+  const setSelectedProfile = async () => {
+    if(dryerId) {
+      const activeProfile = await getSavedProfile(dryerId);
+      if(activeProfile !== null) {
+        setSelected(activeProfile);
+      }
+    }
+  }
+
   useFocusEffect(
     useCallback(() => {
       fetchProfiles();
+      setSelectedProfile();
     }, [])
   );
-
-  useEffect(() => {
-    const fetchProfiles = async () => {
-        const json = await ProfileService.getProfiles();
-        setProfiles(json['profiles']);
-    };
-
-    fetchProfiles();
-}, []);
   
   const translateX = useRef(new Animated.Value(0)).current;
   const handleTabSwitch = (newTab: "Preset" | "Custom") => {
@@ -70,9 +79,15 @@ const ProfileOverviewPage = () => {
 
       <Animated.View style={{ flex: 1, transform: [{ translateX }] }}>
         {activeTab === "Preset" ? (
-          <ProfilesList profiles={profiles.filter(profile => profile.customizable === false)} />
+          <ProfilesList 
+            profiles={profiles.filter(profile => profile.customizable === false)} 
+            {...(selection ? {selected, setSelected: setSelected, dryerId} : {})}
+          />
         ) : (
-          <ProfilesList profiles={profiles.filter(profile => profile.customizable === true)} />
+          <ProfilesList 
+            profiles={profiles.filter(profile => profile.customizable === true)} 
+            {...(selection ? {selected, setSelected: setSelected, dryerId} : {})}
+          />
         )}
     </Animated.View>
     </ScrollView>
