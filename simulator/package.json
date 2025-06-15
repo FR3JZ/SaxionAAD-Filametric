@@ -1,0 +1,13 @@
+{
+  "name": "mqtt-simulator",
+  "version": "1.0.0",
+  "main": "simulate.js",
+  "scripts": {
+    "start": "node simulate.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "fs": "^0.0.1-security",
+    "mqtt": "^5.13.0"
+  }
+}
