@@ -33,6 +33,22 @@ const HomePage = () => {
             return null;
           }
 
+        return (
+          <DryerCard
+            key={index}
+            name={dryer.name}
+            status={dryer.status as any}
+            type={dryer.type as any}
+            targetTemp={75}
+            actualTemp={73}
+            progress={75}
+            timeRemaining="25min"
+            isExpanded={isExpanded}
+            onToggleExpand={() => handleToggle(dryer.name)}
+            onCollapseComplete={() => setCollapsingDryer(null)}
+          />
+        );
+      })}
           return (
             <DryerCard
               key={dryer.serial}
