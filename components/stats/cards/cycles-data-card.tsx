@@ -1,16 +1,24 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native";
 
 interface Props {
-    dryer: string;
-    timeframe: string;
+    cyclesInTimeFrame?: number;
+    wrtLast?: number;
+    timeframe: number;
 }
 
-const CyclesDataCard:  React.FC<Props> = ({dryer, timeframe}) => {
+const CyclesDataCard:  React.FC<Props> = ({cyclesInTimeFrame, wrtLast, timeframe}) => {
 
     function getTimeframeText(): string{
-        return "in " + timeframe.toLowerCase();
+        if(wrtLast === undefined) return "";
+        if(timeframe === 1) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last day" : String(wrtLast) + " w.r.t last day"
+        }
+        if(timeframe === 7) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last week" : String(wrtLast) + " w.r.t last week"
+        }
+        return ""
     }
 
     return (
@@ -19,8 +27,8 @@ const CyclesDataCard:  React.FC<Props> = ({dryer, timeframe}) => {
                 <Ionicons style={styles.icon} size={32} name='checkmark-circle'></Ionicons>
                 <Text style={styles.titleText}>Completed cycles</Text>
             </View>
-            <Text style={styles.statText}>7 Cycles</Text>
-            <Text style={styles.changeText}>+ 1 w.r.t. {getTimeframeText()}</Text>
+            <Text style={styles.statText}>{cyclesInTimeFrame} Cycles</Text>
+            <Text style={styles.changeText}> {getTimeframeText()}</Text>
         </View>
     )
 }
@@ -68,4 +76,4 @@ const styles = StyleSheet.create({
         fontFamily: 'Satoshi',
         fontWeight: "400"
     }
-})
+});

@@ -7,7 +7,7 @@ export type DryingProfile = {
     Mode: string,
     Customizable: boolean,
     User_id: string,
-    Drying_profile_mode_id: string
+    Drying_profile_mode_id: string,
 }
 
 export type DryingMode = {
@@ -15,4 +15,30 @@ export type DryingMode = {
     Name: string,
     Target_temperature: number,
     Target_duration: number,
+}
+
+export type Device = {
+    ID: string,
+    Shadow: any,
+}
+
+export type DryerLog = {
+  temperature: number,
+  humidity: number,
+  completedCycles: number,
+  timestamp: Date,
+}
+
+export type StatsData = {
+  humidityReductionPercentage: number,
+  completedCycles: number,
+  wrtHumidity: number,
+  wrtCycles: number,
+  temperaturePeriodArray: GraphData,
+  humidityPeriodArray: GraphData,
+}
+
+export type GraphData = {
+  timestamp:string[],
+  value:number[],
 }
