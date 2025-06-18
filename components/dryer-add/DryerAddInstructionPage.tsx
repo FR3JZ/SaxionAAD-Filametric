@@ -77,15 +77,18 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingTop: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#F9F9F9'
     },
     instructionsContainer: {
         width: '90%',
-        borderWidth: 1,
-        borderColor: '#B0B0B0',
         borderRadius: 10,
         padding: 16,
         backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
     },
     header: {
         flexDirection: 'row',
@@ -135,11 +138,14 @@ const styles = StyleSheet.create({
     explanationContainer: {
         marginTop: 20,
         width: '90%',
-        borderWidth: 1,
-        borderColor: '#B0B0B0',
         borderRadius: 10,
         backgroundColor: '#fff',
         paddingVertical: 16,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
     },
     explanationTitle: {
         fontFamily: 'Satoshi-Medium',
@@ -168,9 +174,9 @@ const styles = StyleSheet.create({
         color: '#5D5D5D',
         marginTop: 2,
     },
-    redirectButton: {
+    redirectButton: { 
         marginTop: 24,
-        backgroundColor: '#FF5500',
+        backgroundColor: '#00C03B',
         paddingVertical: 14,
         borderRadius: 10,
         alignItems: 'center',
