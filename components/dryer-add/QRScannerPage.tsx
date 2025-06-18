@@ -144,17 +144,21 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#F9F9F9',
         marginTop: 15
     },
     cameraAccessContainer: {
-        borderWidth: 1,
-        borderColor: '#B0B0B0',
         width: '90%',
         borderRadius: 10,
         display: 'flex',
         justifyContent: 'space-evenly',
-        paddingVertical: 20
+        paddingVertical: 20,
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
     },
     cameraAccessTitle: {
         flexDirection: 'row',
@@ -317,12 +321,16 @@ const styles = StyleSheet.create({
     },
 
     instructionsContainer: {
-        borderWidth: 1,
-        borderColor: '#B0B0B0',
         borderRadius: 10,
         width: '90%',
         height: 230,
-        marginTop: 20
+        marginTop: 20,
+        backgroundColor: '#fff',
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 5,
+        elevation: 3,
     },
 
     instructionTitle: {
