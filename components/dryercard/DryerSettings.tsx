@@ -7,10 +7,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { Slider } from "@react-native-assets/slider";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import SwitchToggle from "react-native-switch-toggle";
 import LabeledSwitchRow from "../custom/LabeledSwitchRow";
 import LabeledSliderRow from "../custom/LabeledSliderRow";
 
@@ -19,13 +17,16 @@ interface DryerSettingsProps {
 }
 
 const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
+  // State variables for toggles and slider
   const [sleepMode, setSleepMode] = useState(false);
   const [brightness, setBrightness] = useState(75);
   const [enableSounds, setEnableSounds] = useState(false);
   const [autoUpdateFirmware, setAutoUpdateFirmware] = useState(false);
 
+  // Animation value for fade in/out
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
+  // Animate fade in when screen is focused
   useFocusEffect(
     React.useCallback(() => {
       fadeAnim.setValue(0);
@@ -37,6 +38,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
     }, [])
   );
 
+  // Animate fade out before navigating back
   const handleBackPress = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
@@ -61,12 +63,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
         {/* Firmware Section */}
         <View style={styles.section}>
           <View style={styles.headerRow}>
-            <Ionicons
-              name="terminal-outline"
-              size={24}
-              color="black"
-              style={styles.icon}
-            />
+            <Ionicons name="terminal-outline" size={24} color="black" style={styles.icon} />
             <Text style={styles.sectionTitle}>Firmware</Text>
           </View>
           <LabeledSwitchRow
@@ -78,6 +75,8 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
               console.log("Auto update firmware:", val);
             }}
           />
+
+          {/* Version Info */}
           <View style={styles.versionRow}>
             <Text style={styles.versionLabel}>Current version</Text>
             <View style={styles.versionTagWhite}>
@@ -88,36 +87,26 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
           <View style={styles.versionRow}>
             <View>
               <Text style={styles.versionLabel}>Latest version</Text>
-              <Text style={[styles.caption, { marginTop: 4 }]}>
-                Available for download
-              </Text>
+              <Text style={[styles.caption, { marginTop: 4 }]}>Available for download</Text>
             </View>
             <View style={styles.versionTagPurple}>
               <Text style={styles.versionTextWhite}>1.2.4</Text>
             </View>
           </View>
+
+          {/* Update Button */}
           <TouchableOpacity style={styles.updateButton}>
             <View style={styles.updateButtonContent}>
-              <Ionicons
-                name="share-outline"
-                size={20}
-                color="white"
-                style={styles.updateIcon}
-              />
+              <Ionicons name="share-outline" size={20} color="white" style={styles.updateIcon} />
               <Text style={styles.updateButtonText}>Update '{name}'</Text>
             </View>
           </TouchableOpacity>
         </View>
 
-        {/* Display Settings */}
+        {/* Device Settings */}
         <View style={styles.section}>
           <View style={styles.headerRow}>
-            <Ionicons
-              name="tv-outline"
-              size={24}
-              color="black"
-              style={styles.icon}
-            />
+            <Ionicons name="tv-outline" size={24} color="black" style={styles.icon} />
             <Text style={styles.sectionTitle}>Device Settings</Text>
           </View>
 
@@ -132,6 +121,7 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
           />
 
           <View style={styles.divider} />
+
           <View style={styles.row}>
             <LabeledSwitchRow
               title="Display sleep after 5 minutes"
@@ -142,18 +132,19 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
                 console.log("Sleep mode:", val);
               }}
             />
-
           </View>
+
           <LabeledSliderRow
             title="Display brightness"
             value={brightness}
             onChange={setBrightness}
           />
 
+          {/* Display Off Button */}
           <TouchableOpacity style={styles.turnOffButton}>
             <Text style={styles.turnOffButtonText}>Turn off display</Text>
           </TouchableOpacity>
-          <Text style={styles.caption}>Immediately turns of the dryer's display</Text>
+          <Text style={styles.caption}>Immediately turns off the dryer's display</Text>
         </View>
       </Animated.View>
     </View>

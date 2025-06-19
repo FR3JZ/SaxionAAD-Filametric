@@ -1,4 +1,3 @@
-// context/authContext.tsx
 import { clearRememberUser, getRememberUser, setLoggedInState, setRememberUser } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
@@ -10,7 +9,7 @@ type AuthState = {
     isReady: boolean;
     user: any;
     setUser: (user: any) => void;
-    logIn: (email: string, password: string, rememberUser:boolean) => Promise<void>;
+    logIn: (email: string, password: string, rememberUser: boolean) => Promise<void>;
     logOut: () => Promise<void>;
 };
 
@@ -29,7 +28,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const [user, setUser] = useState<any>(null);
     const router = useRouter();
 
-    const logIn = async (email: string, password: string, rememberUser:boolean) => {
+    // Triggered when user submits login form
+    const logIn = async (email: string, password: string, rememberUser: boolean) => {
         try {
             await setRememberUser(rememberUser);
             const cognitoUser = await Auth.signIn(email, password);
@@ -39,6 +39,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
             setUser(cognitoUser);
             setIsLoggedIn(true);
 
+            // Navigate to main app screen
             router.replace("/(protected)/(tabs)");
         } catch (error: any) {
             console.error("Login failed:", error);
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    // Logs out user and clears session
     const logOut = async () => {
         try {
             await clearRememberUser();
@@ -57,11 +59,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    // Checks if a session should be restored on startup
     const checkAuthenticationStatus = async () => {
         let authenticated = false;
         try {
-            const rememberTheUser:boolean = await getRememberUser();
-            if(rememberTheUser) {
+            const rememberTheUser: boolean = await getRememberUser();
+            if (rememberTheUser) {
                 console.log("Check state");
                 const cognitoUser = await Auth.currentAuthenticatedUser();
                 setUser(cognitoUser);
@@ -81,6 +84,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         checkAuthenticationStatus();
 
+        // Listen for changes in auth state (e.g. signIn, signOut)
         const listener = (data: any) => {
             console.log('Auth Hub event:', data.payload.event);
             switch (data.payload.event) {
@@ -88,17 +92,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     setUser(data.payload.data);
                     setIsLoggedIn(true);
                     setLoggedInState("LoggedIn");
-                    console.log('Auth Hub: Gebruiker succesvol ingelogd:', data.payload.data.username);
+                    console.log('Auth Hub: User successfully signed in:', data.payload.data.username);
                     break;
                 case 'signOut':
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
-                    console.log('Auth Hub: Gebruiker uitgelogd');
+                    console.log('Auth Hub: User signed out');
                     router.replace("/LoginScreen");
                     break;
                 case 'signIn_failure':
-                    console.error('Auth Hub: Login mislukt:', data.payload.data);
+                    console.error('Auth Hub: Sign in failed:', data.payload.data);
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
@@ -111,6 +115,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
         };
 
         Hub.listen('auth', listener);
+
+        // Cleanup listener on unmount
         return () => Hub.remove('auth', listener);
     }, []);
 

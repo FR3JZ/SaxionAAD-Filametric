@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, Modal, TouchableOpacity, FlatList, TextInput, Image, ImageSourcePropType } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
 
 interface ProfileMultiPickerProps {
   image: ImageSourcePropType;
@@ -20,25 +30,31 @@ const ProfileMultiPicker = ({
   minutes,
   setMinutes,
   temperature,
-  setTemperature
+  setTemperature,
 }: ProfileMultiPickerProps) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedInput, setSelectedInput] = useState<'hours' | 'minutes' | 'temperature'>('hours');
+  const [selectedInput, setSelectedInput] = useState<
+    "hours" | "minutes" | "temperature"
+  >("hours");
   const [selectedValues, setSelectedValues] = useState({
-    hours: hours,
-    minutes: minutes,
-    temperature: temperature
+    hours,
+    minutes,
+    temperature,
   });
 
   const handleInputClick = () => {
     setModalVisible(true);
   };
 
-  const handleValueChange = (value: number, type: 'hours' | 'minutes' | 'temperature') => {
-    setSelectedValues(prevValues => ({ ...prevValues, [type]: value }));
+  const handleValueChange = (
+    value: number,
+    type: "hours" | "minutes" | "temperature"
+  ) => {
+    setSelectedValues((prev) => ({ ...prev, [type]: value }));
   };
 
   const handleSave = () => {
+    // Commit selection to parent state
     setHours(selectedValues.hours);
     setMinutes(selectedValues.minutes);
     setTemperature(selectedValues.temperature);
@@ -49,13 +65,14 @@ const ProfileMultiPicker = ({
     setModalVisible(false);
   };
 
-  // Data for each picker column
+  // Picker data ranges
   const hoursData = Array.from({ length: 12 }, (_, i) => i + 1);
   const minutesData = Array.from({ length: 60 }, (_, i) => i);
   const temperatureData = Array.from({ length: 100 }, (_, i) => i);
 
   return (
     <View style={styles.inputsContainer}>
+      {/* Time & Temp Preview Blocks */}
       <View style={styles.inputsWrapper}>
         <TouchableOpacity onPress={handleInputClick}>
           <View style={styles.input}>
@@ -64,6 +81,7 @@ const ProfileMultiPicker = ({
         </TouchableOpacity>
         <Text style={styles.type}>hrs</Text>
       </View>
+
       <View style={styles.inputsWrapper}>
         <TouchableOpacity onPress={handleInputClick}>
           <View style={styles.input}>
@@ -72,6 +90,7 @@ const ProfileMultiPicker = ({
         </TouchableOpacity>
         <Text style={styles.type}>min</Text>
       </View>
+
       <View style={styles.inputsWrapper}>
         <TouchableOpacity onPress={handleInputClick}>
           <View style={styles.input}>
@@ -81,7 +100,7 @@ const ProfileMultiPicker = ({
         <Text style={styles.type}>°C</Text>
       </View>
 
-      {/* Custom Modal with custom picker */}
+      {/* Modal Picker for Hours / Minutes / Temperature */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -91,75 +110,79 @@ const ProfileMultiPicker = ({
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalTitleContainer}>
-                <Image source={image} style={styles.modeImage} resizeMode='contain' />
-                <Text style={styles.modalTitle}>{label}</Text>
+              <Image source={image} style={styles.modeImage} resizeMode="contain" />
+              <Text style={styles.modalTitle}>{label}</Text>
             </View>
-            
+
+            {/* Picker Columns */}
             <View style={styles.pickersWrapper}>
-                <View style={styles.pickerContainer}>
-                {/* Hours Picker Column */}
+              <View style={styles.pickerContainer}>
+                {/* Hours Picker */}
                 <View style={styles.pickerColumn}>
-                    <Text style={styles.pickerLabel}>Hours</Text>
-                    <FlatList
+                  <Text style={styles.pickerLabel}>Hours</Text>
+                  <FlatList
                     data={hoursData}
                     keyExtractor={(item) => item.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity
-                        onPress={() => handleValueChange(item, 'hours')}
+                      <TouchableOpacity
+                        onPress={() => handleValueChange(item, "hours")}
                         style={[
-                            styles.pickerItem,
-                            selectedValues.hours === item && styles.selectedItem
+                          styles.pickerItem,
+                          selectedValues.hours === item && styles.selectedItem,
                         ]}
-                        >
+                      >
                         <Text style={styles.pickerItemText}>{item}</Text>
-                        </TouchableOpacity>
+                      </TouchableOpacity>
                     )}
                     contentContainerStyle={styles.pickerList}
-                    />
+                  />
                 </View>
 
+                {/* Minutes Picker */}
                 <View style={styles.pickerColumn}>
-                    <Text style={styles.pickerLabel}>Minutes</Text>
-                    <FlatList
+                  <Text style={styles.pickerLabel}>Minutes</Text>
+                  <FlatList
                     data={minutesData}
                     keyExtractor={(item) => item.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity
-                        onPress={() => handleValueChange(item, 'minutes')}
+                      <TouchableOpacity
+                        onPress={() => handleValueChange(item, "minutes")}
                         style={[
-                            styles.pickerItem,
-                            selectedValues.minutes === item && styles.selectedItem
+                          styles.pickerItem,
+                          selectedValues.minutes === item && styles.selectedItem,
                         ]}
-                        >
+                      >
                         <Text style={styles.pickerItemText}>{item}</Text>
-                        </TouchableOpacity>
+                      </TouchableOpacity>
                     )}
                     contentContainerStyle={styles.pickerList}
-                    />
+                  />
                 </View>
 
+                {/* Temperature Picker */}
                 <View style={styles.pickerColumn}>
-                    <Text style={styles.pickerLabel}>Temperature</Text>
-                    <FlatList
+                  <Text style={styles.pickerLabel}>Temperature</Text>
+                  <FlatList
                     data={temperatureData}
                     keyExtractor={(item) => item.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity
-                        onPress={() => handleValueChange(item, 'temperature')}
+                      <TouchableOpacity
+                        onPress={() => handleValueChange(item, "temperature")}
                         style={[
-                            styles.pickerItem,
-                            selectedValues.temperature === item && styles.selectedItem
+                          styles.pickerItem,
+                          selectedValues.temperature === item && styles.selectedItem,
                         ]}
-                        >
+                      >
                         <Text style={styles.pickerItemText}>{item}</Text>
-                        </TouchableOpacity>
+                      </TouchableOpacity>
                     )}
                     contentContainerStyle={styles.pickerList}
-                    />
+                  />
                 </View>
-                </View>
+              </View>
             </View>
 
+            {/* Modal Actions */}
             <View style={styles.modalButtons}>
               <TouchableOpacity onPress={handleSave} style={[styles.button, styles.saveButton]}>
                 <Text style={styles.buttonText}>Save</Text>
@@ -177,131 +200,116 @@ const ProfileMultiPicker = ({
 
 const styles = StyleSheet.create({
   inputsContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   inputsWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     width: 50,
     height: 50,
     borderWidth: 1,
-    borderColor: '#D1D1D1',
+    borderColor: "#D1D1D1",
     borderRadius: 10,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 5,
   },
   inputText: {
-    color: '#B0B0B0',
+    color: "#B0B0B0",
     fontSize: 20,
   },
   type: {
     fontSize: 18,
-    fontFamily: 'Satoshi-Medium',
+    fontFamily: "Satoshi-Medium",
   },
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
     width: 400,
     height: 450,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  modalTitle: {
-    fontSize: 20,
-    marginLeft: 10,
-    fontFamily: 'Satoshi-Medium',
-  },
-
   modalTitleContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flexDirection: "row",
+    alignItems: "center",
   },
-
   modeImage: {
     width: 25,
     height: 25,
   },
-
-  pickersWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+  modalTitle: {
+    fontSize: 20,
+    marginLeft: 10,
+    fontFamily: "Satoshi-Medium",
   },
-
+  pickersWrapper: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
   pickerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    height: '80%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    height: "80%",
   },
   pickerColumn: {
-    alignItems: 'center',
-    width: 100, 
+    alignItems: "center",
+    width: 100,
   },
   pickerLabel: {
     fontSize: 16,
     marginBottom: 10,
   },
   pickerList: {
-    flexDirection: 'column',
+    flexDirection: "column",
   },
   pickerItem: {
     width: 40,
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#D1D1D1',
+    borderColor: "#D1D1D1",
     borderRadius: 10,
   },
   selectedItem: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: "#E0E0E0",
   },
   pickerItemText: {
     fontSize: 18,
   },
   modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
   button: {
     padding: 10,
     borderRadius: 5,
-    width: '45%',
-    alignItems: 'center',
+    width: "45%",
+    alignItems: "center",
   },
-
   cancelButton: {
-    backgroundColor: '#FF2323'
+    backgroundColor: "#FF2323",
   },
-
   saveButton: {
-    backgroundColor: '#00C03B'
+    backgroundColor: "#00C03B",
   },
-
-
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 16,
   },
 });

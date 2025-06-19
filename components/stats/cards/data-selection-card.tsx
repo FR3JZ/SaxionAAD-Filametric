@@ -12,26 +12,30 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
   const [timeFrame, setTimeFrame] = useState<string>('1 Day');
   const [dryers, setDryers] = useState<string[]>([]);
 
+  // Called when the user selects a different dryer
   function changeDryer(dryer: string) {
     dryerChanged(dryer);
     setDryer(dryer);
   }
 
+  // Called when the user selects a different time frame
   function changeTimeFrame(timeFrame: string) {
     timeFrameChanged(timeFrame);
     setTimeFrame(timeFrame);
   }
 
   useEffect(() => {
+    // Notify parent of initial selection
     dryerChanged(dryer);
     timeFrameChanged(timeFrame);
 
-    // Simulate fetching dryer options; replace with real data fetch if needed
+    // Simulate fetching dryer list (replace with actual data source)
     setDryers(['Dryer A', 'Dryer B', 'Dryer C']);
   }, []);
 
   return (
     <View style={styles.container}>
+      {/* Dryer selector */}
       <View style={[styles.pickerWrapper, styles.leftMargin]}>
         <FilametricPicker
           label="Dryer"
@@ -40,6 +44,8 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
           options={[{ label: 'All dryers', value: 'All dryers' }, ...dryers.map(d => ({ label: d, value: d }))]}
         />
       </View>
+
+      {/* Time frame selector */}
       <View style={[styles.pickerWrapper, styles.rightMargin]}>
         <FilametricPicker
           label="Time Frame"

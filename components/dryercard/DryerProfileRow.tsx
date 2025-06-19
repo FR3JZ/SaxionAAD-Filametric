@@ -18,6 +18,7 @@ const DryerProfileRow: React.FC<Props> = ({
   status,
   isExpanded,
 }) => {
+  // Navigate to profile selection if dryer is expanded and cycle is completed
   const routeToSelectProfile = () => {
     if (isExpanded && status === 'Completed') {
       router.push({
@@ -27,6 +28,7 @@ const DryerProfileRow: React.FC<Props> = ({
     }
   };
 
+  // Navigate to mode selection for current profile
   const routeToSelectModus = () => {
     if (isExpanded && status === 'Completed') {
       router.push({
@@ -36,6 +38,7 @@ const DryerProfileRow: React.FC<Props> = ({
     }
   };
 
+  // Map current mode to corresponding icon image
   const modeIcons = {
     normal: require('../../assets/images/normal_mode_icon.png'),
     silent: require('../../assets/images/silent_mode_icon.png'),
@@ -46,10 +49,13 @@ const DryerProfileRow: React.FC<Props> = ({
 
   return (
     <View style={styles.row}>
+      {/* Profile name section with folder icon */}
       <TouchableOpacity style={styles.profileContainer} onPress={routeToSelectProfile}>
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
         <Text style={styles.profileText}>{currentProfile.name}</Text>
       </TouchableOpacity>
+
+      {/* Mode icon bubble */}
       <TouchableOpacity style={styles.iconBubble} onPress={routeToSelectModus}>
         <Image source={icon} style={styles.modeIcon} resizeMode="contain" />
       </TouchableOpacity>

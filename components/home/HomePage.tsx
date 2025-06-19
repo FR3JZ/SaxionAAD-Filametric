@@ -5,9 +5,11 @@ import { useDryerWebSocket } from "../../hooks/useDryerWebSocket";
 
 const HomePage = () => {
   const { dryerMap } = useDryerWebSocket();
+
   const [expandedDryer, setExpandedDryer] = useState<string | null>(null);
   const [collapsingDryer, setCollapsingDryer] = useState<string | null>(null);
 
+  // Handles expand/collapse toggle for individual dryers
   const handleToggle = (dryerName: string) => {
     if (expandedDryer === dryerName) {
       setCollapsingDryer(dryerName);
@@ -20,36 +22,40 @@ const HomePage = () => {
 
   return (
     <ScrollView>
+      {/* Page Title */}
       <View style={styles.title}>
         <Text style={styles.titleText}>Dryers</Text>
       </View>
 
+      {/* Render DryerCards based on most recent timestamp */}
       {Object.values(dryerMap)
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((dryer) => {
           const isExpanded = expandedDryer === dryer.serial;
           const isCollapsing = collapsingDryer === dryer.serial;
+
+          // Only show one dryer at a time, or allow collapsing animation to complete
           if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {
             return null;
           }
 
-        return (
-          <DryerCard
-            key={dryer.serial}
-            name={dryer.serial}
-            status={dryer.status || "Completed"}
-            type={"Solo"}
-            targetTemp={dryer.targetTemp}
+          return (
+            <DryerCard
+              key={dryer.serial}
+              name={dryer.serial}
+              status={dryer.status || "Completed"}
+              type={"Solo"}
+              targetTemp={dryer.targetTemp}
               actualTemp={dryer.temperature}
               humidity={`${dryer.humidity}%`}
               timeRemaining={dryer.timeRemaining || 0}
               totalTime={dryer.totalTime}
-            isExpanded={isExpanded}
-            onToggleExpand={() => handleToggle(dryer.serial)}
-            onCollapseComplete={() => setCollapsingDryer(null)}
-          />
-        );
-      })}
+              isExpanded={isExpanded}
+              onToggleExpand={() => handleToggle(dryer.serial)}
+              onCollapseComplete={() => setCollapsingDryer(null)}
+            />
+          );
+        })}
     </ScrollView>
   );
 };

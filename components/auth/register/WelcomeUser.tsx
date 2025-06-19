@@ -1,13 +1,12 @@
 import React from 'react';
 import { Image, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
-
 interface Props {
     username: string;
     goToLogin: () => void;
 }
 
-const WelcomeUser: React.FC<Props> = ({username, goToLogin}) => {
+const WelcomeUser: React.FC<Props> = ({ username, goToLogin }) => {
     return (
         <View>
             <View style={style.header}>
@@ -16,26 +15,30 @@ const WelcomeUser: React.FC<Props> = ({username, goToLogin}) => {
             </View>
 
             <View style={style.textContainer}>
-                <Text style={style.pageText}>Access everything Filametric has to offer - all from a single account</Text>
+                <Text style={style.pageText}>
+                    Access everything Filametric has to offer - all from a single account
+                </Text>
             </View>
 
-            <View  style={style.imageContainer}>
-                <Image 
+            {/* Visual welcome illustration */}
+            <View style={style.imageContainer}>
+                <Image
                     source={require("../../../assets/images/solo.png")}
                     style={style.soloImage}
                     resizeMode="contain"
                 />
             </View>
-            
-            
+
+            {/* CTA button to proceed to login */}
             <TouchableOpacity style={style.button} onPress={goToLogin}>
                 <Text style={style.buttonText}>Bring on the heat!</Text>
             </TouchableOpacity>
         </View>
-    )
-}
+    );
+};
 
 export default WelcomeUser;
+
 
 const style = StyleSheet.create({
     header: {

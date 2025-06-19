@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F3F6',
     borderRadius: 12,
     padding: 12,
-    marginLeft: 5,    // wider right spacing to compensate
+    marginLeft: 5,
   },
   machineImage: {
     width: 220,

@@ -7,9 +7,10 @@ const DangerZoneCard = () => {
     return (
         <SafeAreaView edges={['bottom']} style={styles.safeArea}>
             <View style={styles.card}>
+                {/* Warning header */}
                 <View>
                     <View style={styles.row}>
-                        <Ionicons color="#FF2323" size={32} name="warning-outline"/>
+                        <Ionicons color="#FF2323" size={32} name="warning-outline" />
                         <Text style={styles.dangerTitle}>Danger zone</Text>
                     </View>
                     <Text style={styles.dangerText}>
@@ -17,43 +18,47 @@ const DangerZoneCard = () => {
                     </Text>
                 </View>
 
-                <View style={styles.seperator}/>
+                <View style={styles.seperator} />
 
+                {/* Section: Delete all dryers */}
                 <View>
                     <View style={styles.spacing}>
                         <Text style={styles.headingText}>Delete Dryers</Text>
                         <Text style={styles.text}>Remove all registered dryers and their settings</Text>
                         <TouchableOpacity style={styles.minorDangerButton}>
-                            <Ionicons color="#FF2323" size={24} name="trash-outline"/>
+                            <Ionicons color="#FF2323" size={24} name="trash-outline" />
                             <Text style={styles.minorDangerButtonText}>Delete all dryers</Text>
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.spacing}> 
+                    {/* Section: Delete all custom profiles */}
+                    <View style={styles.spacing}>
                         <Text style={styles.headingText}>Delete Custom Profiles</Text>
                         <Text style={styles.text}>Remove all your custom filament profiles</Text>
                         <TouchableOpacity style={styles.minorDangerButton}>
-                            <Ionicons color="#FF2323" size={24} name="trash-outline"/>
+                            <Ionicons color="#FF2323" size={24} name="trash-outline" />
                             <Text style={styles.minorDangerButtonText}>Delete All Custom Profiles</Text>
                         </TouchableOpacity>
                     </View>
 
+                    {/* Section: Reset settings */}
                     <View>
                         <Text style={styles.headingText}>Reset All Settings</Text>
                         <Text style={styles.text}>Reset all preferences, notification settings and app configuration</Text>
                         <TouchableOpacity style={styles.minorDangerButton}>
-                            <Ionicons color="#FF2323" size={24} name="reload-outline"/>
+                            <Ionicons color="#FF2323" size={24} name="reload-outline" />
                             <Text style={styles.minorDangerButtonText}>Reset All Settings</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={styles.seperator}/>
+                <View style={styles.seperator} />
 
+                {/* Section: Permanent account deletion */}
                 <Text style={styles.bigDangerHeadingText}>Permanently Delete Account</Text>
                 <Text style={styles.text}>Permanently delete your Filametric account including all data and usage history</Text>
                 <TouchableOpacity style={styles.bigDangerButton}>
-                    <Ionicons color="#FFFFFF" size={24} name="trash-outline"/>
+                    <Ionicons color="#FFFFFF" size={24} name="trash-outline" />
                     <Text style={styles.bigDangerButtonText}>Delete Account</Text>
                 </TouchableOpacity>
             </View>
@@ -117,11 +122,11 @@ const styles = StyleSheet.create({
     minorDangerButton: {
         height: 48,
         backgroundColor: "#FFFFFF",
-        justifyContent: 'center', 
-        alignItems: "center", 
-        flexDirection: 'row',    
-        paddingHorizontal: 16,  
-        columnGap: 8,   
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        columnGap: 8,
         marginTop: 8,
         marginBottom: 4,
         borderWidth: 1,
@@ -137,13 +142,13 @@ const styles = StyleSheet.create({
     bigDangerButton: {
         height: 48,
         backgroundColor: "#FF2323",
-        justifyContent: 'center', 
-        alignItems: "center", 
-        flexDirection: 'row',    
-        paddingHorizontal: 16,  
-        columnGap: 8,   
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        columnGap: 8,
         marginTop: 8,
-        marginBottom: 16, // extra marge onderin
+        marginBottom: 16,
         borderWidth: 1,
         borderRadius: 10,
         borderColor: "#FF2323",

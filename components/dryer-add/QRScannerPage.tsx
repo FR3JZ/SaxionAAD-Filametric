@@ -9,8 +9,9 @@ const { width } = Dimensions.get("window");
 const QRScannerPage = () => {
     const [hasPermission, setHasPermission] = useState<boolean>(false);
     const [scanned, setScanned] = useState<boolean>(false);
-    const scannedRef = useRef(false);
+    const scannedRef = useRef(false); // prevent duplicate scans
 
+    // Reset scanned state when screen regains focus
     useFocusEffect(
         useCallback(() => {
             setScanned(false);
@@ -18,6 +19,7 @@ const QRScannerPage = () => {
         }, [])
     );
 
+    // Ask for camera permission on mount
     useEffect(() => {
         (async () => {
             const { status } = await Camera.getCameraPermissionsAsync();
@@ -31,11 +33,14 @@ const QRScannerPage = () => {
         })();
     }, []);
 
+    // Handle successful QR scan and navigate with payload
     const handleBarCodeScanned = ({ data }: { data: string }) => {
-        if (scannedRef.current) return;
+        if (scannedRef.current) return; // ignore if already handled
 
         scannedRef.current = true;
         setScanned(true);
+
+        // Navigate to AddNewDryerScreen with scanned data
         router.push({
             pathname: "/(protected)/(dryer-add)/AddNewDryerScreen",
             params: { data },
@@ -44,12 +49,14 @@ const QRScannerPage = () => {
 
     return (
         <View style={styles.container}>
+            {/* Top section: permission status */}
             <View style={styles.cameraAccessContainer}>
                 <View style={styles.cameraAccessTitle}>
                     <Ionicons name="camera-outline" size={25} color={'#000'} />
                     <Text style={styles.cameraAccessTitleText}>Camera Access</Text>
                 </View>
 
+                {/* Feedback block based on permission */}
                 {hasPermission ? (
                     <View style={[styles.accessibilityContainer, styles.accessGrantedContainer]}>
                         <Ionicons name="checkmark" color={"#009632"} size={35} style={styles.accessibilityIcon} />
@@ -69,6 +76,7 @@ const QRScannerPage = () => {
                 )}
             </View>
 
+            {/* Scanner view or placeholder depending on permission */}
             {hasPermission ? (
                 <View style={styles.cameraContainer}>
                     <CameraView
@@ -76,11 +84,13 @@ const QRScannerPage = () => {
                         onBarcodeScanned={handleBarCodeScanned}
                         barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
                     />
+                    {/* Frame overlay for visual guidance */}
                     <View style={styles.overlay}>
                         <View style={styles.overlayDarkTop} />
                         <View style={styles.overlayMiddleRow}>
                             <View style={styles.overlaySide} />
                             <View style={styles.overlayCenter}>
+                                {/* Corner markers */}
                                 <View style={styles.cornerTopLeftHorizontal} />
                                 <View style={styles.cornerTopLeftVertical} />
 
@@ -99,12 +109,14 @@ const QRScannerPage = () => {
                     </View>
                 </View>
             ) : (
+                // If denied: show disabled box with frame overlay for consistency
                 <View style={styles.cameraPlaceholder}>
                     <View style={styles.overlay}>
                         <View style={styles.overlayDarkTop} />
                         <View style={styles.overlayMiddleRow}>
                             <View style={styles.overlaySide} />
                             <View style={styles.overlayCenter}>
+                                {/* Corner markers */}
                                 <View style={styles.cornerTopLeftHorizontal} />
                                 <View style={styles.cornerTopLeftVertical} />
 
@@ -123,11 +135,22 @@ const QRScannerPage = () => {
                     </View>
                 </View>
             )}
+
+            {/* Instructional steps */}
             <View style={styles.instructionsContainer}>
                 <Text style={styles.instructionTitle}>How to scan:</Text>
-                <View style={styles.instructionLine}><View style={styles.stepContainer}><Text style={styles.stepText}>1</Text></View><Text style={styles.instructionText}>Hold your device steady and point the camera at the QR code</Text></View>
-                <View style={styles.instructionLine}><View style={styles.stepContainer}><Text style={styles.stepText}>2</Text></View><Text style={styles.instructionText}>Make sure the QR code fits within the frame</Text></View>
-                <View style={styles.instructionLine}><View style={styles.stepContainer}><Text style={styles.stepText}>3</Text></View><Text style={styles.instructionText}>The scanner will automatically detect the code</Text></View>
+                <View style={styles.instructionLine}>
+                    <View style={styles.stepContainer}><Text style={styles.stepText}>1</Text></View>
+                    <Text style={styles.instructionText}>Hold your device steady and point the camera at the QR code</Text>
+                </View>
+                <View style={styles.instructionLine}>
+                    <View style={styles.stepContainer}><Text style={styles.stepText}>2</Text></View>
+                    <Text style={styles.instructionText}>Make sure the QR code fits within the frame</Text>
+                </View>
+                <View style={styles.instructionLine}>
+                    <View style={styles.stepContainer}><Text style={styles.stepText}>3</Text></View>
+                    <Text style={styles.instructionText}>The scanner will automatically detect the code</Text>
+                </View>
             </View>
         </View>
     );

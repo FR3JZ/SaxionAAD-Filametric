@@ -38,6 +38,9 @@ export interface DryerCardProps {
   onCollapseComplete?: () => void;
 }
 
+// The main component representing a single dryer card with dynamic UI,
+// machine controls, real-time updates and profile/mode state.
+
 const DryerCard: React.FC<DryerCardProps> = ({
   name,
   status,
@@ -59,32 +62,15 @@ const DryerCard: React.FC<DryerCardProps> = ({
   const [machineViewHeight, setMachineViewHeight] = useState(0);
   const [profile, setProfile] = useState<any>({});
   const [mode, setMode] = useState<string>("normal");
+
   const animatedHeight = useRef(new Animated.Value(0)).current;
 
-  const testProfile = {
-    id: '25b28a50-fa42-4f93-a6be-f92cad9033cf',
-    name: 'Dryer A',
-    description: 'Een profiel voor een droger',
-    normal: {
-      duration: 7200,
-      target_temperature: 80
-    },
-    silent: {
-      duration: 8400,
-      target_temperature: 90
-    },
-    storage: {
-      duration: 10800,
-      target_temperature: 70
-    },
-    switch_to_storage: true
-  };
-
+  // Load profile & mode on screen focus
   useFocusEffect(
     useCallback(() => {
       const fetchProfile = async () => {
         const storedProfile = await getSavedProfile(name);
-        setProfile(storedProfile ?? testProfile);
+        setProfile(storedProfile);
       };
       const fetchMode = async () => {
         const storedMode = await getSavedMode(name, profile.id);
@@ -95,6 +81,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
     }, [name, profile])
   );
 
+  // Animate expand/collapse of the machine panel
   useEffect(() => {
     if (!isExpanded && machineViewHeight === 0) return;
     Animated.timing(animatedHeight, {
@@ -108,6 +95,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
     });
   }, [isExpanded, machineViewHeight]);
 
+  // Sync local adjustments when modal is closed
   useEffect(() => {
     if (!showAdjustments) {
       setAdjustedTemp(targetTemp);
@@ -131,6 +119,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
   return (
     <View style={styles.wrapper}>
       <View style={styles.card}>
+        {/* Header + Expand/Collapse Toggle */}
         <View style={styles.topRow}>
           <DryerHeader name={name} status={status} />
           <TouchableOpacity onPress={onToggleExpand}>
@@ -144,6 +133,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
 
         <Text style={styles.subtitle}>Last connected: just now</Text>
 
+        {/* Temperature + Time Blocks */}
         <View style={styles.infoRow}>
           <DryerInfoBlock
             iconName="thermometer"
@@ -159,11 +149,13 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         </View>
 
+        {/* Humidity + Energy */}
         <View style={styles.infoRow}>
           <DryerInfoBlock iconName="water" value={humidity} iconColor="#0086D4" />
           <DryerInfoBlock iconName="flash-outline" value={electricity} iconColor="#FF5500" />
         </View>
 
+        {/* Expandable Machine View (animated height) */}
         <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
           <DryerMachineView
             type={type}
@@ -177,6 +169,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         </Animated.View>
 
+        {/* Hidden ref component for dynamic height measuring */}
         <View
           style={styles.hidden}
           onLayout={(e) => {
@@ -188,9 +181,17 @@ const DryerCard: React.FC<DryerCardProps> = ({
           <DryerMachineView type={type} onRightAction={() => { }} onLeftAction={() => { }} />
         </View>
 
-        <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} isExpanded={isExpanded} />
+        <DryerProfileRow
+          dryerId={name}
+          currentProfile={profile}
+          currentMode={mode}
+          status={status}
+          isExpanded={isExpanded}
+        />
+
         <DryerProgressBar progress={calculateProgress()} />
 
+        {/* Controls only when expanded */}
         {isExpanded && (
           <DryerActionControls
             status={status}
@@ -210,6 +211,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
         )}
 
+        {/* Modal: Manual Temp/Time Adjustment */}
         {showAdjustments && (
           <ManualAdjustmentsPanel
             targetTemp={adjustedTemp ?? targetTemp}
@@ -232,6 +234,7 @@ const DryerCard: React.FC<DryerCardProps> = ({
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   wrapper: {

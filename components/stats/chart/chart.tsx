@@ -3,23 +3,25 @@ import { View } from "react-native";
 import { LineChart, PieChart } from 'react-native-chart-kit';
 
 interface Props {
-    dryer: string;
-    timeframe: string;
-    subject: string;
+  dryer: string;
+  timeframe: string;
+  subject: string;
 }
 
-const Chart:  React.FC<Props> = ({dryer, timeframe, subject}) => {
+const Chart: React.FC<Props> = ({ dryer, timeframe, subject }) => {
   const [containerWidth, setContainerWidth] = React.useState(0);
 
   return (
     <View
       style={{ flex: 1, padding: 16 }}
+      // Dynamically capture container width for responsive chart sizing
       onLayout={(event) => {
         const { width } = event.nativeEvent.layout;
         setContainerWidth(width);
       }}
     >
       {subject !== "Materials" ? (
+        // Line chart shown for all subjects except "Materials"
         <View>
           <LineChart
             data={{
@@ -43,8 +45,8 @@ const Chart:  React.FC<Props> = ({dryer, timeframe, subject}) => {
             }}
           />
         </View>
-        
       ) : (
+        // Pie chart for "Materials" subject
         <PieChart
           data={[
             { name: 'PLA', population: 51, color: '#00C03B', legendFontColor: '#7F7F7F', legendFontSize: 15 },
@@ -63,6 +65,6 @@ const Chart:  React.FC<Props> = ({dryer, timeframe, subject}) => {
       )}
     </View>
   );
-}
+};
 
 export default Chart;

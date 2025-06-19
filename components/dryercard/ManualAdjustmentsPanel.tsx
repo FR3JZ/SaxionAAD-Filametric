@@ -26,6 +26,7 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const overlayFadeAnim = useRef(new Animated.Value(0)).current;
 
+  // Fade-in animation when the panel mounts
   useEffect(() => {
     Animated.parallel([
       Animated.timing(overlayFadeAnim, {
@@ -41,6 +42,7 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
     ]).start();
   }, []);
 
+  // Fade-out animation before dismissing the panel
   const handleClose = () => {
     Animated.parallel([
       Animated.timing(overlayFadeAnim, {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
+import { Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import Chart from '../chart/chart';
 
 interface Props {
@@ -7,42 +7,51 @@ interface Props {
     timeframe: string;
 }
 
-const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
+const DataChartCard: React.FC<Props> = ({ dryer, timeframe }) => {
+    // State to track which data subject is selected
     const [dataSubject, setDataSubject] = useState<string>("Temprature");
-    const [dataTitle, setDataTitle] = useState<string>("Temprature");
-    const dataSubjects:string[] = ["Temprature", "Humidity", "Energy", "Materials"];
 
-    function changeDataSubject(newSubject:string) {
-        if(newSubject === "Materials") {
-            setDataTitle(newSubject +  " Pie")
+    // Display title based on subject and type of chart
+    const [dataTitle, setDataTitle] = useState<string>("Temprature");
+
+    const dataSubjects: string[] = ["Temprature", "Humidity", "Energy", "Materials"];
+
+    function changeDataSubject(newSubject: string) {
+        if (newSubject === "Materials") {
+            setDataTitle(newSubject + " Pie");
         } else {
-            setDataTitle(newSubject +  " Curve");
+            setDataTitle(newSubject + " Curve");
         }
-        setDataSubject(newSubject)
+        setDataSubject(newSubject);
     }
 
     return (
         <View style={styles.card}>
+            {/* Buttons to switch between data subjects */}
             <View style={styles.buttonRow}>
                 {dataSubjects.map((subject) => (
-                <Pressable
-                    key={subject}
-                    onPress={() => changeDataSubject(subject)}
-                    style={[ styles.button, dataSubject === subject && styles.selectedButton ]}>
-                    <Text>{subject}</Text>
-                </Pressable>
+                    <Pressable
+                        key={subject}
+                        onPress={() => changeDataSubject(subject)}
+                        style={[styles.button, dataSubject === subject && styles.selectedButton]}
+                    >
+                        <Text>{subject}</Text>
+                    </Pressable>
                 ))}
             </View>
 
+            {/* Chart title */}
             <Text style={styles.titleText}>{dataTitle}</Text>
+
+            {/* Platform-specific handling for chart rendering */}
             {Platform.OS === 'web' ? (
-                <Text style={{padding: 12}}>Chart is not available on web</Text>
+                <Text style={{ padding: 12 }}>Chart is not available on web</Text>
             ) : (
-                <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject}/>
+                <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject} />
             )}
         </View>
-    )
-}
+    );
+};
 
 export default DataChartCard;
 
@@ -76,6 +85,6 @@ const styles = StyleSheet.create({
         padding: 4,
     },
     selectedButton: {
-        backgroundColor: "#F6F6F6"
+        backgroundColor: "#F6F6F6",
     }
-})
+});
