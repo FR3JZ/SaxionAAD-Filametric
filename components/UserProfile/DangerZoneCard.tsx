@@ -1,9 +1,94 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useContext } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext } from "@/context/authContext";
+import ProfileService from "@/services/profileService";
+import DryerService from "@/services/dryerService";
 
 const DangerZoneCard = () => {
+    const auth = useContext(AuthContext)
+
+    const confirmAccountDeletion = () => {
+        Alert.alert(
+            "Delete your account?",
+            "Are you sure you want to delete your account? This action cannot be undone.",
+        [
+            {
+                text: "Cancel",
+                style: "cancel",
+            },
+            {
+                text: "OK",
+                onPress: () => {
+                    auth.deleteUserAccount();
+                },
+            },
+        ],
+            { cancelable: false }
+        );
+    };
+
+    const confirmDryerDeletion = () => {
+        Alert.alert(
+            "Delete your dryers?",
+            "Are you sure you want to delete your dryers? This action cannot be undone.",
+        [
+            {
+                text: "Cancel",
+                style: "cancel",
+            },
+            {
+                text: "OK",
+                onPress: () => {
+                    DryerService.deleteAllDryers();
+                },
+            },
+        ],
+            { cancelable: false }
+        );
+    };
+
+    const confirmCustomProfileDeletion = () => {
+        Alert.alert(
+            "Delete your custom profiles?",
+            "Are you sure you want to delete your custom profiles? This action cannot be undone.",
+        [
+            {
+                text: "Cancel",
+                style: "cancel",
+            },
+            {
+                text: "OK",
+                onPress: () => {
+                    ProfileService.deleteAllProfile();
+                },
+            },
+        ],
+            { cancelable: false }
+        );
+    };
+
+    const confirmSettingReset = () => {
+        Alert.alert(
+            "Reset your settings?",
+            "Are you sure you want to reset your settings? This action cannot be undone.",
+        [
+            {
+                text: "Cancel",
+                style: "cancel",
+            },
+            {
+                text: "OK",
+                onPress: () => {
+                    console.log("settings reset");
+                },
+            },
+        ],
+            { cancelable: false }
+        );
+    };
+
     return (
         <SafeAreaView edges={['bottom']} style={styles.safeArea}>
             <View style={styles.card}>
@@ -23,7 +108,7 @@ const DangerZoneCard = () => {
                     <View style={styles.spacing}>
                         <Text style={styles.headingText}>Delete Dryers</Text>
                         <Text style={styles.text}>Remove all registered dryers and their settings</Text>
-                        <TouchableOpacity style={styles.minorDangerButton}>
+                        <TouchableOpacity onPress={confirmDryerDeletion} style={styles.minorDangerButton}>
                             <Ionicons color="#FF2323" size={24} name="trash-outline"/>
                             <Text style={styles.minorDangerButtonText}>Delete all dryers</Text>
                         </TouchableOpacity>
@@ -32,7 +117,7 @@ const DangerZoneCard = () => {
                     <View style={styles.spacing}> 
                         <Text style={styles.headingText}>Delete Custom Profiles</Text>
                         <Text style={styles.text}>Remove all your custom filament profiles</Text>
-                        <TouchableOpacity style={styles.minorDangerButton}>
+                        <TouchableOpacity onPress={confirmCustomProfileDeletion} style={styles.minorDangerButton}>
                             <Ionicons color="#FF2323" size={24} name="trash-outline"/>
                             <Text style={styles.minorDangerButtonText}>Delete All Custom Profiles</Text>
                         </TouchableOpacity>
@@ -41,7 +126,7 @@ const DangerZoneCard = () => {
                     <View>
                         <Text style={styles.headingText}>Reset All Settings</Text>
                         <Text style={styles.text}>Reset all preferences, notification settings and app configuration</Text>
-                        <TouchableOpacity style={styles.minorDangerButton}>
+                        <TouchableOpacity onPress={confirmSettingReset} style={styles.minorDangerButton}>
                             <Ionicons color="#FF2323" size={24} name="reload-outline"/>
                             <Text style={styles.minorDangerButtonText}>Reset All Settings</Text>
                         </TouchableOpacity>
@@ -52,7 +137,7 @@ const DangerZoneCard = () => {
 
                 <Text style={styles.bigDangerHeadingText}>Permanently Delete Account</Text>
                 <Text style={styles.text}>Permanently delete your Filametric account including all data and usage history</Text>
-                <TouchableOpacity style={styles.bigDangerButton}>
+                <TouchableOpacity onPress={confirmAccountDeletion} style={styles.bigDangerButton}>
                     <Ionicons color="#FFFFFF" size={24} name="trash-outline"/>
                     <Text style={styles.bigDangerButtonText}>Delete Account</Text>
                 </TouchableOpacity>

@@ -14,6 +14,8 @@ type AuthState = {
     logIn: (username: string, password: string, rememberUser:boolean) => Promise<void>;
     logOut: () => Promise<void>;
     getCurrentUsername: () => Promise<string | null>;
+    deleteUserAccount: () => Promise<void>;
+    getCurrentEmail: () => Promise<string | null>;
 };
 
 export const AuthContext = createContext<AuthState>({
@@ -24,6 +26,8 @@ export const AuthContext = createContext<AuthState>({
     logIn: async () => {},
     logOut: async () => {},
     getCurrentUsername: async () => null,
+    deleteUserAccount: async () => {},
+    getCurrentEmail: async () => null,
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
@@ -31,14 +35,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<any>(null);
     const [username, setUsername] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
     const router = useRouter();
 
     const logIn = async (username: string, password: string, rememberUser:boolean) => {
         try {
             await setRememberUser(rememberUser);
             const cognitoUser = await Auth.signIn(username, password);
-
-            console.log("Signed in user:", cognitoUser);
 
             setUser(cognitoUser);
             setIsLoggedIn(true);
@@ -67,7 +70,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         try {
             const rememberTheUser:boolean = await getRememberUser();
             if(rememberTheUser) {
-                console.log("Check state");
                 const cognitoUser = await Auth.currentAuthenticatedUser();
                 setUser(cognitoUser);
                 authenticated = true;
@@ -124,16 +126,45 @@ export function AuthProvider({ children }: PropsWithChildren) {
             if(username) {
                 return username;
             }
-            const user = await Auth.currentAuthenticatedUser();
-            return user?.username ?? null;
+            const userInfo = await Auth.currentUserInfo();
+            setUsername(userInfo?.username)
+            return userInfo?.username ?? null;
         } catch (error) {
             console.warn("getCurrentUsername: No authenticated user", error);
             return null;
         }
     };
 
+    const getCurrentEmail = async (): Promise<string | null> => {
+        try {
+            if(email) {
+                return email;
+            }
+            const userInfo = await Auth.currentUserInfo();
+            console.log(userInfo)
+            setEmail(userInfo?.email)
+            return userInfo?.attributes.email ?? null;
+        } catch (error) {
+            console.warn("getCurrentUsername: No authenticated user", error);
+            return null;
+        }
+    };
+
+    const deleteUserAccount = async () => {
+        try {
+            await Auth.deleteUser();
+            await logOut();
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut, getCurrentUsername }}>
+        <AuthContext.Provider value={{ 
+                isReady, isLoggedIn, user, 
+                setUser, logIn, logOut, getCurrentUsername, 
+                deleteUserAccount, getCurrentEmail
+            }}>
             {children}
         </AuthContext.Provider>
     );
