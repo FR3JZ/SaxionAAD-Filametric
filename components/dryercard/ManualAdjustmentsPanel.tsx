@@ -6,26 +6,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  Dimensions,
 } from 'react-native';
 
 interface ManualAdjustmentsPanelProps {
   targetTemp: number;
-  targetMinutes: number;
+  timeRemaining: number;
   onTempChange: (value: number) => void;
-  onMinutesChange: (value: number) => void;
+  onTimeChange: (value: number) => void;
   onDismiss: () => void;
 }
 
 const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
   targetTemp,
-  targetMinutes,
+  timeRemaining,
   onTempChange,
-  onMinutesChange,
+  onTimeChange,
   onDismiss,
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current; // for panel
-  const overlayFadeAnim = useRef(new Animated.Value(0)).current; // for background
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const overlayFadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -59,21 +58,14 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
     });
   };
 
-  const hours = Math.floor(targetMinutes / 60);
-  const minutes = targetMinutes % 60;
+  const hours = Math.floor(timeRemaining / 60);
+  const minutes = timeRemaining % 60;
 
   return (
     <TouchableWithoutFeedback onPress={handleClose}>
       <Animated.View style={[styles.overlay, { opacity: overlayFadeAnim }]}>
         <TouchableWithoutFeedback>
-          <Animated.View
-            style={[
-              styles.panel,
-              {
-                opacity: fadeAnim,
-              },
-            ]}
-          >
+          <Animated.View style={[styles.panel, { opacity: fadeAnim }]}>
             <Text style={styles.title}>Manual Adjustments</Text>
 
             {/* Temperature Controls */}
@@ -83,7 +75,7 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
                 <View style={styles.controlItem}>
                   <TouchableOpacity
                     style={styles.adjustButton}
-                    onPress={() => onTempChange(targetTemp - 1)}
+                    onPress={() => onTempChange(Number(targetTemp) - 1)}
                   >
                     <Text style={styles.buttonText}>–</Text>
                   </TouchableOpacity>
@@ -96,48 +88,42 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
                 <View style={styles.controlItem}>
                   <TouchableOpacity
                     style={styles.adjustButton}
-                    onPress={() => onTempChange(targetTemp + 1)}
+                    onPress={() => onTempChange(Number(targetTemp) + 1)}
                   >
                     <Text style={styles.buttonText}>+</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <Text style={styles.footerText}>
-                Range: 40°C - 90°C
-              </Text>
+              <Text style={styles.footerText}>Range: 40°C - 90°C</Text>
             </View>
 
             {/* Duration Controls */}
             <View style={styles.section}>
-              <Text style={styles.label}>Target Duration</Text>
+              <Text style={styles.label}>Remaining Time</Text>
               <View style={styles.controlRow}>
                 <View style={styles.controlItem}>
                   <TouchableOpacity
                     style={styles.adjustButton}
-                    onPress={() => onMinutesChange(targetMinutes - 1)}
+                    onPress={() => onTimeChange(Number(timeRemaining) - 1)}
                   >
                     <Text style={styles.buttonText}>–</Text>
                   </TouchableOpacity>
-
                 </View>
-
                 <View style={styles.controlItem}>
                   <View style={styles.valueBox}>
-                    <Text style={styles.valueText}>{targetMinutes} min</Text>
+                    <Text style={styles.valueText}>{timeRemaining} min</Text>
                   </View>
                 </View>
                 <View style={styles.controlItem}>
                   <TouchableOpacity
                     style={styles.adjustButton}
-                    onPress={() => onMinutesChange(targetMinutes + 1)}
+                    onPress={() => onTimeChange(Number(timeRemaining) + 1)}
                   >
                     <Text style={styles.buttonText}>+</Text>
                   </TouchableOpacity>
                 </View>
               </View>
-              <Text style={styles.footerText}>
-                Total: {hours}h {minutes}m
-              </Text>
+              <Text style={styles.footerText}>Total: {hours}h {minutes}m</Text>
             </View>
           </Animated.View>
         </TouchableWithoutFeedback>

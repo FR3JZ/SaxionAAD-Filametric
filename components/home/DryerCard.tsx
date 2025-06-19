@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,7 +15,10 @@ import DryerProgressBar from '../dryercard/DryerProgressBar';
 import DryerMachineView from '../dryercard/DryerMachineView';
 import DryerActionControls from '../dryercard/DryerActionControls';
 import ManualAdjustmentsPanel from '../dryercard/ManualAdjustmentsPanel';
-import { router } from 'expo-router';
+import { getSavedProfile } from '@/stores/profileStore';
+import { getSavedMode } from '@/stores/modeStore';
+import { router, useFocusEffect } from 'expo-router';
+import DryerService from '@/services/dryerService';
 
 export type DryerStatus = 'Completed' | 'Paused' | 'Running';
 export type DryerMachineType = 'Solo' | 'Duo';
@@ -26,12 +29,10 @@ export interface DryerCardProps {
   type: DryerMachineType;
   targetTemp?: number;
   actualTemp?: number;
-  progress?: number;
-  timeRemaining?: string;
-  totalTime?: string;
+  timeRemaining?: number; // in minutes
+  totalTime?: number; // in minutes
   humidity?: string;
   electricity?: string;
-  currentProfile: string;
   isExpanded: boolean;
   onToggleExpand: () => void;
   onCollapseComplete?: () => void;
@@ -43,26 +44,59 @@ const DryerCard: React.FC<DryerCardProps> = ({
   type,
   targetTemp = 80,
   actualTemp = 23,
-  progress = 100,
-  timeRemaining = '0h 0m',
-  totalTime = '8h 0m',
-  humidity = '10%',
-  electricity = '0.39 kWh',
-  currentProfile,
+  timeRemaining = 0,
+  totalTime = 0,
+  humidity = '0%',
+  electricity = '0',
   isExpanded,
   onToggleExpand,
   onCollapseComplete,
 }) => {
   const [showAdjustments, setShowAdjustments] = useState(false);
-  const [adjustedTemp, setAdjustedTemp] = useState(targetTemp);
-  const [adjustedDuration, setAdjustedDuration] = useState(480); // 8h default
+  const [adjustedTemp, setAdjustedTemp] = useState<number | null>(null);
+  const [adjustedTime, setAdjustedTime] = useState<number | null>(null);
 
   const [machineViewHeight, setMachineViewHeight] = useState(0);
+  const [profile, setProfile] = useState<any>({});
+  const [mode, setMode] = useState<string>("normal");
   const animatedHeight = useRef(new Animated.Value(0)).current;
+
+  const testProfile = {
+    id: '25b28a50-fa42-4f93-a6be-f92cad9033cf',
+    name: 'Dryer A',
+    description: 'Een profiel voor een droger',
+    normal: {
+      duration: 7200,
+      target_temperature: 80
+    },
+    silent: {
+      duration: 8400,
+      target_temperature: 90
+    },
+    storage: {
+      duration: 10800,
+      target_temperature: 70
+    },
+    switch_to_storage: true
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchProfile = async () => {
+        const storedProfile = await getSavedProfile(name);
+        setProfile(storedProfile ?? testProfile);
+      };
+      const fetchMode = async () => {
+        const storedMode = await getSavedMode(name, profile.id);
+        setMode(storedMode ?? 'normal');
+      };
+      fetchProfile();
+      fetchMode();
+    }, [name, profile])
+  );
 
   useEffect(() => {
     if (!isExpanded && machineViewHeight === 0) return;
-
     Animated.timing(animatedHeight, {
       toValue: isExpanded ? machineViewHeight : 0,
       duration: 300,
@@ -73,6 +107,26 @@ const DryerCard: React.FC<DryerCardProps> = ({
       }
     });
   }, [isExpanded, machineViewHeight]);
+
+  useEffect(() => {
+    if (!showAdjustments) {
+      setAdjustedTemp(targetTemp);
+      setAdjustedTime(timeRemaining);
+    }
+  }, [targetTemp, timeRemaining, showAdjustments]);
+
+  const formatMinutesToTime = (minutes: number): string => {
+    const h = Math.floor(minutes / 60);
+    const m = Math.floor(minutes % 60);
+    return `${h}h ${m}m`;
+  };
+
+  const calculateProgress = (): number => {
+    if (!totalTime || totalTime <= 0) return 0;
+    const used = totalTime - timeRemaining;
+    const progress = (used / totalTime) * 100;
+    return Math.min(Math.max(Math.floor(progress), 0), 100);
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -99,8 +153,8 @@ const DryerCard: React.FC<DryerCardProps> = ({
           />
           <DryerInfoBlock
             iconName="time-outline"
-            value={timeRemaining}
-            subValue={`/ ${totalTime}`}
+            value={formatMinutesToTime(timeRemaining)}
+            subValue={`/ ${formatMinutesToTime(totalTime)}`}
             iconColor="#00C03B"
           />
         </View>
@@ -111,18 +165,16 @@ const DryerCard: React.FC<DryerCardProps> = ({
         </View>
 
         <Animated.View style={{ overflow: 'hidden', height: animatedHeight }}>
-          <View>
-            <DryerMachineView
-              type={type}
-              onRightAction={() => setShowAdjustments(true)}
-              onLeftAction={() =>
-                router.push({
-                  pathname: "/(protected)/(tabs)/DryerSettingsScreen",
-                  params: { name },
-                })
-              }
-            />
-          </View>
+          <DryerMachineView
+            type={type}
+            onRightAction={() => setShowAdjustments(true)}
+            onLeftAction={() =>
+              router.push({
+                pathname: "/(protected)/(tabs)/DryerSettingsScreen",
+                params: { name },
+              })
+            }
+          />
         </Animated.View>
 
         <View
@@ -133,32 +185,47 @@ const DryerCard: React.FC<DryerCardProps> = ({
             }
           }}
         >
-          <DryerMachineView type={type} onRightAction={() => {}} onLeftAction={() => {}} />
+          <DryerMachineView type={type} onRightAction={() => { }} onLeftAction={() => { }} />
         </View>
 
-        <DryerProfileRow currentProfile={currentProfile} status={status} />
-        <DryerProgressBar progress={progress} />
+        <DryerProfileRow dryerId={name} currentProfile={profile} currentMode={mode} status={status} isExpanded={isExpanded} />
+        <DryerProgressBar progress={calculateProgress()} />
 
         {isExpanded && (
           <DryerActionControls
             status={status}
-            onStart={() => console.log('Start')}
-            onResume={() => console.log('Resume')}
-            onPause={() => console.log('Pause')}
-            onStop={() => console.log('Stop')}
-            onAddHour={() => setAdjustedDuration(adjustedDuration + 60)}
-            onTempDown={() => setAdjustedTemp(adjustedTemp - 5)}
-            onTempUp={() => setAdjustedTemp(adjustedTemp + 5)}
+            onStart={() => DryerService.startDryer(name, profile.id, mode)}
+            onResume={() => DryerService.startDryer(name, profile.id, mode)}
+            onPause={() => DryerService.pauseDryer(name)}
+            onStop={() => DryerService.stopDryer(name)}
+            onAddHour={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining + 60, targetTemp)
+            }
+            onTempDown={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp - 5)
+            }
+            onTempUp={() =>
+              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp + 5)
+            }
           />
         )}
 
         {showAdjustments && (
           <ManualAdjustmentsPanel
-            targetTemp={adjustedTemp}
-            targetMinutes={adjustedDuration}
+            targetTemp={adjustedTemp ?? targetTemp}
+            timeRemaining={adjustedTime ?? timeRemaining}
             onTempChange={setAdjustedTemp}
-            onMinutesChange={setAdjustedDuration}
-            onDismiss={() => setShowAdjustments(false)}
+            onTimeChange={setAdjustedTime}
+            onDismiss={() => {
+              setShowAdjustments(false);
+
+              const tempChanged = adjustedTemp !== null && adjustedTemp !== targetTemp;
+              const timeChanged = adjustedTime !== null && adjustedTime !== timeRemaining;
+
+              if (tempChanged || timeChanged) {
+                DryerService.changeDryerWhileRunning(name, adjustedTime!, adjustedTemp!);
+              }
+            }}
           />
         )}
       </View>

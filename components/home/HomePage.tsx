@@ -1,24 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import DryerCard from "./DryerCard";
-
-const dryers = [
-  { name: "Dryer 1", status: "Completed", type: "Solo" },
-  { name: "Dryer 2", status: "Running", type: "Solo" },
-  { name: "Dryer 3", status: "Paused", type: "Solo" },
-];
+import { useDryerWebSocket } from "../../hooks/useDryerWebSocket";
 
 const HomePage = () => {
+  const { dryerMap } = useDryerWebSocket();
   const [expandedDryer, setExpandedDryer] = useState<string | null>(null);
   const [collapsingDryer, setCollapsingDryer] = useState<string | null>(null);
 
   const handleToggle = (dryerName: string) => {
     if (expandedDryer === dryerName) {
-      // Start collapse animation
       setCollapsingDryer(dryerName);
       setExpandedDryer(null);
     } else {
-      // Expand new one
       setExpandedDryer(dryerName);
       setCollapsingDryer(null);
     }
@@ -30,28 +24,28 @@ const HomePage = () => {
         <Text style={styles.titleText}>Dryers</Text>
       </View>
 
-      {dryers.map((dryer, index) => {
-        const isExpanded = expandedDryer === dryer.name;
-        const isCollapsing = collapsingDryer === dryer.name;
-
-        // Hide all non-expanded/collapsing cards while any animation is in progress
-        if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {
-          return null;
-        }
+      {Object.values(dryerMap)
+        .sort((a, b) => b.timestamp - a.timestamp)
+        .map((dryer) => {
+          const isExpanded = expandedDryer === dryer.serial;
+          const isCollapsing = collapsingDryer === dryer.serial;
+          if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {
+            return null;
+          }
 
         return (
           <DryerCard
-            key={index}
-            name={dryer.name}
-            status={dryer.status as any}
-            type={dryer.type as any}
-            targetTemp={75}
-            actualTemp={73}
-            progress={75}
-            timeRemaining="25min"
-            currentProfile="My Profile 1"
+            key={dryer.serial}
+            name={dryer.serial}
+            status={dryer.status || "Completed"}
+            type={"Solo"}
+            targetTemp={dryer.targetTemp}
+              actualTemp={dryer.temperature}
+              humidity={`${dryer.humidity}%`}
+              timeRemaining={dryer.timeRemaining || 0}
+              totalTime={dryer.totalTime}
             isExpanded={isExpanded}
-            onToggleExpand={() => handleToggle(dryer.name)}
+            onToggleExpand={() => handleToggle(dryer.serial)}
             onCollapseComplete={() => setCollapsingDryer(null)}
           />
         );

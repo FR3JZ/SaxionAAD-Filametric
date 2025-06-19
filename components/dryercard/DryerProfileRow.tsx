@@ -1,25 +1,58 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 
 interface Props {
-  currentProfile: string;
-  status: "Completed" | "Paused" | "Running";
+  dryerId: string;
+  currentProfile: any;
+  currentMode: string;
+  status: 'Completed' | 'Paused' | 'Running';
+  isExpanded: boolean;
 }
 
-const DryerProfileRow: React.FC<Props> = ({ currentProfile, status }) => {
-  const statusIconName = status === "Completed" ? "moon" : "flame";
-  const statusIconColor = status === "Completed" ? "#723BFF" : "#FF5500";
+const DryerProfileRow: React.FC<Props> = ({
+  dryerId,
+  currentProfile,
+  currentMode,
+  status,
+  isExpanded,
+}) => {
+  const routeToSelectProfile = () => {
+    if (isExpanded && status === 'Completed') {
+      router.push({
+        pathname: '/(protected)/(profiles)/SelectProfileScreen',
+        params: { dryerId },
+      });
+    }
+  };
+
+  const routeToSelectModus = () => {
+    if (isExpanded && status === 'Completed') {
+      router.push({
+        pathname: '/(protected)/(profiles)/SelectProfileModeScreen',
+        params: { dryerId, profileId: currentProfile.id },
+      });
+    }
+  };
+
+  const modeIcons = {
+    normal: require('../../assets/images/normal_mode_icon.png'),
+    silent: require('../../assets/images/silent_mode_icon.png'),
+    storage: require('../../assets/images/storage_mode_icon.png'),
+  };
+
+  const icon = (modeIcons as any)[currentMode];
 
   return (
     <View style={styles.row}>
-      <View style={styles.profileContainer}>
+      <TouchableOpacity style={styles.profileContainer} onPress={routeToSelectProfile}>
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
-        <Text style={styles.profileText}>{currentProfile}</Text>
-      </View>
-      <View style={styles.iconBubble}>
-        <Ionicons name={statusIconName} size={24} style={{ color: statusIconColor }} />
-      </View>
+        <Text style={styles.profileText}>{currentProfile.name}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.iconBubble} onPress={routeToSelectModus}>
+        <Image source={icon} style={styles.modeIcon} resizeMode="contain" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -59,6 +92,10 @@ const styles = StyleSheet.create({
     width: 48,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modeIcon: {
+    width: 30,
+    height: 30,
   },
 });
 

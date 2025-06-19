@@ -73,15 +73,19 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     paddingTop: 20,
-    backgroundColor: '#fff',
+    backgroundColor: "#F9F9F9"
   },
 
   dryerInfoContainer: {
-    borderWidth: 1,
-    borderColor: '#B0B0B0',
     borderRadius: 20,
     width: '85%',
-    height: 500
+    height: 500,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 5,
+    elevation: 3
   },
 
   dryerInfoTitle: {
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    backgroundColor: '#FF5500',
+    backgroundColor: '#00C03B'
   },
 
   buttonText: {

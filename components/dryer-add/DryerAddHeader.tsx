@@ -24,7 +24,7 @@ const DryerAddHeader = ({ titleText }: { titleText: string }) => {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        backgroundColor: "#fff",
+        backgroundColor: "#F9F9F9",
         paddingTop: 50,
         paddingBottom: 10,
         width: "100%",
