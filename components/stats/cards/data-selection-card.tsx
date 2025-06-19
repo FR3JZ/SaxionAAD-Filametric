@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FilametricPicker from '../../custom/FilametricPicker';
 import StatsService from '@/services/statsService';
+import { Device } from '@/constants/Objects';
 
 interface Props {
   dryerChanged: (dryer: string) => void;
@@ -11,7 +12,7 @@ interface Props {
 const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) => {
   const [dryer, setDryer] = useState<string>('All dryers');
   const [timeFrame, setTimeFrame] = useState<string>('1');
-  const [dryers, setDryers] = useState<string[]>([]);
+  const [dryers, setDryers] = useState<Device[]>([]);
 
   function changeDryer(dryer: string) {
     dryerChanged(dryer);
@@ -32,8 +33,7 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
   async function getDryers() {
     try {
       const devices = await StatsService.getUserDevices();
-      const names = devices.map(item => item.ID)
-      setDryers(names)
+      setDryers(devices);
     } catch {
 
     } finally {
@@ -48,7 +48,7 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
           label="Dryer"
           selectedValue={dryer}
           onValueChange={changeDryer}
-          options={[{ label: 'All dryers', value: 'All dryers' }, ...dryers.map(d => ({ label: d, value: d }))]}
+          options={[{ label: 'All dryers', value: 'All dryers' }, ...dryers.map(d => ({ label: d.ID, value: d.ID }))]}
         />
       </View>
       <View style={[styles.pickerWrapper, styles.rightMargin]}>

@@ -21,12 +21,12 @@ const Chart:  React.FC<Props> = ({data, subject}) => {
 
   return (
     <View>
-      {data.value.length < 1 ? 
+      {data.value.length > 1 ? 
         <View
         style={{ flex: 1, padding: 16 }}
         onLayout={(event) => {
           const { width } = event.nativeEvent.layout;
-          setContainerWidth(width);
+          setContainerWidth(width * 0.80);
         }}
       >
         {subject !== "Materials" ? (

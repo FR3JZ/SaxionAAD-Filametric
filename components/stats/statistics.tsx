@@ -33,7 +33,6 @@ const Statistics = () => {
     }
 
     async function setStats() {
-        
         try {
             setIsGettingStats(true);
             if(currentDryer === 'All dryers') {

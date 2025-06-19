@@ -4,14 +4,16 @@ import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
 import { Auth, Hub } from "aws-amplify";
+import { CognitoUser } from "amazon-cognito-identity-js";
 
 type AuthState = {
     isLoggedIn: boolean;
     isReady: boolean;
     user: any;
     setUser: (user: any) => void;
-    logIn: (email: string, password: string, rememberUser:boolean) => Promise<void>;
+    logIn: (username: string, password: string, rememberUser:boolean) => Promise<void>;
     logOut: () => Promise<void>;
+    getCurrentUsername: () => Promise<string | null>;
 };
 
 export const AuthContext = createContext<AuthState>({
@@ -21,23 +23,26 @@ export const AuthContext = createContext<AuthState>({
     setUser: () => {},
     logIn: async () => {},
     logOut: async () => {},
+    getCurrentUsername: async () => null,
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
     const [isReady, setIsReady] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<any>(null);
+    const [username, setUsername] = useState<string>("");
     const router = useRouter();
 
-    const logIn = async (email: string, password: string, rememberUser:boolean) => {
+    const logIn = async (username: string, password: string, rememberUser:boolean) => {
         try {
             await setRememberUser(rememberUser);
-            const cognitoUser = await Auth.signIn(email, password);
+            const cognitoUser = await Auth.signIn(username, password);
 
             console.log("Signed in user:", cognitoUser);
 
             setUser(cognitoUser);
             setIsLoggedIn(true);
+            setUsername(username)
 
             router.replace("/(protected)/(tabs)");
         } catch (error: any) {
@@ -114,8 +119,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
         return () => Hub.remove('auth', listener);
     }, []);
 
+    const getCurrentUsername = async (): Promise<string | null> => {
+        try {
+            if(username) {
+                return username;
+            }
+            const user = await Auth.currentAuthenticatedUser();
+            return user?.username ?? null;
+        } catch (error) {
+            console.warn("getCurrentUsername: No authenticated user", error);
+            return null;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut }}>
+        <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut, getCurrentUsername }}>
             {children}
         </AuthContext.Provider>
     );
