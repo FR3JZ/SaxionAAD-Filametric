@@ -200,13 +200,13 @@ const DryerCard: React.FC<DryerCardProps> = ({
             onPause={() => DryerService.pauseDryer(name)}
             onStop={() => DryerService.stopDryer(name)}
             onAddHour={() =>
-              DryerService.changeDryerWhileRunning(name, timeRemaining + 60, targetTemp)
+              DryerService.changeDryerWhileRunning(name, timeRemaining + 60, Number(targetTemp))
             }
             onTempDown={() =>
-              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp - 5)
+              DryerService.changeDryerWhileRunning(name, timeRemaining, Number(targetTemp) - 5)
             }
             onTempUp={() =>
-              DryerService.changeDryerWhileRunning(name, timeRemaining, targetTemp + 5)
+              DryerService.changeDryerWhileRunning(name, timeRemaining, Number(targetTemp) + 5)
             }
           />
         )}
