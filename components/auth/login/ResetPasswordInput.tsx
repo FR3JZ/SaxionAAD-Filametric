@@ -11,7 +11,7 @@ const PasswordResetInput = () => {
 
     const [resetCode, setResetCode] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
-    
+
     const [sendingCode, setSendingCode] = useState<boolean>(false);
     const [enterNewPassword, setEnterNewPassword] = useState<boolean>(false);
     const [sendingNewPassword, setSendingNewPassword] = useState<boolean>(false);
@@ -24,7 +24,7 @@ const PasswordResetInput = () => {
     const [hasNumber, setHasNumber] = useState<boolean>(false);
     const [hasSymbol, setHasSymbol] = useState<boolean>(false);
     
-    // Check to see if the password is correct
+    // Check to see if the password is correct after input changes
     useEffect(() => {
         setIsCorrectLength(newPassword.length >= 8);
         setHasLowerAndUpercase(/[a-z]/.test(newPassword) && /[A-Z]/.test(newPassword));
@@ -40,9 +40,9 @@ const PasswordResetInput = () => {
             setSendingCode(true);
             setUsernameError("");
             await Auth.forgotPassword(username);
-            setEnterNewPassword(true);
+            setEnterNewPassword(true); // Switch to step 2
         } catch (error) {
-            if(error instanceof Error) setUsernameError(error.message);
+            if (error instanceof Error) setUsernameError(error.message);
         } finally {
             setSendingCode(false);
         }
@@ -56,22 +56,22 @@ const PasswordResetInput = () => {
             setSendingNewPassword(true);
             setPasswordResetError("");
             await Auth.forgotPasswordSubmit(username, resetCode, newPassword);
-            router.push("/LoginScreen")
+            router.push("/LoginScreen"); // Navigate to login after success
         } catch (error) {
-            if(error instanceof Error) setPasswordResetError(error.message);
+            if (error instanceof Error) setPasswordResetError(error.message);
         } finally {
             setSendingNewPassword(false);
         }
-    }
+    };
 
     /**
      * Returns a color for user feedback on their password
      * @returns The color code string for the input border
      */
     const getBorderColor = () => {
-        if (newPassword === "") return "#E7E7E7";     
-        if (isPasswordCorrect()) return "#00C03B"; 
-        return "#FF2323";                          
+        if (newPassword === "") return "#E7E7E7";
+        if (isPasswordCorrect()) return "#00C03B";
+        return "#FF2323";
     };
 
     /**
@@ -89,7 +89,7 @@ const PasswordResetInput = () => {
                 <Text style={style.titleText}>Reset your password</Text>
             </View>
 
-            {!enterNewPassword ? 
+            {!enterNewPassword ?
                 <View>
                     <TextInput
                         value={username}
@@ -100,17 +100,17 @@ const PasswordResetInput = () => {
                         autoCapitalize="none"
                     />
 
-                    <ErrorMessageText message={usernameError}/>
+                    <ErrorMessageText message={usernameError} />
 
                     <TouchableOpacity onPress={initiatePasswordReset} style={style.button}>
-                        {!sendingCode ? 
-                            <Text style={style.buttonText}>Send reset code</Text> 
-                        : 
-                            <ActivityIndicator style={style.loadingIndicator} color="white"/>
+                        {!sendingCode ?
+                            <Text style={style.buttonText}>Send reset code</Text>
+                            :
+                            <ActivityIndicator style={style.loadingIndicator} color="white" />
                         }
                     </TouchableOpacity>
                 </View>
-            :
+                :
                 <View>
                     <TextInput
                         value={resetCode}
@@ -141,39 +141,40 @@ const PasswordResetInput = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <ErrorMessageText message={passwordResetError}/>
+                    <ErrorMessageText message={passwordResetError} />
 
+                    {/* Password criteria checklist */}
                     <View>
                         <View style={style.checkRow}>
-                            <Ionicons style={[style.icon, { color: isCorrectLength ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                            <Ionicons style={[style.icon, { color: isCorrectLength ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                             <Text>A minimum of 8 characters</Text>
                         </View>
                         <View style={style.checkRow}>
-                            <Ionicons style={[style.icon, { color: hasLowerAndUpercase ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                            <Ionicons style={[style.icon, { color: hasLowerAndUpercase ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                             <Text>Lower and uppercase letter</Text>
                         </View>
                         <View style={style.checkRow}>
-                            <Ionicons style={[style.icon, { color: hasNumber ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                            <Ionicons style={[style.icon, { color: hasNumber ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                             <Text>At least 1 number</Text>
                         </View>
                         <View style={style.checkRow}>
-                            <Ionicons style={[style.icon, { color: hasSymbol ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                            <Ionicons style={[style.icon, { color: hasSymbol ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                             <Text>At least 1 symbol</Text>
                         </View>
                     </View>
 
                     <TouchableOpacity onPress={sendPasswordReset} style={style.button}>
-                        {!sendingNewPassword ? 
-                            <Text style={style.buttonText}>Reset password</Text> 
-                        : 
-                            <ActivityIndicator style={style.loadingIndicator} color="white"/>
+                        {!sendingNewPassword ?
+                            <Text style={style.buttonText}>Reset password</Text>
+                            :
+                            <ActivityIndicator style={style.loadingIndicator} color="white" />
                         }
                     </TouchableOpacity>
                 </View>
             }
 
             <Pressable onPress={() => router.push("/LoginScreen")}>
-                <Text style={style.goBackText}>Go back</Text> 
+                <Text style={style.goBackText}>Go back</Text>
             </Pressable>
         </View>
     )

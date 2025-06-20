@@ -11,17 +11,17 @@ interface Props {
     error: string;
 }
 
-const UsernameInput: React.FC<Props> = ({setNewUsername, sendDetails, goBack, isSendingAccountDetails = false, error = ""}) => {
+const UsernameInput: React.FC<Props> = ({ setNewUsername, sendDetails, goBack, isSendingAccountDetails = false, error = "" }) => {
     const [username, setUsername] = useState<string>("");
 
     /**
-     * Tells the parent the user want to use this username
+     * Tells the parent the user want to use this username when the username is long enough
      */
     const goToNextQuestion = () => {
-        if(username.length >= 3) {
-            sendDetails()
+        if (username.length >= 3) {
+            sendDetails();
         }
-    }
+    };
 
     /**
      * sets the new username and tells the parent what it is.
@@ -30,16 +30,16 @@ const UsernameInput: React.FC<Props> = ({setNewUsername, sendDetails, goBack, is
     const usernameChange = (newUsername:string) => {
         setUsername(newUsername)
         setNewUsername(newUsername);
-    }
+    };
 
     /**
-     * Get the border color for the username input
+     * Get the border color for the username input based on validity
      * @returns The color code string
      */
     const getBorderColor = () => {
-        if (username === "") return "#E7E7E7";     
-        if (username.length >= 3) return "#00C03B"; 
-        return "#FF2323";                          
+        if (username === "") return "#E7E7E7";
+        if (username.length >= 3) return "#00C03B";
+        return "#FF2323";
     };
 
     return (
@@ -58,22 +58,24 @@ const UsernameInput: React.FC<Props> = ({setNewUsername, sendDetails, goBack, is
                 onChangeText={(value) => usernameChange(value)}
                 placeholderTextColor="gray"
                 placeholder="Username"
-                style={[style.textField, { borderColor:  getBorderColor()}]}
+                style={[style.textField, { borderColor: getBorderColor() }]}
                 autoCapitalize="none"
                 keyboardType="email-address"
             />
-            <ErrorMessageText message={error}/>
 
+            <ErrorMessageText message={error} />
+
+            {/* Continue button with loading state */}
             <TouchableOpacity onPress={goToNextQuestion} style={style.button}>
-                {!isSendingAccountDetails ? 
-                    <Text style={style.buttonText}>Continue</Text> 
-                : 
+                {!isSendingAccountDetails ?
+                    <Text style={style.buttonText}>Continue</Text>
+                    :
                     <ActivityIndicator color="#FFFFFF" style={style.activity} />
                 }
             </TouchableOpacity>
 
             <Pressable onPress={goBack}>
-                    <Text style={style.goBackText}>Go back</Text>
+                <Text style={style.goBackText}>Go back</Text>
             </Pressable>
         </View>
     );

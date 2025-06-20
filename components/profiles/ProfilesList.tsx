@@ -5,177 +5,215 @@ import { useFocusEffect } from 'expo-router';
 import { saveProfile } from '@/stores/profileStore';
 
 type ProfilesListProps = {
-    profiles: any[];
-    selected?: any;
-    setSelected?: (profile: any) => void;
-    dryerId?: string;
-  };
+  profiles: any[];
+  selected?: any;
+  setSelected?: (profile: any) => void;
+  dryerId?: string;
+};
 
 const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesListProps) => {
-    const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
-    const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
+  const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
+  const [animations, setAnimations] = useState<{ [key: string]: Animated.Value }>({});
 
-    useFocusEffect(
-        useCallback(() => {
-            setOpenStates({});
-            setAnimations({});
+  // Reset state and create animation values when screen is focused
+  useFocusEffect(
+    useCallback(() => {
+      setOpenStates({});
+      setAnimations({});
 
-            const newAnimations: { [key: string]: Animated.Value } = {};
-            profiles.forEach(profile => {
-            newAnimations[profile.id] = new Animated.Value(0);
-            });
+      const newAnimations: { [key: string]: Animated.Value } = {};
+      profiles.forEach(profile => {
+        newAnimations[profile.id] = new Animated.Value(0);
+      });
 
-            setAnimations(newAnimations);
-        }, [profiles])
-    );
+      setAnimations(newAnimations);
+    }, [profiles])
+  );
 
-    const toggleProfile = (profileID: string) => {
-        const isOpen = openStates[profileID];
-        const newValue = !isOpen;
-        setOpenStates(prev => ({ ...prev, [profileID]: newValue }));
+  // Toggle expand/collapse animation for a specific profile
+  const toggleProfile = (profileID: string) => {
+    const isOpen = openStates[profileID];
+    const newValue = !isOpen;
+    setOpenStates(prev => ({ ...prev, [profileID]: newValue }));
 
-        if (animations[profileID]) {
-            Animated.timing(animations[profileID], {
-                toValue: newValue ? 1 : 0,
-                duration: 300,
-                useNativeDriver: false,
-            }).start();
-        }
-    };
-
-    const selectProfile = async (profile: any) => {
-        if(setSelected) {
-            setSelected!(profile);
-
-            if(dryerId) {
-                await saveProfile(dryerId, profile)
-            }
-        }
+    if (animations[profileID]) {
+      Animated.timing(animations[profileID], {
+        toValue: newValue ? 1 : 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
     }
+  };
 
-    return (
-        <View>
-            <View style={styles.profilesContainer}>
-                {profiles.map(profile => {
-                        const animatedHeight = animations[profile.id]
-                            ? animations[profile.id].interpolate({
-                                inputRange: [0, 1],
-                                outputRange: [0, 380]
-                            })
-                            : new Animated.Value(0);
+  // Save selected profile to local state and optionally to the profile store
+  const selectProfile = async (profile: any) => {
+    if (setSelected) {
+      setSelected(profile);
 
-                        const isOpen = openStates[profile.id];
+      if (dryerId) {
+        await saveProfile(dryerId, profile);
+      }
+    }
+  };
 
-                        return (
-                            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}><View style={[styles.closedProfile, selected?.id === profile.id && styles.selectedProfile]}>
+  return (
+    <View>
+      <View style={styles.profilesContainer}>
+        {profiles.map(profile => {
+          const animatedHeight = animations[profile.id]
+            ? animations[profile.id].interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 380],
+              })
+            : new Animated.Value(0);
 
-                                <View style={styles.closedProfileTitle}>
-                                    <View style={styles.closedProfileTitleName}>
-                                        <Ionicons
-                                            name={profile.customizable ? 'person-outline' : 'star-outline'}
-                                            size={25}
-                                            color={profile.customizable ? '#723BFF' : '#F6B900'} 
-                                        />
-                                        <Text style={styles.closedProfileTitleText}>{profile.name}</Text>
-                                    </View>
-                                    <Pressable onPress={() => toggleProfile(profile.id)}>
-                                        <Ionicons
-                                            name={isOpen ? 'chevron-up' : 'information-circle-outline'}
-                                            size={22}
-                                            color={'#5D5D5D'}
-                                        />
-                                    </Pressable>
-                                </View>
+          const isOpen = openStates[profile.id];
 
-                                {!isOpen && (
-                                    <View style={styles.closedProfileInfo}>
-                                        <View style={styles.closedProfileTemperature}>
-                                            <Ionicons name='thermometer' size={22} color={'#5D5D5D'} />
-                                            <Text style={styles.closedProfileInfoText}>{profile.normal.target_temperature} °C</Text>
-                                        </View>
-                                        <View style={styles.closedProfileTime}>
-                                            <Ionicons name='time-outline' size={22} color={'#5D5D5D'} />
-                                            <Text style={styles.closedProfileInfoText}>
-                                                {Math.floor(profile.normal.duration / 60)}h {profile.normal.duration % 60}m
-                                            </Text>
-                                        </View>
-                                    </View>
-                                )}
+          return (
+            <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}>
+              <View
+                style={[
+                  styles.closedProfile,
+                  selected?.id === profile.id && styles.selectedProfile,
+                ]}
+              >
+                <View style={styles.closedProfileTitle}>
+                  <View style={styles.closedProfileTitleName}>
+                    <Ionicons
+                      name={profile.customizable ? 'person-outline' : 'star-outline'}
+                      size={25}
+                      color={profile.customizable ? '#723BFF' : '#F6B900'}
+                    />
+                    <Text style={styles.closedProfileTitleText}>{profile.name}</Text>
+                  </View>
+                  <Pressable onPress={() => toggleProfile(profile.id)}>
+                    <Ionicons
+                      name={isOpen ? 'chevron-up' : 'information-circle-outline'}
+                      size={22}
+                      color={'#5D5D5D'}
+                    />
+                  </Pressable>
+                </View>
 
-                                <Animated.View style={[{ overflow: 'hidden', height: animatedHeight }, styles.shadow]}>
-                                    <View style={styles.openedProfileModes}>
-                                        <View style={styles.openedProfileModesContent}>
-                                            <Text style={styles.openedProfileText}>Available modes:</Text>
+                {!isOpen && (
+                  <View style={styles.closedProfileInfo}>
+                    <View style={styles.closedProfileTemperature}>
+                      <Ionicons name='thermometer' size={22} color={'#5D5D5D'} />
+                      <Text style={styles.closedProfileInfoText}>
+                        {profile.normal.target_temperature} °C
+                      </Text>
+                    </View>
+                    <View style={styles.closedProfileTime}>
+                      <Ionicons name='time-outline' size={22} color={'#5D5D5D'} />
+                      <Text style={styles.closedProfileInfoText}>
+                        {Math.floor(profile.normal.duration / 60)}h {profile.normal.duration % 60}m
+                      </Text>
+                    </View>
+                  </View>
+                )}
 
-                                            <View style={styles.openedProfileMode}>
-                                                <View style={styles.openedProfileTitle}>
-                                                    <Image source={require("../../assets/images/normal_mode_icon.png")} style={styles.openedProfileIconImage} resizeMode='contain' />
-                                                    <Text style={styles.openedProfileModeText}>Normal Mode:</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTemp}>
-                                                    <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>{profile.normal.target_temperature}°C</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTime}>
-                                                    <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>
-                                                        {Math.floor(profile.normal.duration / 60)}h {profile.normal.duration % 60}m
-                                                    </Text>
-                                                </View>
-                                            </View>
+                {/* Animated expansion section with all mode details */}
+                <Animated.View
+                  style={[{ overflow: 'hidden', height: animatedHeight }, styles.shadow]}
+                >
+                  <View style={styles.openedProfileModes}>
+                    <View style={styles.openedProfileModesContent}>
+                      <Text style={styles.openedProfileText}>Available modes:</Text>
 
-                                            <View style={styles.openedProfileMode}>
-                                                <View style={styles.openedProfileTitle}>
-                                                    <Image source={require("../../assets/images/silent_mode_icon.png")} style={styles.openedProfileIconImage} resizeMode='contain' />
-                                                    <Text style={styles.openedProfileModeText}>Silent Mode:</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTemp}>
-                                                    <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>{profile.silent.target_temperature}°C</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTime}>
-                                                    <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>
-                                                        {Math.floor(profile.silent.duration / 60)}h {profile.silent.duration % 60}m
-                                                    </Text>
-                                                </View>
-                                            </View>
+                      {/* Normal Mode */}
+                      <View style={styles.openedProfileMode}>
+                        <View style={styles.openedProfileTitle}>
+                          <Image
+                            source={require("../../assets/images/normal_mode_icon.png")}
+                            style={styles.openedProfileIconImage}
+                            resizeMode='contain'
+                          />
+                          <Text style={styles.openedProfileModeText}>Normal Mode:</Text>
+                        </View>
+                        <View style={styles.openedProfileTemp}>
+                          <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {profile.normal.target_temperature}°C
+                          </Text>
+                        </View>
+                        <View style={styles.openedProfileTime}>
+                          <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {Math.floor(profile.normal.duration / 60)}h {profile.normal.duration % 60}m
+                          </Text>
+                        </View>
+                      </View>
 
-                                            <View style={styles.openedProfileMode}>
-                                                <View style={styles.openedProfileTitle}>
-                                                    <Image source={require("../../assets/images/storage_mode_icon.png")} style={styles.openedProfileIconImage} resizeMode='contain' />
-                                                    <Text style={styles.openedProfileModeText}>Storage Mode:</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTemp}>
-                                                    <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>{profile.storage.target_temperature}°C</Text>
-                                                </View>
-                                                <View style={styles.openedProfileTime}>
-                                                    <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
-                                                    <Text style={styles.openedProfileModeText}>{Math.floor(profile.storage.duration / 60)}h {profile.silent.duration % 60}m</Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
+                      {/* Silent Mode */}
+                      <View style={styles.openedProfileMode}>
+                        <View style={styles.openedProfileTitle}>
+                          <Image
+                            source={require("../../assets/images/silent_mode_icon.png")}
+                            style={styles.openedProfileIconImage}
+                            resizeMode='contain'
+                          />
+                          <Text style={styles.openedProfileModeText}>Silent Mode:</Text>
+                        </View>
+                        <View style={styles.openedProfileTemp}>
+                          <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {profile.silent.target_temperature}°C
+                          </Text>
+                        </View>
+                        <View style={styles.openedProfileTime}>
+                          <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {Math.floor(profile.silent.duration / 60)}h {profile.silent.duration % 60}m
+                          </Text>
+                        </View>
+                      </View>
 
-                                    <View style={styles.openedProfileCompatibleMats}>
-                                        <Text style={styles.openedProfileText}>Compatible Materials:</Text>
-                                        <View style={styles.openedProfileMaterial}>
-                                            <Text style={styles.openedProfileMaterialText}>PVB</Text>
-                                        </View>
-                                    </View>
+                      {/* Storage Mode */}
+                      <View style={styles.openedProfileMode}>
+                        <View style={styles.openedProfileTitle}>
+                          <Image
+                            source={require("../../assets/images/storage_mode_icon.png")}
+                            style={styles.openedProfileIconImage}
+                            resizeMode='contain'
+                          />
+                          <Text style={styles.openedProfileModeText}>Storage Mode:</Text>
+                        </View>
+                        <View style={styles.openedProfileTemp}>
+                          <Ionicons name='thermometer' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {profile.storage.target_temperature}°C
+                          </Text>
+                        </View>
+                        <View style={styles.openedProfileTime}>
+                          <Ionicons name='time-outline' size={15} style={styles.openedProfileIcon} />
+                          <Text style={styles.openedProfileModeText}>
+                            {Math.floor(profile.storage.duration / 60)}h {profile.silent.duration % 60}m
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
 
-                                    <View style={styles.openedProfileNotes}>
-                                        <Text style={styles.openedProfileText}>Notes:</Text>
-                                        <Text style={styles.openedProfileNotesText}>Water-soluble support material.</Text>
-                                    </View>
-                                </Animated.View>
-                            </View></TouchableOpacity>
-                        );
-                    })}
-            </View>
-        </View>
-    );
+                  {/* Compatible materials and notes (currently hardcoded) */}
+                  <View style={styles.openedProfileCompatibleMats}>
+                    <Text style={styles.openedProfileText}>Compatible Materials:</Text>
+                    <View style={styles.openedProfileMaterial}>
+                      <Text style={styles.openedProfileMaterialText}>PVB</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.openedProfileNotes}>
+                    <Text style={styles.openedProfileText}>Notes:</Text>
+                    <Text style={styles.openedProfileNotesText}>Water-soluble support material.</Text>
+                  </View>
+                </Animated.View>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({

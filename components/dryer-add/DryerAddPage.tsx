@@ -13,6 +13,7 @@ const DryerAddPage = () => {
   const [description, setDescription] = useState<string>("");
   const [dryerNameError, setDryerNameError] = useState<string>("");
 
+  // Clears form state every time screen is focused
   useFocusEffect(
     useCallback(() => {
       setDryerName("");
@@ -21,12 +22,15 @@ const DryerAddPage = () => {
     }, [])
   );
 
+  // Called when user taps "Add Dryer" button
   function addDryer() {
     if(dryerHasValidName()) {
+      // Proceed to confirmation screen if validation passes
       router.push('/(protected)/(dryer-add)/AddDryerConfirmationScreen');
     }
   }
 
+  // Simple validation: name must not be empty
   function dryerHasValidName(): boolean {
     if (dryerName.length < 1) {
       setDryerNameError("Please enter a name for the dryer");
@@ -39,13 +43,20 @@ const DryerAddPage = () => {
   return (
     <View style={styles.container}>
       <View style={styles.dryerInfoContainer}>
-        <View style={styles.dryerInfoTitle}><Ionicons name="information-circle-outline" size={25} color={'#000'} style={styles.dryerInfoIcon}/><Text style={styles.dryerInfoTitleText}>Dryer Information</Text></View>
+        <View style={styles.dryerInfoTitle}>
+          <Ionicons name="information-circle-outline" size={25} color={'#000'} style={styles.dryerInfoIcon}/>
+          <Text style={styles.dryerInfoTitleText}>Dryer Information</Text>
+        </View>
+
         <View style={styles.dryerInfoInputs}>
+          {/* Required input */}
           <Text style={styles.dryerInfoInputTitle}>Dryer Name *</Text>
-          <AddInput placeholder="E.g. Solo Unit #3" value={dryerName} onChangeText={setDryerName}></AddInput>
-          <ErrorMessageText message={dryerNameError}/>
+          <AddInput placeholder="E.g. Solo Unit #3" value={dryerName} onChangeText={setDryerName} />
+          <ErrorMessageText message={dryerNameError} />
+
           <Text style={styles.dryerInfoInputTitle}>Location</Text>
-          <AddInput placeholder="E.g. Workshop" value={location} onChangeText={setLocation}></AddInput>
+          <AddInput placeholder="E.g. Workshop" value={location} onChangeText={setLocation} />
+
           <Text style={styles.dryerInfoInputTitle}>Description</Text>
           <TextInput 
             style={styles.dryerInfoDescriptionInput}
@@ -60,14 +71,26 @@ const DryerAddPage = () => {
         </View>
 
         <View style={styles.buttons}>
-          <TouchableOpacity onPress={() => router.push('/(protected)/(tabs)')} style={[styles.button, styles.cancelButton]}><Text style={styles.buttonText}>Cancel</Text></TouchableOpacity>
-          <TouchableOpacity onPress={addDryer} style={[styles.button, styles.addButton]}><Ionicons name="add" size={30} color={'#fff'}/><Text style={styles.buttonText}>Add Dryer</Text></TouchableOpacity>
+          {/* Cancel returns to tabs screen without saving */}
+          <TouchableOpacity 
+            onPress={() => router.push('/(protected)/(tabs)')} 
+            style={[styles.button, styles.cancelButton]}
+          >
+            <Text style={styles.buttonText}>Cancel</Text>
+          </TouchableOpacity>
+
+          {/* Add button triggers validation and routing */}
+          <TouchableOpacity onPress={addDryer} style={[styles.button, styles.addButton]}>
+            <Ionicons name="add" size={30} color={'#fff'} />
+            <Text style={styles.buttonText}>Add Dryer</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
   )
 }
 
+// Styling
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -75,7 +98,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     backgroundColor: "#F9F9F9"
   },
-
   dryerInfoContainer: {
     borderRadius: 20,
     width: '85%',
@@ -87,7 +109,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3
   },
-
   dryerInfoTitle: {
     display: 'flex',
     flexDirection: 'row',
@@ -95,12 +116,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20
   },
-
   dryerInfoIcon: {
     marginRight: 10,
     marginTop: 2
   },
-
   dryerInfoTitleText: {
     fontFamily: 'Satoshi-Medium',
     fontSize: 22
@@ -109,13 +128,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20
   },
-
   dryerInfoInputTitle: {
     fontFamily: 'Satoshi-Medium',
     fontSize: 17,
     marginBottom: 10
   },
-
   dryerInfoDescriptionInput: {
     borderWidth: 1,
     borderColor: '#E7E7E7',
@@ -126,14 +143,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Satoshi-Regular',
     fontSize: 17
   },
-
   buttons: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     width: '100%'
   },
-  
   button: {
     display: 'flex',
     flexDirection: 'row',
@@ -144,23 +159,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 20
   },
-
   cancelButton: {
     paddingHorizontal: 42,
     backgroundColor: '#5D5D5D'
   },
-
   addButton: {
     backgroundColor: '#00C03B'
   },
-
   buttonText: {
     color: '#fff',
     fontFamily: 'Satoshi-Medium',
     fontSize: 16
   }
-
-
 });
 
-export default DryerAddPage
+export default DryerAddPage;

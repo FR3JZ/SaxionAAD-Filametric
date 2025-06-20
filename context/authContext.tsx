@@ -1,4 +1,3 @@
-// context/authContext.tsx
 import { clearRememberUser, getRememberUser, setLoggedInState, setRememberUser } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
@@ -6,6 +5,7 @@ import React from "react";
 import { Auth, Hub } from "aws-amplify";
 import { CognitoUser } from "amazon-cognito-identity-js";
 
+// Context type describing authentication state and actions
 type AuthState = {
     isLoggedIn: boolean;
     isReady: boolean;
@@ -18,6 +18,7 @@ type AuthState = {
     getCurrentEmail: () => Promise<string | null>;
 };
 
+// Auth context with initial dummy values
 export const AuthContext = createContext<AuthState>({
     isLoggedIn: false,
     isReady: false,
@@ -30,6 +31,7 @@ export const AuthContext = createContext<AuthState>({
     getCurrentEmail: async () => null,
 });
 
+// AuthProvider wraps your app with authentication logic/state
 export function AuthProvider({ children }: PropsWithChildren) {
     const [isReady, setIsReady] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -52,7 +54,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
             setUser(cognitoUser);
             setIsLoggedIn(true);
             setUsername(username)
-
             router.replace("/(protected)/(tabs)");
         } catch (error: any) {
             console.error("Login failed:", error);
@@ -90,7 +91,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         } catch (e) {
             setUser(null);
             authenticated = false;
-            console.log('checkAuthenticationStatus: No active session.');
             await setLoggedInState("LoggedOut");
         } finally {
             setIsLoggedIn(authenticated);
@@ -98,27 +98,24 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    // Listen for authentication events (signIn, signOut, etc.) and react accordingly
     useEffect(() => {
         checkAuthenticationStatus();
 
         const listener = (data: any) => {
-            console.log('Auth Hub event:', data.payload.event);
             switch (data.payload.event) {
                 case 'signIn':
                     setUser(data.payload.data);
                     setIsLoggedIn(true);
                     setLoggedInState("LoggedIn");
-                    console.log('Auth Hub: Gebruiker succesvol ingelogd:', data.payload.data.username);
                     break;
                 case 'signOut':
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
-                    console.log('Auth Hub: Gebruiker uitgelogd');
                     router.replace("/LoginScreen");
                     break;
                 case 'signIn_failure':
-                    console.error('Auth Hub: Login mislukt:', data.payload.data);
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
@@ -147,7 +144,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
             setUsername(userInfo?.username)
             return userInfo?.username ?? null;
         } catch (error) {
-            console.warn("getCurrentUsername: No authenticated user", error);
             return null;
         }
     };

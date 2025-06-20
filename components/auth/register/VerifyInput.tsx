@@ -64,7 +64,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
     };
 
     /**
-     * Send the numbers the user put in to AWS cognito to verify.
+     * Send the numbers the user entered to AWS cognito to verify.
      * @param codeArray Is a array with all the numbers the user put in.
      */
     async function VerifyAccount(codeArray: string[]) {
@@ -82,7 +82,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
     }
 
     /**
-     * Send a new verification code.
+     * Send a new verification code. (throttled by timer)
      */
     async function reSendAccounDetails() {
         if (username && timer === 0){
@@ -94,55 +94,66 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
                 startTimer()
             }
         }
-    }
+    };
 
   return (
     <View style={style.container}>
-        <View style={style.header}>
-            <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
-            <Text style={style.titleText}>Enter the 6-digit code we emailed you</Text>
+      <View style={style.header}>
+        <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
+        <Text style={style.titleText}>Enter the 6-digit code we emailed you</Text>
+      </View>
+
+      <View style={style.textContainer}>
+        <Text style={style.pageText}>
+          Verify that {email} is your email to confirm it’s really you
+        </Text>
+      </View>
+
+      <View>
+        <Text style={style.promptText}>Enter code: </Text>
+        <View style={style.nrRow}>
+          {code.map((digit, index) => (
+            <TextInput
+              key={index}
+              ref={(ref) => {
+                if (ref !== null) {
+                  inputsRef.current[index] = ref;
+                }
+              }}
+              style={style.nrInputStyle}
+              keyboardType="number-pad"
+              maxLength={1}
+              value={digit}
+              onChangeText={(text) => handleChange(text, index)}
+              autoFocus={index === 0}
+            />
+          ))}
         </View>
+      </View>
 
-        <View style={style.textContainer}>
-            <Text style={style.pageText}>Verify that {email} is your email to confirm it’s really you</Text>
-        </View>
+      <ErrorMessageText message={verificationError} />
 
-        <View >
-            <Text style={style.promptText}>Enter code: </Text>
-            <View style={style.nrRow}>
-                {code.map((digit, index) => (
-                    <TextInput
-                        key={index}
-                        ref={(ref) => {
-                            if(ref !== null){
-                                inputsRef.current[index] = ref;
-                            }
-                        }}
-                        style={style.nrInputStyle}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        value={digit}
-                        onChangeText={(text) => handleChange(text, index)}
-                        autoFocus={index === 0}
-                    />
-                ))}
-            </View>
-        </View>
+      {/* Resend code button with timer block */}
+      <TouchableOpacity
+        onPress={reSendAccounDetails}
+        style={[style.button, timer > 0 && { backgroundColor: "#E7E7E7" }]}
+      >
+        {timer > 0 ? (
+          <Text style={style.buttonTextCodeSend}>Resend code in {timer} seconds</Text>
+        ) : (
+          <Text style={style.buttonText}>Resend code</Text>
+        )}
+      </TouchableOpacity>
 
-        <ErrorMessageText message={verificationError}/>
-
-        <TouchableOpacity onPress={reSendAccounDetails} style={[style.button, timer > 0 && {backgroundColor: "#E7E7E7"}]}>
-            {timer > 0 ? <Text style={style.buttonTextCodeSend}>Resend code in {timer} seconds</Text> : <Text style={style.buttonText}>Resend code</Text>}
-        </TouchableOpacity>
-
-        <Pressable onPress={goBack}>
-            <Text style={style.goBackText}>Go back</Text>
-        </Pressable>
+      <Pressable onPress={goBack}>
+        <Text style={style.goBackText}>Go back</Text>
+      </Pressable>
     </View>
   );
 };
 
 export default VerifyInput;
+
 
 const style = StyleSheet.create({
     header: {

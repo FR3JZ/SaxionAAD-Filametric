@@ -8,17 +8,18 @@ interface Props {
     setUserPassword: (password: string) => void;
 }
 
-const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
+const GetPassword: React.FC<Props> = ({ goBack, setUserPassword }) => {
     const [password, setPassword] = useState<string>("");
     const [secureText1, setSecureText1] = useState(true);
     const [isFocused, setIsFocused] = useState(false);
 
+    // State for password validation rules
     const [isCorrectLength, setIsCorrectLength] = useState<boolean>(false);
     const [hasLowerAndUpercase, setHasLowerAndUpercase] = useState<boolean>(false);
     const [hasNumber, setHasNumber] = useState<boolean>(false);
     const [hasSymbol, setHasSymbol] = useState<boolean>(false);
 
-    // Check to see if the password is correct
+    // Check to see if the password is correct when password changes
     useEffect(() => {
         setIsCorrectLength(password.length >= 8);
         setHasLowerAndUpercase(/[a-z]/.test(password) && /[A-Z]/.test(password));
@@ -38,8 +39,8 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
      * Tells the parent what the new password is when the password is correct
      */
     function setNewUserPassword() {
-        if(isPasswordCorrect()) {
-            setUserPassword(password)
+        if (isPasswordCorrect()) {
+            setUserPassword(password);
         }
     }
 
@@ -48,9 +49,9 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
      * @returns The color code string for the input border
      */
     const getBorderColor = () => {
-        if (password === "") return "#E7E7E7";     
-        if (isPasswordCorrect()) return "#00C03B"; 
-        return "#FF2323";                          
+        if (password === "") return "#E7E7E7";
+        if (isPasswordCorrect()) return "#00C03B";
+        return "#FF2323";
     };
 
     return (
@@ -64,10 +65,7 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
                 <Text style={style.pageText}>protect your account by creating a strong password</Text>
             </View>
 
-            <View style={[
-                style.passwordContainer,
-                { borderColor: getBorderColor() }
-            ]}>
+            <View style={[style.passwordContainer, { borderColor: getBorderColor() }]}>
                 <TextInput
                     value={password}
                     onChangeText={setPassword}
@@ -77,28 +75,31 @@ const GetPassword: React.FC<Props> = ({goBack, setUserPassword}) => {
                     autoCapitalize="none"
                     placeholderTextColor="gray"
                     placeholder="Password"
-                    style={{ flex: 1, fontSize: 20}}
+                    style={{ flex: 1, fontSize: 20 }}
                 />
                 <TouchableOpacity onPress={() => setSecureText1(!secureText1)} style={style.toggle}>
-                    {secureText1 ? <Ionicons size={24} name='eye-sharp' /> : <Ionicons size={24} name='eye-off-sharp' />}
+                    {secureText1
+                        ? <Ionicons size={24} name='eye-sharp' />
+                        : <Ionicons size={24} name='eye-off-sharp' />}
                 </TouchableOpacity>
             </View>
 
+            {/* Live password validation checklist */}
             <View style={style.checkRows}>
                 <View style={style.checkRow}>
-                    <Ionicons style={[style.icon, { color: isCorrectLength ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                    <Ionicons style={[style.icon, { color: isCorrectLength ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                     <Text style={style.checkRowText}>A minimum of 8 characters</Text>
                 </View>
                 <View style={style.checkRow}>
-                    <Ionicons style={[style.icon, { color: hasLowerAndUpercase ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                    <Ionicons style={[style.icon, { color: hasLowerAndUpercase ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                     <Text style={style.checkRowText}>Lower and uppercase letter</Text>
                 </View>
                 <View style={style.checkRow}>
-                    <Ionicons style={[style.icon, { color: hasNumber ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                    <Ionicons style={[style.icon, { color: hasNumber ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                     <Text style={style.checkRowText}>At least 1 number</Text>
                 </View>
                 <View style={style.checkRow}>
-                    <Ionicons style={[style.icon, { color: hasSymbol ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle'/>
+                    <Ionicons style={[style.icon, { color: hasSymbol ? "#00C03B" : "#888888" }]} size={24} name='checkmark-circle' />
                     <Text style={style.checkRowText}>At least 1 symbol</Text>
                 </View>
             </View>

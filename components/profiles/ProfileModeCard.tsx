@@ -20,7 +20,7 @@ interface ProfileModeCardProps {
   shortDescription: string;
   longDescription: string;
   selected: string;
-  setSelected: (text: string) => void
+  setSelected: (text: string) => void;
   dryerId: string;
   profileId: string;
 }
@@ -34,13 +34,16 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
   selected,
   setSelected,
   dryerId,
-  profileId
+  profileId,
 }) => {
   const [expanded, setExpanded] = useState(false);
+
+  // Animation state for expand/collapse
   const animation = useRef(new Animated.Value(0)).current;
 
   const toggleExpand = () => {
     if (expanded) {
+      // Collapse panel
       Animated.timing(animation, {
         toValue: 0,
         duration: 300,
@@ -48,6 +51,7 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
         easing: Easing.ease,
       }).start(() => setExpanded(false));
     } else {
+      // Expand panel
       setExpanded(true);
       Animated.timing(animation, {
         toValue: 1,
@@ -58,11 +62,13 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
     }
   };
 
-  const saveSelection = async() => {
+  const saveSelection = async () => {
+    // Update selected mode and persist it
     setSelected(mode);
     await saveMode(dryerId, profileId, mode);
-  }
+  };
 
+  // Interpolated height and opacity for smooth expand/collapse
   const heightInterpolate = animation.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 170],
@@ -75,7 +81,11 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
 
   return (
     <TouchableOpacity
-      style={[styles.card, !expanded && styles.cardCollapsed, selected === mode && styles.selectedCard]}
+      style={[
+        styles.card,
+        !expanded && styles.cardCollapsed,
+        selected === mode && styles.selectedCard,
+      ]}
       onPress={saveSelection}
     >
       <View style={styles.header}>
@@ -83,6 +93,7 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
           <Image source={icon} style={styles.icon} resizeMode="contain" />
           <Text style={styles.title}>{title}</Text>
         </View>
+
         <TouchableOpacity onPress={toggleExpand}>
           <Ionicons
             name={expanded ? "chevron-down" : "information-circle-outline"}
@@ -90,15 +101,16 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
             color="#000"
           />
         </TouchableOpacity>
-
       </View>
 
+      {/* Short description always visible if not expanded */}
       {!expanded && <Text style={styles.description}>{shortDescription}</Text>}
 
+      {/* Animated expansion for long description */}
       {expanded && (
         <Animated.View
           style={{
-            overflow: 'hidden',
+            overflow: "hidden",
             height: heightInterpolate,
             opacity: opacityInterpolate,
           }}
@@ -112,34 +124,34 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    width: '90%',
-    backgroundColor: '#fff',
+    width: "90%",
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 10,
     marginBottom: 20,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
     elevation: 3,
   },
   selectedCard: {
-    backgroundColor: '#EFF9FF',
+    backgroundColor: "#EFF9FF",
     borderWidth: 1,
-    borderColor: '#006BAB'
+    borderColor: "#006BAB",
   },
   cardCollapsed: {
     minHeight: 100,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   iconTitle: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   icon: {
     width: 30,
@@ -151,9 +163,9 @@ const styles = StyleSheet.create({
   },
   description: {
     marginTop: 10,
-    fontFamily: 'Satoshi-Light',
-    fontSize: 16
-  }
+    fontFamily: "Satoshi-Light",
+    fontSize: 16,
+  },
 });
 
 export default ProfileModeCard;

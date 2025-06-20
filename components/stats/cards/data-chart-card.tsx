@@ -4,14 +4,15 @@ import Chart from '../chart/chart';
 import { GraphData } from '@/constants/Objects';
 
 interface Props {
-    tempData?:GraphData;
-    humidityData?:GraphData;
+    tempData?: GraphData;
+    humidityData?: GraphData;
 }
 
-const DataChartCard:  React.FC<Props> = ({tempData, humidityData}) => {
+const DataChartCard: React.FC<Props> = ({ tempData, humidityData }) => {
+    // Current selected data subject (Temperature, Humidity, etc.)
     const [dataSubject, setDataSubject] = useState<string>("Temprature");
     const [dataTitle, setDataTitle] = useState<string>("Temprature");
-    const dataSubjects:string[] = ["Temprature", "Humidity", "Energy", "Materials"];
+    const dataSubjects: string[] = ["Temprature", "Humidity", "Energy", "Materials"];
 
     /**
      * Set the title text above the chart
@@ -21,7 +22,7 @@ const DataChartCard:  React.FC<Props> = ({tempData, humidityData}) => {
         if(newSubject === "Materials") {
             setDataTitle(newSubject +  " Pie");
         } else {
-            setDataTitle(newSubject +  " Curve");
+            setDataTitle(newSubject + " Curve");
         }
         setDataSubject(newSubject);
     }
@@ -33,7 +34,7 @@ const DataChartCard:  React.FC<Props> = ({tempData, humidityData}) => {
         if(dataSubject === "Temprature" && tempData && tempData.value.length >= 1) {
             return tempData;
         }
-        if(dataSubject === "Humidity" && humidityData && humidityData.value.length >= 1) {
+        if (dataSubject === "Humidity" && humidityData && humidityData.value.length >= 1) {
             return humidityData;
         }
         return {
@@ -44,22 +45,25 @@ const DataChartCard:  React.FC<Props> = ({tempData, humidityData}) => {
 
     return (
         <View style={styles.card}>
+            {/* Subject selection buttons */}
             <View style={styles.buttonRow}>
                 {dataSubjects.map((subject) => (
-                <Pressable
-                    key={subject}
-                    onPress={() => changeDataSubject(subject)}
-                    style={[ styles.button, dataSubject === subject && styles.selectedButton ]}>
-                    <Text>{subject}</Text>
-                </Pressable>
+                    <Pressable
+                        key={subject}
+                        onPress={() => changeDataSubject(subject)}
+                        style={[styles.button, dataSubject === subject && styles.selectedButton]}>
+                        <Text>{subject}</Text>
+                    </Pressable>
                 ))}
             </View>
 
             <Text style={styles.titleText}>{dataTitle}</Text>
+
+            {/* Show placeholder on web, actual chart otherwise */}
             {Platform.OS === 'web' ? (
-                <Text style={{padding: 12}}>Chart is not available on web</Text>
+                <Text style={{ padding: 12 }}>Chart is not available on web</Text>
             ) : (
-                <Chart data={getSubjectData()} subject={dataSubject}/>
+                <Chart data={getSubjectData()} subject={dataSubject} />
             )}
         </View>
     )

@@ -4,16 +4,19 @@ import { Ionicons } from '@expo/vector-icons';
 import FilametricPicker from '../custom/FilametricPicker';
 
 const UnitsFormatSettings = () => {
+  // State for selected temperature unit and time format
   const [tempUnit, setTempUnit] = useState('Celsius');
   const [timeFormat, setTimeFormat] = useState('24-hour');
 
   return (
     <View style={styles.card}>
+      {/* Section header with icon */}
       <View style={styles.headerRow}>
         <Ionicons name="thermometer" size={24} color="red" style={styles.icon} />
         <Text style={styles.header}>Units & Format</Text>
       </View>
 
+      {/* Temperature unit selection */}
       <FilametricPicker
         label="Temperature unit"
         selectedValue={tempUnit}
@@ -27,6 +30,7 @@ const UnitsFormatSettings = () => {
         ]}
       />
 
+      {/* Time format selection */}
       <FilametricPicker
         label="Time format"
         selectedValue={timeFormat}

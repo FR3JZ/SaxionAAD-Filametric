@@ -4,16 +4,19 @@ import { Ionicons } from '@expo/vector-icons';
 import LabeledSwitchRow from '../custom/LabeledSwitchRow';
 
 const PrivacyDataSettings = () => {
+  // Local state for toggles
   const [analytics, setAnalytics] = useState(false);
   const [crashReports, setCrashReports] = useState(false);
 
   return (
     <View style={styles.card}>
+      {/* Header with icon and section title */}
       <View style={styles.headerRow}>
         <Ionicons name="shield-outline" size={24} color="#007AFF" style={styles.icon} />
         <Text style={styles.header}>Privacy & Data</Text>
       </View>
 
+      {/* Toggle for anonymous usage analytics */}
       <LabeledSwitchRow
         title="Anonymous data collection"
         description="Help us improve the app with usage analytics"
@@ -24,6 +27,7 @@ const PrivacyDataSettings = () => {
         }}
       />
 
+      {/* Toggle for automatic crash reporting */}
       <LabeledSwitchRow
         title="Crash reports"
         description="Automatically send crash reports"

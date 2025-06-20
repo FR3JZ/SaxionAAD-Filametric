@@ -15,23 +15,21 @@ const CyclesDataCard:  React.FC<Props> = ({cyclesInTimeFrame, wrtLast, timeframe
      */
     function getTimeframeText(): string{
         if(wrtLast === undefined) return "";
-        if(timeframe === 1) {
-            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last day" : String(wrtLast) + " w.r.t last day"
-        }
-        if(timeframe === 7) {
-            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last week" : String(wrtLast) + " w.r.t last week"
-        }
-        return ""
+        if(timeframe === 1)
+            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last day";
+        if(timeframe === 7)
+            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last week";
+        return "";
     }
 
     return (
         <View style={styles.card}>
             <View style={styles.titleContainer}>
-                <Ionicons style={styles.icon} size={32} name='checkmark-circle'></Ionicons>
+                <Ionicons style={styles.icon} size={32} name='checkmark-circle' />
                 <Text style={styles.titleText}>Completed cycles</Text>
             </View>
             <Text style={styles.statText}>{cyclesInTimeFrame} Cycles</Text>
-            <Text style={styles.changeText}> {getTimeframeText()}</Text>
+            <Text style={styles.changeText}>{getTimeframeText()}</Text>
         </View>
     )
 }
@@ -39,9 +37,7 @@ const CyclesDataCard:  React.FC<Props> = ({cyclesInTimeFrame, wrtLast, timeframe
 export default CyclesDataCard;
 
 const styles = StyleSheet.create({
-    icon: {
-        color: "#00C03B",
-    },
+    icon: { color: "#00C03B" },
     card: {
         marginHorizontal: 14,
         marginVertical: 6,

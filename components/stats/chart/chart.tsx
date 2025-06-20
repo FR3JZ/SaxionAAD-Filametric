@@ -4,13 +4,14 @@ import { Text, View } from "react-native";
 import { LineChart, PieChart } from 'react-native-chart-kit';
 
 interface Props {
-  data:GraphData;
+  data: GraphData;
   subject: string;
 }
 
-const Chart:  React.FC<Props> = ({data, subject}) => {
+const Chart: React.FC<Props> = ({ data, subject }) => {
   const [containerWidth, setContainerWidth] = React.useState(0);
 
+  // Limit the number of x-axis labels for readability
   const maxLabels = 6;
   const totalLabels = data.timestamp.length;
   const step = Math.ceil(totalLabels / maxLabels);
@@ -24,40 +25,39 @@ const Chart:  React.FC<Props> = ({data, subject}) => {
 
   return (
     <View>
-      {data.value.length > 1 ? 
+      {data.value.length > 1 ?
         <View
-        style={{ flex: 1, padding: 16 }}
-        onLayout={(event) => {
-          const { width } = event.nativeEvent.layout;
-          setContainerWidth(width * 0.80);
-        }}
-      >
-        {subject !== "Materials" ? (
-          <View>
-            <LineChart
-              data={{
-                labels: filteredLabels,
-                datasets: [{ data: data.value }],
-              }}
-              fromZero={true}
-              yAxisInterval={1}
-              width={containerWidth}
-              height={220}
-              withDots={true}
-              chartConfig={{
-                backgroundColor: '#fff',
-                backgroundGradientFrom: '#fff',
-                backgroundGradientTo: '#fff',
-                color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
-                labelColor: () => '#333',
-              }}
-              onDataPointClick={({ value }) => {
-                console.log("Clicked:", value);
-              }}
-            />
-          </View>
-          
-        ) : (
+          style={{ flex: 1, padding: 16 }}
+          onLayout={(event) => {
+            const { width } = event.nativeEvent.layout;
+            setContainerWidth(width * 0.80);
+          }}
+        >
+          {subject !== "Materials" ? (
+            <View>
+              <LineChart
+                data={{
+                  labels: filteredLabels,
+                  datasets: [{ data: data.value }],
+                }}
+                fromZero={true}
+                yAxisInterval={1}
+                width={containerWidth}
+                height={220}
+                withDots={true}
+                chartConfig={{
+                  backgroundColor: '#fff',
+                  backgroundGradientFrom: '#fff',
+                  backgroundGradientTo: '#fff',
+                  color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
+                  labelColor: () => '#333',
+                }}
+                onDataPointClick={({ value }) => {
+                  console.log("Clicked:", value);
+                }}
+              />
+            </View>
+          ) : (
             <PieChart
               data={[
                 { name: 'PLA', population: 51, color: '#00C03B', legendFontColor: '#7F7F7F', legendFontSize: 15 },
@@ -76,13 +76,11 @@ const Chart:  React.FC<Props> = ({data, subject}) => {
           )}
         </View>
         :
-        <View style={{padding: 13}}>
+        <View style={{ padding: 13 }}>
           <Text>No data for chart</Text>
         </View>
       }
-      
     </View>
-    
   );
 }
 

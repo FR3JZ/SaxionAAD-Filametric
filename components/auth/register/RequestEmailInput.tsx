@@ -7,9 +7,10 @@ interface Props {
     setUserEmail: (email: string) => void;
 }
 
-const EmailInput: React.FC<Props> = ({setUserEmail, goBack}) => {
+const EmailInput: React.FC<Props> = ({ setUserEmail, goBack }) => {
     const [email, setEmail] = useState<string>("");
 
+    // Simple email validation pattern
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,24}$/;
 
     /**
@@ -17,9 +18,9 @@ const EmailInput: React.FC<Props> = ({setUserEmail, goBack}) => {
      * @returns The color code string
      */
     const getBorderColor = () => {
-        if (email === "") return "#E7E7E7";     
-        if (emailRegex.test(email)) return "#00C03B"; 
-        return "#FF2323";                          
+        if (email === "") return "#E7E7E7";
+        if (emailRegex.test(email)) return "#00C03B";
+        return "#FF2323";
     };
 
     /**
@@ -27,10 +28,10 @@ const EmailInput: React.FC<Props> = ({setUserEmail, goBack}) => {
      * When the email is correct.
      */
     const goToNextQuestion = () => {
-        if (emailRegex.test(email)){
-            setUserEmail(email)
+        if (emailRegex.test(email)) {
+            setUserEmail(email);
         }
-    }
+    };
 
     return (
         <View>
@@ -40,7 +41,9 @@ const EmailInput: React.FC<Props> = ({setUserEmail, goBack}) => {
             </View>
 
             <View style={style.textContainer}>
-                <Text style={style.pageText}>Access everything Filametric has to offer - all from a single account</Text>
+                <Text style={style.pageText}>
+                    Access everything Filametric has to offer - all from a single account
+                </Text>
             </View>
 
             <TextInput
