@@ -1,24 +1,38 @@
 import React, { useState } from 'react';
 import { Platform, Pressable, StyleSheet, Text, View } from "react-native"
 import Chart from '../chart/chart';
+import { GraphData } from '@/constants/Objects';
 
 interface Props {
-    dryer: string;
-    timeframe: string;
+    tempData?:GraphData;
+    humidityData?:GraphData;
 }
 
-const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
+const DataChartCard:  React.FC<Props> = ({tempData, humidityData}) => {
     const [dataSubject, setDataSubject] = useState<string>("Temprature");
     const [dataTitle, setDataTitle] = useState<string>("Temprature");
     const dataSubjects:string[] = ["Temprature", "Humidity", "Energy", "Materials"];
 
     function changeDataSubject(newSubject:string) {
         if(newSubject === "Materials") {
-            setDataTitle(newSubject +  " Pie")
+            setDataTitle(newSubject +  " Pie");
         } else {
             setDataTitle(newSubject +  " Curve");
         }
-        setDataSubject(newSubject)
+        setDataSubject(newSubject);
+    }
+
+    function getSubjectData() : GraphData{
+        if(dataSubject === "Temprature" && tempData && tempData.value.length >= 1) {
+            return tempData;
+        }
+        if(dataSubject === "Humidity" && humidityData && humidityData.value.length >= 1) {
+            return humidityData;
+        }
+        return {
+            timestamp: [" "],
+            value: [0],
+        };
     }
 
     return (
@@ -38,7 +52,7 @@ const DataChartCard:  React.FC<Props> = ({dryer, timeframe}) => {
             {Platform.OS === 'web' ? (
                 <Text style={{padding: 12}}>Chart is not available on web</Text>
             ) : (
-                <Chart dryer={dryer} timeframe={timeframe} subject={dataSubject}/>
+                <Chart data={getSubjectData()} subject={dataSubject}/>
             )}
         </View>
     )
@@ -78,4 +92,4 @@ const styles = StyleSheet.create({
     selectedButton: {
         backgroundColor: "#F6F6F6"
     }
-})
+});
