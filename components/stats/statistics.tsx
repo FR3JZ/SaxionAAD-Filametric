@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, ScrollView, StyleSheet, Text, View } from "react-native"
+import { ScrollView, StyleSheet, Text, View } from "react-native"
 import DataSelectionCard from "./cards/data-selection-card";
 import HumidityDataCard from "./cards/humidity-data-card";
 import CyclesDataCard from "./cards/cycles-data-card";
 import DataChartCard from "./cards/data-chart-card";
-import { DryerLog, StatsData } from "@/constants/Objects";
+import { StatsData } from "@/constants/Objects";
 import StatsService from "@/services/statsService";
 
 const Statistics = () => {
