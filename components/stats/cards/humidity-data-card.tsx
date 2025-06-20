@@ -8,23 +8,21 @@ interface Props {
     timeframe: number;
 }
 
-const HumidityDataCard: React.FC<Props> = ({currentPercentage, wrtLast, timeframe}) => {
-
-    function getTimeframeText(): string{
-        if(wrtLast === undefined) return "";
-        if(timeframe === 1) {
-            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last day" : String(wrtLast) + " w.r.t last day"
-        }
-        if(timeframe === 7) {
-            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last week" : String(wrtLast) + " w.r.t last week"
-        }
-        return ""
+const HumidityDataCard: React.FC<Props> = ({ currentPercentage, wrtLast, timeframe }) => {
+    // Returns difference text for timeframe (day/week), or empty if not available
+    function getTimeframeText(): string {
+        if (wrtLast === undefined) return "";
+        if (timeframe === 1)
+            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last day";
+        if (timeframe === 7)
+            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last week";
+        return "";
     }
-    
+
     return (
         <View style={styles.card}>
             <View style={styles.titleContainer}>
-                <Ionicons name='water' size={32} style={styles.icon}></Ionicons>
+                <Ionicons name='water' size={32} style={styles.icon} />
                 <Text style={styles.titleText}>Humidity reduction</Text>
             </View>
             <Text style={styles.statText}>{currentPercentage}%</Text>
@@ -36,9 +34,7 @@ const HumidityDataCard: React.FC<Props> = ({currentPercentage, wrtLast, timefram
 export default HumidityDataCard;
 
 const styles = StyleSheet.create({
-    icon: {
-        color: "#0086D4",
-    },
+    icon: { color: "#0086D4" },
     card: {
         marginHorizontal: 14,
         marginVertical: 6,
