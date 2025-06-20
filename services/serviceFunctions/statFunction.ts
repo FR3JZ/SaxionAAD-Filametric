@@ -1,5 +1,11 @@
 import { DryerLog, StatsData, GraphData } from "@/constants/Objects";
 
+/**
+ * Create an object with all the statistics the stats screen could need.
+ * @param logs The logs created by the dryers
+ * @param timePeriod The time period of how far back the user wants to look
+ * @returns A object with all the compiled stats
+ */
 export default function createStatsDataObject(logs: DryerLog[], timePeriod: number): StatsData {
     // Need 2 logs minimum to get any stats
     if (logs.length >= 2) {
@@ -46,7 +52,10 @@ export default function createStatsDataObject(logs: DryerLog[], timePeriod: numb
     }
 }
 
-// Create an empty object
+/**
+ * An empty object for when there is an error or not enough logs.
+ * @returns An empty StatsData object
+ */
 function emptyObject() : StatsData{
     return {
         humidityReductionPercentage: 0,
@@ -64,7 +73,11 @@ function emptyObject() : StatsData{
     };
 }
 
-// Check to see if a log is usable
+/**
+ * Check to see if a log is usable
+ * @param log The log that needs to be valid for use
+ * @returns True if the log is valid
+ */
 function isLogValidForUse(log:DryerLog) : boolean{
     if (log === undefined) return false;
     if (log.humidity === undefined) return false;
@@ -72,7 +85,13 @@ function isLogValidForUse(log:DryerLog) : boolean{
     return true;
 }
 
-// Get all logs of for example yesterday or last week
+/**
+ * Get all logs of for example, last week when you want to compare them to the stats of this week
+ * @param logs All of the logs given to createStatsDataObject
+ * @param lastLogOfCurrentPeriod The last log of the current period to help figure out what day/time it is.
+ * @param timeFrameInDays How far back the user wants to look
+ * @returns A list of logs of the previous period
+ */
 function findLogsOfPreviousPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: DryerLog, timeFrameInDays: number ): DryerLog[] {
     const endTimestamp = lastLogOfCurrentPeriod.timestamp;
     const cutOff = new Date(endTimestamp);
@@ -81,7 +100,13 @@ function findLogsOfPreviousPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: Dry
     return logs.filter(log => log.timestamp.getTime() <= cutOff.getTime());
 }
 
-// Get all logs of for example today or this week
+/**
+ * Get all logs of for example, this week
+ * @param logs All of the logs given to createStatsDataObject
+ * @param lastLogOfCurrentPeriod The last log of the current period to help figure out what day/time it is.
+ * @param timeFrameInDays How far back the user wants to look
+ * @returns A list of logs of the current period
+ */
 function findLogsOfCurrentPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: DryerLog, timeFrameInDays: number ): DryerLog[] {
     const endTimestamp = lastLogOfCurrentPeriod.timestamp;
     const cutOff = new Date(endTimestamp);
@@ -90,7 +115,11 @@ function findLogsOfCurrentPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: Drye
     return logs.filter(log => log.timestamp.getTime() > cutOff.getTime());
 }
 
-// Find the latest log in the list using the dates
+/**
+ * Find the latest log in the list using the timestamps
+ * @param logs the logs you want to look through
+ * @returns the last log in the list (by timestamp)
+ */
 function findLastLog(logs:DryerLog[]):DryerLog {
     let log:DryerLog = logs[0];
     logs.forEach(item => {
@@ -101,7 +130,11 @@ function findLastLog(logs:DryerLog[]):DryerLog {
     return log;
 }
 
-// Find the first log in the list using the dates
+/**
+ * Find the first log in the list using the timestamps
+ * @param logs the logs you want to look through
+ * @returns the first log in the list (by timestamp)
+ */
 function findFirstLog(logs:DryerLog[]):DryerLog{
     let log:DryerLog = logs[0];
     logs.forEach(item => {
@@ -112,35 +145,60 @@ function findFirstLog(logs:DryerLog[]):DryerLog{
     return log;
 }
 
-// Calculate how much humidity was reduced between the earliest log and the latest in a period
+/**
+ * Calculate how much humidity was reduced between the earliest log and the latest in a period
+ * @param earliest the humidity in the earliest log.
+ * @param latest the humidity in the last log
+ * @returns differance between earliest and latest in percentage
+ */
 function calculateHumidtyReduction(earliest:number, latest:number) : number {
     if(earliest === null || latest === null || earliest === 0) return 0;
     const percentage:number = ((earliest - latest) / earliest) * 100
     return Number(percentage.toFixed(2));
 }
 
-// Calculate how many cycles were completed between the earliest and latest log in a period
+/**
+ * Calculate how many cycles were completed between the earliest and latest log in a period
+ * @param earliest the completed cycles in the earliest log.
+ * @param latest the completed cycles in the last log
+ * @returns differance between earliest and latest completed cycles
+ */
 function calculateCycles(earliest:number, latest:number) : number {
     if(earliest === null || latest === null || earliest === 0) return 0;
     const cycles = latest - earliest;
     return Number(cycles.toFixed(2));
 }
 
-// Calculate the difference in humidity reduction in current and previous period
+/**
+ * Calculate the difference in humidity reduction in current and previous period
+ * @param currentPeriodReduction the percentage of humidity in the current period
+ * @param previousPeriodReduction the percentage of humidity in the previous period
+ * @returns the differece between the 2 percentages
+ */
 function calculateWRTHumidity(currentPeriodReduction:number, previousPeriodReduction:number) :number {
     if(currentPeriodReduction === null || previousPeriodReduction === null) return 0;
     const humidity = currentPeriodReduction - previousPeriodReduction;
     return Number(humidity.toFixed(2));
 }
 
-// Calculate the difference in cycles executed in current and previous period
+/**
+ * Calculate the difference in cycles executed in current and previous period
+ * @param currentCompletedCycles the completed cycles in the current period
+ * @param previousCompletedCycles the completed cycles in the previous period
+ * @returns the diffence between the 2 numbers
+ */
 function calculateWRTCycles(currentCompletedCycles:number, previousCompletedCycles:number) : number {
     if(currentCompletedCycles === null || previousCompletedCycles === null) return 0;
     const cycles = currentCompletedCycles - previousCompletedCycles;
     return Number(cycles.toFixed(2));
 }
 
-// Generate the data needed for a graph showing the last 24 hours
+/**
+ * Generate the data needed for a graph showing the last 24 hours
+ * @param data The logs for the needed to make the GraphData
+ * @param dataType temperature or humidity
+ * @returns A object with the arrays needed to fill a graph
+ */
 function generateHourlyGraphData(data: DryerLog[], dataType: string): GraphData {
     if(data.length < 1) return {timestamp: [], value: []};
     const timestamps: string[] = [];
@@ -184,7 +242,12 @@ function generateHourlyGraphData(data: DryerLog[], dataType: string): GraphData 
     };
 }
 
-// Generate the data needed for a graph showing the last N days (e.g., 7 or 31 days)
+/**
+ * Generate the data needed for a graph showing the last N days (e.g., 7 or 31 days)
+ * @param data The logs for the needed to make the GraphData
+ * @param dataType temperature or humidity
+ * @returns A object with the arrays needed to fill a graph
+ */
 function generateDailyGraphData(
     data: DryerLog[],
     dataType: "temperature" | "humidity",

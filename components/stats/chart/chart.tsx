@@ -15,6 +15,9 @@ const Chart:  React.FC<Props> = ({data, subject}) => {
   const totalLabels = data.timestamp.length;
   const step = Math.ceil(totalLabels / maxLabels);
 
+  /**
+   * Prevent the x axis from becoming unreadable by the amount of labels.
+   */
   const filteredLabels = data.timestamp.map((label, index) =>
     index % step === 0 ? label : " "
   );

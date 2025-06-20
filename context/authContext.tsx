@@ -38,6 +38,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const [email, setEmail] = useState<string>("");
     const router = useRouter();
 
+    /**
+     * Send the login request to AWS cognito
+     * @param username The users name
+     * @param password The users password
+     * @param rememberUser True if the user wants to be remembered
+     */
     const logIn = async (username: string, password: string, rememberUser:boolean) => {
         try {
             await setRememberUser(rememberUser);
@@ -54,6 +60,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    /**
+     * Signs out the user.
+     * Stops remembering the user.
+     */
     const logOut = async () => {
         try {
             await clearRememberUser();
@@ -65,6 +75,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    /**
+     * Check to see if the user is loged in or not.
+     */
     const checkAuthenticationStatus = async () => {
         let authenticated = false;
         try {
@@ -121,6 +134,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
         return () => Hub.remove('auth', listener);
     }, []);
 
+    /**
+     * Get the users name
+     * @returns The username of the logged in user
+     */
     const getCurrentUsername = async (): Promise<string | null> => {
         try {
             if(username) {
@@ -135,13 +152,16 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    /**
+     * Get the email of the user
+     * @returns The email of the logged in user
+     */
     const getCurrentEmail = async (): Promise<string | null> => {
         try {
             if(email) {
                 return email;
             }
             const userInfo = await Auth.currentUserInfo();
-            console.log(userInfo)
             setEmail(userInfo?.email)
             return userInfo?.attributes.email ?? null;
         } catch (error) {
@@ -150,6 +170,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
+    /**
+     * Tell AWS cognito to delete the user, then log the user out.
+     */
     const deleteUserAccount = async () => {
         try {
             await Auth.deleteUser();

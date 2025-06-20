@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Auth } from "aws-amplify";
@@ -20,20 +19,29 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
 
   const [timer, setTimer] = useState(0);
 
-  useEffect(() => {
-    let interval:number;
-    if (timer > 0) {
-        interval = setInterval(() => {
-            setTimer((prev) => prev - 1);
-        }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timer]);
+    // Countdown for the button
+    useEffect(() => {
+        let interval:number;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
 
-  const startTimer = () => {
-    setTimer(60);
-  };
+    /**
+     * Sets the thime for the timer
+     */
+    const startTimer = () => {
+        setTimer(60);
+    };
 
+    /**
+     * Moves the user to the next or previous input field when entering verification code.
+     * @param text The user input
+     * @param index The index of what textfield it was put in
+     */
     const handleChange = (text: string, index: number) => {
         if (/^\d?$/.test(text)) {
             const newCode = [...code];
@@ -55,6 +63,10 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
         }
     };
 
+    /**
+     * Send the numbers the user put in to AWS cognito to verify.
+     * @param codeArray Is a array with all the numbers the user put in.
+     */
     async function VerifyAccount(codeArray: string[]) {
         const verification = codeArray.join(""); 
         try {
@@ -69,6 +81,9 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
         }
     }
 
+    /**
+     * Send a new verification code.
+     */
     async function reSendAccounDetails() {
         if (username && timer === 0){
             try {

@@ -9,6 +9,9 @@ import DryerService from "@/services/dryerService";
 const DangerZoneCard = () => {
     const auth = useContext(AuthContext)
 
+    /**
+     * Create a pop-up, when OK is pressed send a delete request to AWS cognito through the authContext
+     */
     const confirmAccountDeletion = () => {
         Alert.alert(
             "Delete your account?",
@@ -29,6 +32,9 @@ const DangerZoneCard = () => {
         );
     };
 
+    /**
+     * Create a pop-up, when OK is pressed send a delete request using the DryerService
+     */
     const confirmDryerDeletion = () => {
         Alert.alert(
             "Delete your dryers?",
@@ -49,6 +55,9 @@ const DangerZoneCard = () => {
         );
     };
 
+    /**
+     * Create a pop-up, when OK is pressed send a delete request using the ProfileService
+     */
     const confirmCustomProfileDeletion = () => {
         Alert.alert(
             "Delete your custom profiles?",
@@ -69,6 +78,10 @@ const DangerZoneCard = () => {
         );
     };
 
+    /**
+     * Create a pop-up, when OK is pressed it does a console log
+     * @deprecated user settings are not saved making it not possible to reset them
+     */
     const confirmSettingReset = () => {
         Alert.alert(
             "Reset your settings?",

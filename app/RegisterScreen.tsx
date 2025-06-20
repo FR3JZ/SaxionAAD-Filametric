@@ -19,24 +19,44 @@ export default function Register() {
     const [signUpError, setSignUpError] = useState<string>("");
     const [sendingAccountDetails, setSendingAccountDetails] = useState<boolean>(false);
 
+    /**
+     * sets the new email and goes to the GetPassword LoginState
+     * @param email - The new users email
+     */
     function enteredNewEmail(email:string){
         setNewUserEmail(email);
         setLoginState(LoginState.GetPassword);
     }
-
+    
+    /**
+     * sets the new password and goes to the GetUsername LoginState
+     * @param password - The new users username
+     */
     function enteredNewPassword(password:string){
         setNewUserPassword(password);
         setLoginState(LoginState.GetUsername);
     }
 
-    async function enteredNewUsername(username:string){
+    /**
+     * This is called by the UsernameInput component to set the username
+     * @param username - The new users username
+     */
+    function enteredNewUsername(username:string){
         setNewUsername(username);
     }
 
+    /**
+     * Go to the WelcomeMessage LoginState when user is verified
+     */
     async function welcomeNewUser(){
         setLoginState(LoginState.WelcomeMessage);
     }
 
+    /**
+     * Send the new users information to cognito.
+     * If user can be made it will also trigger an email with the verification code.
+     * Then goes to the code VerifyEmailCode LoginState.
+     */
     async function sendAccounDetails() {
         if (newUsername && newUserEmail && newUserPassword){
             try {
@@ -59,7 +79,10 @@ export default function Register() {
         }
     }
 
-
+    /**
+     * Check to see if there is an error and give a more clear message in one case
+     * @param error the error object that was thrown
+     */
     function checkError(error:Error){
         if(error.message === "User already exists") {
             setSignUpError(error.message + ": Please use a different name.");
@@ -69,18 +92,30 @@ export default function Register() {
         console.error("Signup error:", error.message);
     }
 
+    /**
+     * Send the user back to the login screen
+     */
     function goBackToLogin() {
         router.push("/LoginScreen");
     }
 
+    /**
+     * Send the user back to the GetEmail screen state
+     */
     function goBackToEmail() {
         setLoginState(LoginState.GetEmail);
     }
 
+    /**
+     * Send the user back to the GetPassword screen state
+     */
     function goBackToPassword() {
         setLoginState(LoginState.GetPassword);
     }
 
+    /**
+     * Send the user back to the GetUsername screen state
+     */
     function goBackToUsername() {
         setLoginState(LoginState.GetUsername);
     }

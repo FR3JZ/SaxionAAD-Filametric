@@ -10,6 +10,9 @@ interface Props {
 
 const CyclesDataCard:  React.FC<Props> = ({cyclesInTimeFrame, wrtLast, timeframe}) => {
 
+    /**
+     * @returns The text for the w.r.t. statistic
+     */
     function getTimeframeText(): string{
         if(wrtLast === undefined) return "";
         if(timeframe === 1) {

@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ErrorMessageText: React.FC<Props> = ({ message, style }) => {
-    if(message.length < 1) return null;
+    if(message.length < 1) return null; // Prevents showing the text when there is no message
 
     return (
         <Text style={[styles.errorText, style]}>{message}</Text>

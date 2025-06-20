@@ -16,6 +16,10 @@ const LoginInput = () => {
 
     const [loginError, setLoginError] = useState<string>("");
 
+    /**
+     * Check to see if the given input was correct.
+     * Send the login request to cognito through the auth context @see {context\authContext.tsx}.
+     */
     async function handleLogin() {
         setLoginError("");
 
@@ -45,10 +49,16 @@ const LoginInput = () => {
         }
     }
 
+    /**
+     * Go to the register user screen
+     */
     function goToRegisterScreen() {
         router.push("/RegisterScreen");
     }
 
+    /**
+     * Go to the password reset screen
+     */
     function goToPasswordReset() {
         router.push("/PasswordReset")
     }

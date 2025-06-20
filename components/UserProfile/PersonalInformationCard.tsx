@@ -17,10 +17,18 @@ const PersonalInformationCard = () => {
         setDetails();
     }, [])
 
+
+    /**
+     * @deprecated AWS cognito does not allow the change of the username. Or the email of a verified user.
+     * This can only be done by an admin in AWS cognito.
+     */
     function saveChanges() {
         console.log("Username: " + username + "  Email: " + email)
     }
 
+    /**
+     * Get the user email and username from the authcontext. 
+     */
     async function setDetails() {
         const name = await auth.getCurrentUsername();
         const mail = await auth.getCurrentEmail();

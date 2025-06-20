@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, TextInput, View, TouchableOpacity }
 import React from "react";
 
 interface Props {
-    goBack: () => void;
+    goBack: () => void; // Tells the parent to go back to the previous screen
     setUserEmail: (email: string) => void;
 }
 
@@ -12,12 +12,20 @@ const EmailInput: React.FC<Props> = ({setUserEmail, goBack}) => {
 
     const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,24}$/;
 
+    /**
+     * Get the border color for the email input
+     * @returns The color code string
+     */
     const getBorderColor = () => {
         if (email === "") return "#E7E7E7";     
         if (emailRegex.test(email)) return "#00C03B"; 
         return "#FF2323";                          
     };
 
+    /**
+     * Tells the parent what the new password is.
+     * When the email is correct.
+     */
     const goToNextQuestion = () => {
         if (emailRegex.test(email)){
             setUserEmail(email)
