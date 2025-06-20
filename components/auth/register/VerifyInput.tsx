@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { Auth } from "aws-amplify";
@@ -20,68 +19,82 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
 
   const [timer, setTimer] = useState(0);
 
-  // Countdown timer for "Resend code"
-  useEffect(() => {
-    let interval: number;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [timer]);
+    // Countdown for the button
+    useEffect(() => {
+        let interval:number;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
 
-  const startTimer = () => {
-    setTimer(60);
+    /**
+     * Sets the thime for the timer
+     */
+    const startTimer = () => {
+        setTimer(60);
+    };
+
+    /**
+     * Moves the user to the next or previous input field when entering verification code.
+     * @param text The user input
+     * @param index The index of what textfield it was put in
+     */
+    const handleChange = (text: string, index: number) => {
+        if (/^\d?$/.test(text)) {
+            const newCode = [...code];
+            newCode[index] = text;
+            setCode(newCode);
+
+            if (text && index < numberOfFields - 1) {
+                inputsRef.current[index + 1]?.focus();
+            }
+
+            if (!text && index > 0) {
+                inputsRef.current[index - 1]?.focus();
+            }
+
+            const isAllFilled = newCode.every((char) => char.length === 1);
+            if (isAllFilled) {
+                VerifyAccount(newCode);
+            }
+        }
+    };
+
+    /**
+     * Send the numbers the user entered to AWS cognito to verify.
+     * @param codeArray Is a array with all the numbers the user put in.
+     */
+    async function VerifyAccount(codeArray: string[]) {
+        const verification = codeArray.join(""); 
+        try {
+            await Auth.confirmSignUp(username, verification);
+            welcomeNewUser();
+        } catch (error: any) {
+            setVerificationError(
+            error.message || "Er is iets misgegaan bij de verificatie."
+            );
+        } finally {
+            startTimer();
+        }
+    }
   };
 
-  // Handles input field changes and auto-navigation between fields
-  const handleChange = (text: string, index: number) => {
-    if (/^\d?$/.test(text)) {
-      const newCode = [...code];
-      newCode[index] = text;
-      setCode(newCode);
-
-      if (text && index < numberOfFields - 1) {
-        inputsRef.current[index + 1]?.focus();
-      }
-
-      if (!text && index > 0) {
-        inputsRef.current[index - 1]?.focus();
-      }
-
-      const isAllFilled = newCode.every((char) => char.length === 1);
-      if (isAllFilled) {
-        VerifyAccount(newCode);
-      }
-    }
-  };
-
-  // Confirm code using AWS Cognito
-  async function VerifyAccount(codeArray: string[]) {
-    const verification = codeArray.join("");
-    try {
-      await Auth.confirmSignUp(username, verification);
-      welcomeNewUser(); // Trigger success handler (e.g., redirect)
-    } catch (error: any) {
-      setVerificationError(
-        error.message || "Er is iets misgegaan bij de verificatie."
-      );
-    } finally {
-      startTimer();
-    }
-  }
-
-  // Resend code to user (throttled by timer)
-  async function reSendAccounDetails() {
-    if (username && timer === 0) {
-      try {
-        await Auth.resendSignUp(username);
-      } catch (error) {
-        if (error instanceof Error) setVerificationError(error.message);
-      } finally {
-        startTimer();
-      }
+    /**
+     * Send a new verification code. (throttled by timer)
+     */
+    async function reSendAccounDetails() {
+        if (username && timer === 0){
+            try {
+                await Auth.resendSignUp(username);
+            } catch (error) {
+                if(error instanceof Error) setVerificationError(error.message);
+            } finally {
+                startTimer()
+            }
+        }
     }
   }
 

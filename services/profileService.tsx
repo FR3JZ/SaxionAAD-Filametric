@@ -1,5 +1,4 @@
 import API from "../utils/API";
-import { Auth } from "aws-amplify";
 import authService from "./authService";
 
 class ProfileService {
@@ -23,6 +22,16 @@ class ProfileService {
         } catch (error: any) {
             console.error("Error while trying to create a profile:", error);
             throw error;
+        }
+    }
+
+    static async deleteAllProfile() {
+        try {
+            const token = await authService.getJWT();
+            const json = await API.request(`profiles`, "DELETE", token);
+            return json;
+        } catch (error ){
+            console.error("Error while trying to delete all profiles:", error);
         }
     }
 }

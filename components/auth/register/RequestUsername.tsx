@@ -14,20 +14,28 @@ interface Props {
 const UsernameInput: React.FC<Props> = ({ setNewUsername, sendDetails, goBack, isSendingAccountDetails = false, error = "" }) => {
     const [username, setUsername] = useState<string>("");
 
-    // Trigger sending when username is long enough
+    /**
+     * Tells the parent the user want to use this username when the username is long enough
+     */
     const goToNextQuestion = () => {
         if (username.length >= 3) {
             sendDetails();
         }
     };
 
-    // Update internal state and lift new value to parent
-    const usernameChange = (newUsername: string) => {
-        setUsername(newUsername);
+    /**
+     * sets the new username and tells the parent what it is.
+     * @param newUsername is the username that was put in the input
+     */
+    const usernameChange = (newUsername:string) => {
+        setUsername(newUsername)
         setNewUsername(newUsername);
     };
 
-    // Dynamic border color based on username validity
+    /**
+     * Get the border color for the username input based on validity
+     * @returns The color code string
+     */
     const getBorderColor = () => {
         if (username === "") return "#E7E7E7";
         if (username.length >= 3) return "#00C03B";

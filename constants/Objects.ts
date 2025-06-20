@@ -22,6 +22,9 @@ export type Device = {
     Shadow: any,
 }
 
+/**
+ * A log of information send by the dryer
+ */
 export type DryerLog = {
   temperature: number,
   humidity: number,
@@ -29,6 +32,9 @@ export type DryerLog = {
   timestamp: Date,
 }
 
+/**
+ * All the data needed to fill the stats page
+ */
 export type StatsData = {
   humidityReductionPercentage: number,
   completedCycles: number,
@@ -38,6 +44,9 @@ export type StatsData = {
   humidityPeriodArray: GraphData,
 }
 
+/**
+ * All the data needed to fill a graph
+ */
 export type GraphData = {
   timestamp:string[],
   value:number[],

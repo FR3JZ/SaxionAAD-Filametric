@@ -14,13 +14,19 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
   const [timeFrame, setTimeFrame] = useState<string>('1');
   const [dryers, setDryers] = useState<Device[]>([]);
 
-  // When user selects a different dryer
+  /**
+   * Set the new dryer and inform the parent of the change.
+   * @param dryer the new dryer to change to
+   */
   function changeDryer(dryer: string) {
     dryerChanged(dryer);
     setDryer(dryer);
   }
 
-  // When user selects a different time frame
+  /**
+   * Set the new timeframe and inform the parent of the change.
+   * @param timeFrame the new timeframe to change to
+   */
   function changeTimeFrame(timeFrame: string) {
     timeFrameChanged(Number(timeFrame));
     setTimeFrame(timeFrame);
@@ -33,12 +39,15 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
     getDryers();
   }, []);
 
-  // Fetch available dryers from API
+  /**
+   * Get the users dryers to show in the dropdown.
+   */
   async function getDryers() {
     try {
       const devices = await StatsService.getUserDevices();
       setDryers(devices);
-    } catch {
+    } catch (e) {
+      console.error(e)
     }
   }
 

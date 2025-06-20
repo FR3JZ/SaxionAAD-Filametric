@@ -1,6 +1,6 @@
 import { AuthContext } from "@/context/authContext";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const PersonalInformationCard = () => {
@@ -11,9 +11,30 @@ const PersonalInformationCard = () => {
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
 
-    // Placeholder for saving functionality
+    const [currentUsername, setCurrentUsername] = useState<string>("");
+    const [currentEmail, setCurrentEmail] = useState<string>("");
+
+    useEffect(() => {
+        setDetails();
+    }, [])
+
+
+    /**
+     * @deprecated AWS cognito does not allow the change of the username. Or the email of a verified user.
+     * This can only be done by an admin in AWS cognito.
+     */
     function saveChanges() {
         console.log("Username: " + username + "  Email: " + email);
+    }
+
+    /**
+     * Get the user email and username from the authcontext. 
+     */
+    async function setDetails() {
+        const name = await auth.getCurrentUsername();
+        const mail = await auth.getCurrentEmail();
+        if (name !== null) setCurrentUsername(name);
+        if (mail !== null) setCurrentEmail(mail);
     }
 
     return (
@@ -36,8 +57,8 @@ const PersonalInformationCard = () => {
                     <View style={styles.infoRow}>
                         <Ionicons style={styles.userImage} size={40} name="person-circle" />
                         <View>
-                            <Text style={styles.nameText}>Alexander Nieuwland</Text>
-                            <Text style={styles.grayText}>Member since May 2025</Text>
+                            <Text style={styles.nameText}>{currentUsername}</Text>
+                            <Text style={styles.nameText}>{currentEmail}</Text>
                         </View>
                     </View>
 
@@ -49,7 +70,7 @@ const PersonalInformationCard = () => {
                                 value={username}
                                 onChangeText={setUsername}
                                 placeholderTextColor="#B0B0B0"
-                                placeholder="Alexander N."
+                                placeholder={currentUsername}
                                 style={styles.textField}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
@@ -58,14 +79,12 @@ const PersonalInformationCard = () => {
                                 value={email}
                                 onChangeText={setEmail}
                                 placeholderTextColor="#B0B0B0"
-                                placeholder="alexander@filametric.com"
+                                placeholder={currentEmail}
                                 style={styles.textField}
                                 autoCapitalize="none"
                                 keyboardType="email-address"
                             />
-                            <Text style={[styles.grayText, { marginVertical: 4 }]}>
-                                Email cannot be changed after registration
-                            </Text>
+                            <Text style={[styles.grayText, {marginVertical: 4}]}>Email and username cannot be changed after registration</Text>
                             <TouchableOpacity onPress={saveChanges} style={styles.saveChangesButton}>
                                 <Text style={styles.buttonText}>Save changes</Text>
                             </TouchableOpacity>

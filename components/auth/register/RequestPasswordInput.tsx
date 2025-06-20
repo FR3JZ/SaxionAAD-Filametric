@@ -19,7 +19,7 @@ const GetPassword: React.FC<Props> = ({ goBack, setUserPassword }) => {
     const [hasNumber, setHasNumber] = useState<boolean>(false);
     const [hasSymbol, setHasSymbol] = useState<boolean>(false);
 
-    // Re-evaluate password rules when password changes
+    // Check to see if the password is correct when password changes
     useEffect(() => {
         setIsCorrectLength(password.length >= 8);
         setHasLowerAndUpercase(/[a-z]/.test(password) && /[A-Z]/.test(password));
@@ -27,19 +27,27 @@ const GetPassword: React.FC<Props> = ({ goBack, setUserPassword }) => {
         setHasSymbol(/[~`!@#$%^&*()_\-+={[}\]|\\:;"'<,>.?/]/.test(password));
     }, [password]);
 
-    // Combines all rule checks into single boolean
-    function isPasswordCorrect(): boolean {
+    /**
+     * Check all booleans that are part of the password requirements
+     * @returns Returns true when all password requirements are correct
+     */
+    function isPasswordCorrect():boolean {
         return isCorrectLength && hasLowerAndUpercase && hasNumber && hasSymbol;
     }
 
-    // Proceeds if password meets all requirements
+    /**
+     * Tells the parent what the new password is when the password is correct
+     */
     function setNewUserPassword() {
         if (isPasswordCorrect()) {
             setUserPassword(password);
         }
     }
 
-    // Dynamically determine border color for password input
+    /**
+     * Returns a color for user feedback on their password
+     * @returns The color code string for the input border
+     */
     const getBorderColor = () => {
         if (password === "") return "#E7E7E7";
         if (isPasswordCorrect()) return "#00C03B";

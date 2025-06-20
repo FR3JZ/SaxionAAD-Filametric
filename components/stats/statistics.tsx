@@ -13,24 +13,36 @@ const Statistics = () => {
     const [currentDryer, setCurrentDryer] = useState<string>("")
     const [currentTimeframe, setCurrentTimeFrame] = useState<number>(1)
 
-    const [statistics, setStatistics] = useState<StatsData>();
+    const [statistics, setStatistics] = useState<StatsData>(); // The statistic data given to the cards.
 
 
+    // Reset the stats when the user want to see a different dryer or timeframe
     useEffect(() => {
         if (currentDryer && currentTimeframe) {
             setStats();
         }
     }, [currentDryer, currentTimeframe]);
 
+    /**
+     * Select a different dryer
+     * @param dryer The dryer that is now selected
+     */
     function dryerChanged(dryer: string) {
         setCurrentDryer(dryer);
     }
 
-    
+    /**
+     * Select a different timeframe
+     * @param timeFrame The timeframe that is now selected
+     */
     function timeFrameChanged(timeFrame: number) {
         setCurrentTimeFrame(timeFrame);
     }
 
+    /**
+     * Retrieves a StatsData object from the StatsService. Then sets it as statistics.
+     * Sets a empty object when there is an error.
+     */
     async function setStats() {
         try {
             setIsGettingStats(true);

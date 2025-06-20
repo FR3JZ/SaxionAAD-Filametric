@@ -17,7 +17,10 @@ const LoginInput = () => {
 
     const [loginError, setLoginError] = useState<string>("");
 
-    // Validates input and attempts login via AuthContext
+    /**
+     * Check to see if the given input was correct.
+     * Send the login request to cognito through the auth context @see {context\authContext.tsx}.
+     */
     async function handleLogin() {
         setLoginError("");
 
@@ -47,11 +50,16 @@ const LoginInput = () => {
         }
     }
 
-    // Navigation handlers
+    /**
+     * Go to the register user screen
+     */
     function goToRegisterScreen() {
         router.push("/RegisterScreen");
     }
 
+    /**
+     * Go to the password reset screen
+     */
     function goToPasswordReset() {
         router.push("/PasswordReset");
     }
