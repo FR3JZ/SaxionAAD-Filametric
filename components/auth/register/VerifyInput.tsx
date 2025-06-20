@@ -80,7 +80,6 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
             startTimer();
         }
     }
-  };
 
     /**
      * Send a new verification code. (throttled by timer)
@@ -95,8 +94,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
                 startTimer()
             }
         }
-    }
-  }
+    };
 
   return (
     <View style={style.container}>
