@@ -4,22 +4,29 @@ import ProfileModeCard from "./ProfileModeCard";
 import { getSavedMode } from "@/stores/modeStore";
 import { useFocusEffect } from "expo-router";
 
-const ProfileModeSelectionPage = ({ dryerId, profileId }: { dryerId: string, profileId: string }) => {
-  
+const ProfileModeSelectionPage = ({
+  dryerId,
+  profileId,
+}: {
+  dryerId: string;
+  profileId: string;
+}) => {
   const [selected, setSelected] = useState<string>("normal");
 
-  const getCurrentMode = async() => {
-    const currentMode = await getSavedMode(dryerId, profileId)
-    if(currentMode !== null) {
+  // Retrieve the previously saved mode for this dryer & profile
+  const getCurrentMode = async () => {
+    const currentMode = await getSavedMode(dryerId, profileId);
+    if (currentMode !== null) {
       setSelected(currentMode);
     }
-  }
+  };
 
+  // Load saved mode whenever the screen comes into focus
   useFocusEffect(
-    useCallback(() => { 
+    useCallback(() => {
       getCurrentMode();
     }, [])
-  )
+  );
 
   return (
     <View style={styles.container}>
@@ -40,9 +47,7 @@ const ProfileModeSelectionPage = ({ dryerId, profileId }: { dryerId: string, pro
         mode="silent"
         icon={require("../../assets/images/silent_mode_icon.png")}
         shortDescription="Minimizes noise while drying filament"
-        longDescription="Silent Mode operates with reduced fan speed to minimize noise while still effectively 
-        drying your filament. This mode takes longer to complete but creates a much quieter environment. 
-        Perfect for overnight drying sessions or when working in noise-sensitive areas like offices or shared spaces."
+        longDescription="Silent Mode operates with reduced fan speed to minimize noise while still effectively drying your filament. This mode takes longer to complete but creates a much quieter environment. Perfect for overnight drying sessions or when working in noise-sensitive areas like offices or shared spaces."
         selected={selected}
         setSelected={setSelected}
         dryerId={dryerId}
@@ -54,10 +59,7 @@ const ProfileModeSelectionPage = ({ dryerId, profileId }: { dryerId: string, pro
         mode="storage"
         icon={require("../../assets/images/storage_mode_icon.png")}
         shortDescription="Keeps filament dry over longer periods"
-        longDescription="Storage Mode is designed for long-term filament preservation. It maintains a consistent, 
-        gentle temperature indefinitely to keep your filament dry and ready for use. This mode operates quietly by
-        default and automatically continues until manually stopped. Ideal for storing opened filament spools or preparing 
-        for extended periods between prints."
+        longDescription="Storage Mode is designed for long-term filament preservation. It maintains a consistent, gentle temperature indefinitely to keep your filament dry and ready for use. This mode operates quietly by default and automatically continues until manually stopped. Ideal for storing opened filament spools or preparing for extended periods between prints."
         selected={selected}
         setSelected={setSelected}
         dryerId={dryerId}
@@ -69,9 +71,9 @@ const ProfileModeSelectionPage = ({ dryerId, profileId }: { dryerId: string, pro
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
     paddingTop: 20,
   },
 });

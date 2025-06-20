@@ -12,6 +12,7 @@ const DryerAddInstructionPage = () => {
                     <Text style={styles.instructionTitle}>Setup Instructions</Text>
                 </View>
 
+                {/* Step 1 Instruction */}
                 <View style={styles.instructionLine}>
                     <View style={styles.stepContainer}><Text style={styles.stepText}>1</Text></View>
                     <View style={styles.instructionTextContainer}>
@@ -20,6 +21,7 @@ const DryerAddInstructionPage = () => {
                     </View>
                 </View>
 
+                {/* Step 2 Instruction */}
                 <View style={styles.instructionLine}>
                     <View style={styles.stepContainer}><Text style={styles.stepText}>2</Text></View>
                     <View style={styles.instructionTextContainer}>
@@ -34,6 +36,7 @@ const DryerAddInstructionPage = () => {
                     <Text style={styles.explanationTitle}>Why connect your dryer?</Text>
                 </View>
 
+                {/* Each benefit block highlights a reason to connect the dryer */}
                 <View style={styles.benefitItem}>
                     <Ionicons name="person-outline" size={22} color="#7A42F4" />
                     <View style={styles.benefitTextBlock}>
@@ -65,7 +68,11 @@ const DryerAddInstructionPage = () => {
                 </View>
             </View>
 
-            <TouchableOpacity onPress={() => router.push('/(protected)/(dryer-add)/QRCodeScannerScreen')} style={styles.redirectButton}>
+            {/* Navigates to QR scanner screen for pairing dryer */}
+            <TouchableOpacity 
+                onPress={() => router.push('/(protected)/(dryer-add)/QRCodeScannerScreen')} 
+                style={styles.redirectButton}
+            >
                 <Text style={styles.redirectButtonText}>+ Connect Dryer</Text>
             </TouchableOpacity>
         </View>

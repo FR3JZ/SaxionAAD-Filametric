@@ -7,32 +7,42 @@ const PersonalInformationCard = () => {
     const auth = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
+    // Local state for editable fields
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
 
+    // Placeholder for saving functionality
     function saveChanges() {
-        console.log("Username: " + username + "  Email: " + email)
+        console.log("Username: " + username + "  Email: " + email);
     }
 
     return (
         <View style={styles.card}>
             <View>
+                {/* Header with title and edit toggle icon */}
                 <View style={styles.titleRow}>
                     <Text style={styles.titleText}>Personal Information</Text>
                     <TouchableOpacity onPress={() => setIsEditing(!isEditing)}>
-                        {!isEditing ? <Ionicons size={32} name="create-outline"/> : <Ionicons size={32} name="return-down-back-outline"/>}
+                        {!isEditing ? (
+                            <Ionicons size={32} name="create-outline" />
+                        ) : (
+                            <Ionicons size={32} name="return-down-back-outline" />
+                        )}
                     </TouchableOpacity>
                 </View>
-                <View >
+
+                {/* Display user identity section */}
+                <View>
                     <View style={styles.infoRow}>
-                        <Ionicons style={styles.userImage} size={40} name="person-circle"/>
+                        <Ionicons style={styles.userImage} size={40} name="person-circle" />
                         <View>
                             <Text style={styles.nameText}>Alexander Nieuwland</Text>
                             <Text style={styles.grayText}>Member since May 2025</Text>
                         </View>
                     </View>
-                    
-                    {isEditing && 
+
+                    {/* Show editable input fields if in edit mode */}
+                    {isEditing && (
                         <View style={styles.spacing}>
                             <Text style={styles.nameText}>Name</Text>
                             <TextInput
@@ -53,23 +63,27 @@ const PersonalInformationCard = () => {
                                 autoCapitalize="none"
                                 keyboardType="email-address"
                             />
-                            <Text style={[styles.grayText, {marginVertical: 4}]}>Email cannot be changed after registration</Text>
+                            <Text style={[styles.grayText, { marginVertical: 4 }]}>
+                                Email cannot be changed after registration
+                            </Text>
                             <TouchableOpacity onPress={saveChanges} style={styles.saveChangesButton}>
                                 <Text style={styles.buttonText}>Save changes</Text>
                             </TouchableOpacity>
                         </View>
-                    }
+                    )}
                 </View>
+
+                {/* Logout button always visible */}
                 <View style={styles.spacing}>
                     <TouchableOpacity onPress={() => auth.logOut()} style={styles.logOutButton}>
-                        <Ionicons color="#FFFFFF" size={24} name="exit-outline"/>
+                        <Ionicons color="#FFFFFF" size={24} name="exit-outline" />
                         <Text style={styles.buttonText}>Logout</Text>
                     </TouchableOpacity>
                 </View>
             </View>
         </View>
-    )
-}
+    );
+};
 
 export default PersonalInformationCard;
 
@@ -104,28 +118,28 @@ const styles = StyleSheet.create({
     userImage: {
         width: 40,
         height: 40,
-        marginRight: 16
+        marginRight: 16,
     },
     nameText: {
         fontSize: 16,
         fontWeight: "500",
         fontFamily: "Satoshi",
-        color: "#262626"
+        color: "#262626",
     },
     grayText: {
         fontSize: 14,
         fontWeight: "400",
         fontFamily: "Satoshi",
-        color: "#5D5D5D"
+        color: "#5D5D5D",
     },
     logOutButton: {
         height: 48,
         backgroundColor: "#FF5500",
-        justifyContent: 'center', 
-        alignItems: "center", 
-        flexDirection: 'row',    
-        paddingHorizontal: 16,  
-        columnGap: 8,   
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        columnGap: 8,
         marginTop: 8,
         marginBottom: 4,
         borderWidth: 1,
@@ -135,11 +149,11 @@ const styles = StyleSheet.create({
     saveChangesButton: {
         height: 48,
         backgroundColor: "#00C03B",
-        justifyContent: 'center', 
-        alignItems: "center", 
-        flexDirection: 'row',    
-        paddingHorizontal: 16,  
-        columnGap: 8,   
+        justifyContent: 'center',
+        alignItems: "center",
+        flexDirection: 'row',
+        paddingHorizontal: 16,
+        columnGap: 8,
         marginTop: 8,
         marginBottom: 4,
         borderWidth: 1,
@@ -150,7 +164,7 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 18,
         fontFamily: "Satoshi-Medium",
-        fontWeight: "500"
+        fontWeight: "500",
     },
     textField: {
         marginTop: 4,

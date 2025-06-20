@@ -24,6 +24,7 @@ export const useDryerWebSocket = () => {
 
     const connectWebSocket = async () => {
       try {
+        // Fetch the current Cognito session to retrieve JWT token
         const session = await Auth.currentSession();
         const token = session.getIdToken().getJwtToken();
 
@@ -33,8 +34,8 @@ export const useDryerWebSocket = () => {
         ws.current.onmessage = (e: WebSocketMessageEvent) => {
           try {
             const message = JSON.parse(e.data);
-
-            // --- Handle "environment" message ---
+            
+            // Handle incoming environment data (live sensor values) 
             if (message.type === "environment" && message.serial && message.data) {
               const { serial, data } = message;
 
@@ -52,11 +53,11 @@ export const useDryerWebSocket = () => {
               }));
             }
 
-            // --- Handle "events" message ---
+            // Handle status/event-based messages 
             if (message.type === "events" && message.serial && message.data) {
               const { serial, data } = message;
 
-              // 1. Handle cycle_started
+              // Handle cycle_started event
               if (data.event === "cycle_started") {
                 const targetTemp = parseFloat(data.temp);
                 const timestamp = new Date(data.timestamp).getTime();
@@ -85,7 +86,7 @@ export const useDryerWebSocket = () => {
                 return;
               }
 
-              // 2. Handle status_report
+              // Handle status_report event
               if (data.event === "status_report") {
                 const status =
                   data.isRunning ? "Running" :

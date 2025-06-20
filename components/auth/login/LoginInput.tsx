@@ -7,15 +7,17 @@ import { Ionicons } from "@expo/vector-icons";
 
 const LoginInput = () => {
     const { logIn } = useContext(AuthContext);
+
     const [sendingLoginRequest, setSendingLoginRequest] = useState<boolean>(false);
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const [secureText, setSecureText] = useState(true);
-    const [rememberUser, setRememberUser] = useState(false);
+    const [secureText, setSecureText] = useState(true); // Toggles password visibility
+    const [rememberUser, setRememberUser] = useState(false); // "Remember me" option
 
     const [loginError, setLoginError] = useState<string>("");
 
+    // Validates input and attempts login via AuthContext
     async function handleLogin() {
         setLoginError("");
 
@@ -31,7 +33,7 @@ const LoginInput = () => {
 
         try {
             setSendingLoginRequest(true);
-            await logIn(username, password, rememberUser);
+            await logIn(username, password, rememberUser); // Pass remember option too
             console.log("LoginInput: Inloggen succesvol via AuthContext.");
         } catch (error: any) {
             console.error("LoginInput: Fout bij inloggen:", error);
@@ -45,12 +47,13 @@ const LoginInput = () => {
         }
     }
 
+    // Navigation handlers
     function goToRegisterScreen() {
         router.push("/RegisterScreen");
     }
 
     function goToPasswordReset() {
-        router.push("/PasswordReset")
+        router.push("/PasswordReset");
     }
 
     return (
@@ -65,6 +68,7 @@ const LoginInput = () => {
                 keyboardType="email-address"
             />
             
+            {/* Password field with visibility toggle */}
             <View style={style.passwordContainer}>
                 <TextInput
                     value={password}
@@ -83,17 +87,18 @@ const LoginInput = () => {
             {loginError ? <Text style={style.errorText}>{loginError}</Text> : null}
 
             <View style={style.optionsRow}>
+                {/* Remember me checkbox */}
                 <Pressable style={style.checkboxContainer} onPress={() => setRememberUser(!rememberUser)}>
                     <View style={[style.checkbox, rememberUser && style.checked]} />
                     <Text style={style.label}>Remember me</Text>
                 </Pressable>
-                <Pressable onPress={() => goToPasswordReset()}>
+
+                <Pressable onPress={goToPasswordReset}>
                     <Text style={style.forgotPasswordText}>Forgot Password?</Text>
                 </Pressable>
             </View>
 
-            
-
+            {/* Login button with loading indicator */}
             <TouchableOpacity onPress={handleLogin} style={style.button}>
                 {!sendingLoginRequest ? 
                     <Text style={style.buttonText}>Sign in</Text> 
@@ -102,19 +107,20 @@ const LoginInput = () => {
                 }
             </TouchableOpacity>
 
+            {/* Divider line between login and sign up */}
             <View style={style.dividerContainer}>
                 <View style={style.line} />
                 <Text style={style.dividerText}>or</Text>
                 <View style={style.line} />
             </View>
 
+            {/* Sign up redirect */}
             <View style={style.signUpRow}>
                 <Text style={style.signUpQuestionText}>No Filametric account yet?</Text>
-                <Pressable onPress={goToRegisterScreen} >
-                    <Text style={style.signUpText} >Sign up</Text>
+                <Pressable onPress={goToRegisterScreen}>
+                    <Text style={style.signUpText}>Sign up</Text>
                 </Pressable>
             </View>
-            
         </View>
     );
 };

@@ -6,7 +6,6 @@ import CyclesDataCard from "./cards/cycles-data-card";
 import DataChartCard from "./cards/data-chart-card";
 import { DryerLog, StatsData } from "@/constants/Objects";
 import StatsService from "@/services/statsService";
-//import StatsService from "@/services/statsService";
 
 const Statistics = () => {
     const [isGettingStats, setIsGettingStats] = useState<boolean>(false)

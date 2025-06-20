@@ -4,16 +4,19 @@ import { Ionicons } from '@expo/vector-icons';
 import FilametricPicker from '../custom/FilametricPicker';
 
 const AppearanceSettings = () => {
+  // Local state for theme and language settings
   const [theme, setTheme] = useState('System');
   const [language, setLanguage] = useState('English');
 
   return (
     <View style={styles.card}>
+      {/* Header section with icon and title */}
       <View style={styles.headerRow}>
         <Ionicons name="color-palette-outline" size={24} color="#8A4DFF" style={styles.icon} />
         <Text style={styles.header}>Appearance</Text>
       </View>
 
+      {/* Theme selection dropdown */}
       <FilametricPicker
         label="Theme"
         selectedValue={theme}
@@ -28,6 +31,7 @@ const AppearanceSettings = () => {
         ]}
       />
 
+      {/* Language selection dropdown */}
       <FilametricPicker
         label="Language"
         selectedValue={language}

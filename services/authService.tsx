@@ -3,7 +3,7 @@ import { Auth } from "aws-amplify"
 class authService {
     static async getJWT() {
         try {
-            const currentSession = await Auth.currentSession(); // 👈 Verplaatst naar functie
+            const currentSession = await Auth.currentSession();
             const token = currentSession.getIdToken().getJwtToken();
             return token;
         } catch(error: any) {

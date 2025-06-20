@@ -7,6 +7,7 @@ import { router } from "expo-router";
 const DryerAddConfirmationPage = () => {
   return (
     <View style={styles.container}>
+      {/* Checkmark animation */}
       <LottieView
         source={require('../../assets/animations/checkmark.json')}
         autoPlay
@@ -20,6 +21,7 @@ const DryerAddConfirmationPage = () => {
         style={styles.image}
         resizeMode="contain"
       />
+      {/* Button back to homescreen */}
       <TouchableOpacity onPress={() => router.push('/(protected)/(tabs)')} style={styles.button}><Ionicons name="home" size={20} color={"#fff"}/><Text style={styles.buttonText}>Back to home</Text></TouchableOpacity>
     </View>
   );

@@ -20,12 +20,13 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
 
   const [timer, setTimer] = useState(0);
 
+  // Countdown timer for "Resend code"
   useEffect(() => {
-    let interval:number;
+    let interval: number;
     if (timer > 0) {
-        interval = setInterval(() => {
-            setTimer((prev) => prev - 1);
-        }, 1000);
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
     }
     return () => clearInterval(interval);
   }, [timer]);
@@ -34,100 +35,114 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
     setTimer(60);
   };
 
-    const handleChange = (text: string, index: number) => {
-        if (/^\d?$/.test(text)) {
-            const newCode = [...code];
-            newCode[index] = text;
-            setCode(newCode);
+  // Handles input field changes and auto-navigation between fields
+  const handleChange = (text: string, index: number) => {
+    if (/^\d?$/.test(text)) {
+      const newCode = [...code];
+      newCode[index] = text;
+      setCode(newCode);
 
-            if (text && index < numberOfFields - 1) {
-                inputsRef.current[index + 1]?.focus();
-            }
+      if (text && index < numberOfFields - 1) {
+        inputsRef.current[index + 1]?.focus();
+      }
 
-            if (!text && index > 0) {
-                inputsRef.current[index - 1]?.focus();
-            }
+      if (!text && index > 0) {
+        inputsRef.current[index - 1]?.focus();
+      }
 
-            const isAllFilled = newCode.every((char) => char.length === 1);
-            if (isAllFilled) {
-                VerifyAccount(newCode);
-            }
-        }
-    };
-
-    async function VerifyAccount(codeArray: string[]) {
-        const verification = codeArray.join(""); 
-        try {
-            await Auth.confirmSignUp(username, verification);
-            welcomeNewUser();
-        } catch (error: any) {
-            setVerificationError(
-            error.message || "Er is iets misgegaan bij de verificatie."
-            );
-        } finally {
-            startTimer();
-        }
+      const isAllFilled = newCode.every((char) => char.length === 1);
+      if (isAllFilled) {
+        VerifyAccount(newCode);
+      }
     }
+  };
 
-    async function reSendAccounDetails() {
-        if (username && timer === 0){
-            try {
-                await Auth.resendSignUp(username);
-            } catch (error) {
-                if(error instanceof Error) setVerificationError(error.message);
-            } finally {
-                startTimer()
-            }
-        }
+  // Confirm code using AWS Cognito
+  async function VerifyAccount(codeArray: string[]) {
+    const verification = codeArray.join("");
+    try {
+      await Auth.confirmSignUp(username, verification);
+      welcomeNewUser(); // Trigger success handler (e.g., redirect)
+    } catch (error: any) {
+      setVerificationError(
+        error.message || "Er is iets misgegaan bij de verificatie."
+      );
+    } finally {
+      startTimer();
     }
+  }
+
+  // Resend code to user (throttled by timer)
+  async function reSendAccounDetails() {
+    if (username && timer === 0) {
+      try {
+        await Auth.resendSignUp(username);
+      } catch (error) {
+        if (error instanceof Error) setVerificationError(error.message);
+      } finally {
+        startTimer();
+      }
+    }
+  }
 
   return (
     <View style={style.container}>
-        <View style={style.header}>
-            <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
-            <Text style={style.titleText}>Enter the 6-digit code we emailed you</Text>
+      <View style={style.header}>
+        <Image style={style.image} source={require('../../../assets/images/Filametric_F_Logo.png')} />
+        <Text style={style.titleText}>Enter the 6-digit code we emailed you</Text>
+      </View>
+
+      <View style={style.textContainer}>
+        <Text style={style.pageText}>
+          Verify that {email} is your email to confirm it’s really you
+        </Text>
+      </View>
+
+      <View>
+        <Text style={style.promptText}>Enter code: </Text>
+        <View style={style.nrRow}>
+          {code.map((digit, index) => (
+            <TextInput
+              key={index}
+              ref={(ref) => {
+                if (ref !== null) {
+                  inputsRef.current[index] = ref;
+                }
+              }}
+              style={style.nrInputStyle}
+              keyboardType="number-pad"
+              maxLength={1}
+              value={digit}
+              onChangeText={(text) => handleChange(text, index)}
+              autoFocus={index === 0}
+            />
+          ))}
         </View>
+      </View>
 
-        <View style={style.textContainer}>
-            <Text style={style.pageText}>Verify that {email} is your email to confirm it’s really you</Text>
-        </View>
+      <ErrorMessageText message={verificationError} />
 
-        <View >
-            <Text style={style.promptText}>Enter code: </Text>
-            <View style={style.nrRow}>
-                {code.map((digit, index) => (
-                    <TextInput
-                        key={index}
-                        ref={(ref) => {
-                            if(ref !== null){
-                                inputsRef.current[index] = ref;
-                            }
-                        }}
-                        style={style.nrInputStyle}
-                        keyboardType="number-pad"
-                        maxLength={1}
-                        value={digit}
-                        onChangeText={(text) => handleChange(text, index)}
-                        autoFocus={index === 0}
-                    />
-                ))}
-            </View>
-        </View>
+      {/* Resend code button with timer block */}
+      <TouchableOpacity
+        onPress={reSendAccounDetails}
+        style={[style.button, timer > 0 && { backgroundColor: "#E7E7E7" }]}
+      >
+        {timer > 0 ? (
+          <Text style={style.buttonTextCodeSend}>Resend code in {timer} seconds</Text>
+        ) : (
+          <Text style={style.buttonText}>Resend code</Text>
+        )}
+      </TouchableOpacity>
 
-        <ErrorMessageText message={verificationError}/>
-
-        <TouchableOpacity onPress={reSendAccounDetails} style={[style.button, timer > 0 && {backgroundColor: "#E7E7E7"}]}>
-            {timer > 0 ? <Text style={style.buttonTextCodeSend}>Resend code in {timer} seconds</Text> : <Text style={style.buttonText}>Resend code</Text>}
-        </TouchableOpacity>
-
-        <Pressable onPress={goBack}>
-            <Text style={style.goBackText}>Go back</Text>
-        </Pressable>
+      <Pressable onPress={goBack}>
+        <Text style={style.goBackText}>Go back</Text>
+      </Pressable>
     </View>
   );
 };
 
 export default VerifyInput;
+
 
 const style = StyleSheet.create({
     header: {

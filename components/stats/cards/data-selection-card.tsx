@@ -14,43 +14,49 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
   const [timeFrame, setTimeFrame] = useState<string>('1');
   const [dryers, setDryers] = useState<Device[]>([]);
 
+  // When user selects a different dryer
   function changeDryer(dryer: string) {
     dryerChanged(dryer);
     setDryer(dryer);
   }
 
+  // When user selects a different time frame
   function changeTimeFrame(timeFrame: string) {
     timeFrameChanged(Number(timeFrame));
     setTimeFrame(timeFrame);
   }
 
+  // On mount: set defaults and fetch all user dryers
   useEffect(() => {
     dryerChanged(dryer);
     timeFrameChanged(Number(timeFrame));
     getDryers();
   }, []);
 
+  // Fetch available dryers from API
   async function getDryers() {
     try {
       const devices = await StatsService.getUserDevices();
       setDryers(devices);
     } catch {
-
-    } finally {
-
     }
   }
 
   return (
     <View style={styles.container}>
+      {/* Dryer Picker */}
       <View style={[styles.pickerWrapper, styles.leftMargin]}>
         <FilametricPicker
           label="Dryer"
           selectedValue={dryer}
           onValueChange={changeDryer}
-          options={[{ label: 'All dryers', value: 'All dryers' }, ...dryers.map(d => ({ label: d.ID, value: d.ID }))]}
+          options={[
+            { label: 'All dryers', value: 'All dryers' },
+            ...dryers.map(d => ({ label: d.ID, value: d.ID }))
+          ]}
         />
       </View>
+      {/* Timeframe Picker */}
       <View style={[styles.pickerWrapper, styles.rightMargin]}>
         <FilametricPicker
           label="Time Frame"
