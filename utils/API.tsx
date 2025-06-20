@@ -16,7 +16,7 @@ class API {
       headers,
       body: body ? JSON.stringify(body) : undefined,
     };
-
+    console.log(`Sending: ${API_URL}${endpoint}`)
     let response = await fetch(`${API_URL}${endpoint}`, options);
 
 

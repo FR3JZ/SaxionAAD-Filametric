@@ -1,16 +1,19 @@
+// context/authContext.tsx
 import { clearRememberUser, getRememberUser, setLoggedInState, setRememberUser } from "@/nativeFeatures/AuthStorage";
 import { useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
 import { Auth, Hub } from "aws-amplify";
+import { CognitoUser } from "amazon-cognito-identity-js";
 
 type AuthState = {
     isLoggedIn: boolean;
     isReady: boolean;
     user: any;
     setUser: (user: any) => void;
-    logIn: (email: string, password: string, rememberUser: boolean) => Promise<void>;
+    logIn: (username: string, password: string, rememberUser:boolean) => Promise<void>;
     logOut: () => Promise<void>;
+    getCurrentUsername: () => Promise<string | null>;
 };
 
 export const AuthContext = createContext<AuthState>({
@@ -20,26 +23,27 @@ export const AuthContext = createContext<AuthState>({
     setUser: () => {},
     logIn: async () => {},
     logOut: async () => {},
+    getCurrentUsername: async () => null,
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
     const [isReady, setIsReady] = useState<boolean>(false);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [user, setUser] = useState<any>(null);
+    const [username, setUsername] = useState<string>("");
     const router = useRouter();
 
-    // Triggered when user submits login form
-    const logIn = async (email: string, password: string, rememberUser: boolean) => {
+    const logIn = async (username: string, password: string, rememberUser:boolean) => {
         try {
             await setRememberUser(rememberUser);
-            const cognitoUser = await Auth.signIn(email, password);
+            const cognitoUser = await Auth.signIn(username, password);
 
             console.log("Signed in user:", cognitoUser);
 
             setUser(cognitoUser);
             setIsLoggedIn(true);
+            setUsername(username)
 
-            // Navigate to main app screen
             router.replace("/(protected)/(tabs)");
         } catch (error: any) {
             console.error("Login failed:", error);
@@ -47,7 +51,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
-    // Logs out user and clears session
     const logOut = async () => {
         try {
             await clearRememberUser();
@@ -59,12 +62,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
         }
     };
 
-    // Checks if a session should be restored on startup
     const checkAuthenticationStatus = async () => {
         let authenticated = false;
         try {
-            const rememberTheUser: boolean = await getRememberUser();
-            if (rememberTheUser) {
+            const rememberTheUser:boolean = await getRememberUser();
+            if(rememberTheUser) {
                 console.log("Check state");
                 const cognitoUser = await Auth.currentAuthenticatedUser();
                 setUser(cognitoUser);
@@ -84,7 +86,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
     useEffect(() => {
         checkAuthenticationStatus();
 
-        // Listen for changes in auth state (e.g. signIn, signOut)
         const listener = (data: any) => {
             console.log('Auth Hub event:', data.payload.event);
             switch (data.payload.event) {
@@ -92,17 +93,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
                     setUser(data.payload.data);
                     setIsLoggedIn(true);
                     setLoggedInState("LoggedIn");
-                    console.log('Auth Hub: User successfully signed in:', data.payload.data.username);
+                    console.log('Auth Hub: Gebruiker succesvol ingelogd:', data.payload.data.username);
                     break;
                 case 'signOut':
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
-                    console.log('Auth Hub: User signed out');
+                    console.log('Auth Hub: Gebruiker uitgelogd');
                     router.replace("/LoginScreen");
                     break;
                 case 'signIn_failure':
-                    console.error('Auth Hub: Sign in failed:', data.payload.data);
+                    console.error('Auth Hub: Login mislukt:', data.payload.data);
                     setUser(null);
                     setIsLoggedIn(false);
                     setLoggedInState("LoggedOut");
@@ -115,13 +116,24 @@ export function AuthProvider({ children }: PropsWithChildren) {
         };
 
         Hub.listen('auth', listener);
-
-        // Cleanup listener on unmount
         return () => Hub.remove('auth', listener);
     }, []);
 
+    const getCurrentUsername = async (): Promise<string | null> => {
+        try {
+            if(username) {
+                return username;
+            }
+            const user = await Auth.currentAuthenticatedUser();
+            return user?.username ?? null;
+        } catch (error) {
+            console.warn("getCurrentUsername: No authenticated user", error);
+            return null;
+        }
+    };
+
     return (
-        <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut }}>
+        <AuthContext.Provider value={{ isReady, isLoggedIn, user, setUser, logIn, logOut, getCurrentUsername }}>
             {children}
         </AuthContext.Provider>
     );

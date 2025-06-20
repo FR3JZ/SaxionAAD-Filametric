@@ -3,24 +3,32 @@ import React from 'react';
 import { StyleSheet, Text, View } from "react-native"
 
 interface Props {
-    dryer: string;
-    timeframe: string;
+    currentPercentage?: number;
+    wrtLast?: number;
+    timeframe: number;
 }
 
-const HumidityDataCard: React.FC<Props> = ({dryer, timeframe}) => {
+const HumidityDataCard: React.FC<Props> = ({currentPercentage, wrtLast, timeframe}) => {
 
     function getTimeframeText(): string{
-        return "in " + timeframe.toLowerCase();
+        if(wrtLast === undefined) return "";
+        if(timeframe === 1) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last day" : String(wrtLast) + " w.r.t last day"
+        }
+        if(timeframe === 7) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last week" : String(wrtLast) + " w.r.t last week"
+        }
+        return ""
     }
-
+    
     return (
         <View style={styles.card}>
             <View style={styles.titleContainer}>
                 <Ionicons name='water' size={32} style={styles.icon}></Ionicons>
                 <Text style={styles.titleText}>Humidity reduction</Text>
             </View>
-            <Text style={styles.statText}>33%</Text>
-            <Text style={styles.changeText}>+ 6% w.r.t. {getTimeframeText()}</Text>
+            <Text style={styles.statText}>{currentPercentage}%</Text>
+            <Text style={styles.changeText}>{getTimeframeText()}</Text>
         </View>
     )
 }
@@ -68,4 +76,4 @@ const styles = StyleSheet.create({
         fontFamily: 'Satoshi',
         fontWeight: "400"
     }
-})
+});
