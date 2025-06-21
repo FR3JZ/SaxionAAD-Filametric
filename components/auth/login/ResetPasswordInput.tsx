@@ -23,8 +23,8 @@ const PasswordResetInput = () => {
     const [hasLowerAndUpercase, setHasLowerAndUpercase] = useState<boolean>(false);
     const [hasNumber, setHasNumber] = useState<boolean>(false);
     const [hasSymbol, setHasSymbol] = useState<boolean>(false);
-
-    // Recalculate password criteria whenever input changes
+    
+    // Check to see if the password is correct after input changes
     useEffect(() => {
         setIsCorrectLength(newPassword.length >= 8);
         setHasLowerAndUpercase(/[a-z]/.test(newPassword) && /[A-Z]/.test(newPassword));
@@ -32,7 +32,9 @@ const PasswordResetInput = () => {
         setHasSymbol(/[~`!@#$%^&*()_\-+={[}\]|\\:;"'<,>.?/]/.test(newPassword));
     }, [newPassword]);
 
-    // Request reset code from Cognito
+    /**
+     * Tell cognito to start the password reset by sending the username.
+     */
     const initiatePasswordReset = async () => {
         try {
             setSendingCode(true);
@@ -46,7 +48,9 @@ const PasswordResetInput = () => {
         }
     };
 
-    // Submit reset code + new password to Cognito
+    /**
+     * Send the username, resetcode and new password to change the password.
+     */
     const sendPasswordReset = async () => {
         try {
             setSendingNewPassword(true);
@@ -60,15 +64,21 @@ const PasswordResetInput = () => {
         }
     };
 
-    // Determine password field border color based on validation state
+    /**
+     * Returns a color for user feedback on their password
+     * @returns The color code string for the input border
+     */
     const getBorderColor = () => {
         if (newPassword === "") return "#E7E7E7";
         if (isPasswordCorrect()) return "#00C03B";
         return "#FF2323";
     };
 
-    // Combine all password criteria into single check
-    function isPasswordCorrect(): boolean {
+    /**
+     * Check all booleans that are part of the password requirements
+     * @returns Returns true when all password requirements are correct
+     */
+    function isPasswordCorrect():boolean {
         return isCorrectLength && hasLowerAndUpercase && hasNumber && hasSymbol;
     }
 

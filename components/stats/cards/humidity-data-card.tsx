@@ -8,15 +8,21 @@ interface Props {
     timeframe: number;
 }
 
-const HumidityDataCard: React.FC<Props> = ({ currentPercentage, wrtLast, timeframe }) => {
-    // Returns difference text for timeframe (day/week), or empty if not available
-    function getTimeframeText(): string {
-        if (wrtLast === undefined) return "";
-        if (timeframe === 1)
-            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last day";
-        if (timeframe === 7)
-            return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last week";
-        return "";
+
+const HumidityDataCard: React.FC<Props> = ({currentPercentage, wrtLast, timeframe}) => {
+
+    /**
+     * @returns The text for the w.r.t. statistic
+     */
+    function getTimeframeText(): string{
+        if(wrtLast === undefined) return "";
+        if(timeframe === 1) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last day" : String(wrtLast) + " w.r.t last day"
+        }
+        if(timeframe === 7) {
+            return wrtLast >= 0 ? "+ " + String(wrtLast) + " w.r.t last week" : String(wrtLast) + " w.r.t last week"
+        }
+        return ""
     }
 
     return (

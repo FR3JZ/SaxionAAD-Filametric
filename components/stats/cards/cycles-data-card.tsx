@@ -9,8 +9,11 @@ interface Props {
 }
 
 const CyclesDataCard:  React.FC<Props> = ({cyclesInTimeFrame, wrtLast, timeframe}) => {
-    // Show delta text for the selected timeframe (day/week)
-    function getTimeframeText(): string {
+
+    /**
+     * @returns The text for the w.r.t. statistic
+     */
+    function getTimeframeText(): string{
         if(wrtLast === undefined) return "";
         if(timeframe === 1)
             return (wrtLast >= 0 ? `+ ${wrtLast}` : `${wrtLast}`) + " w.r.t last day";

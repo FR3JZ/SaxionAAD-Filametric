@@ -1,5 +1,6 @@
 import API from "@/utils/API";
 import authService from "./authService";
+import { Device } from "@/constants/Objects";
 
 class DryerService {
     static async getDryers() {
@@ -45,6 +46,36 @@ class DryerService {
         });
     }
 
+    static async deleteAllDryers() {
+
+        try {
+            const token = await authService.getJWT();
+            const json = await this.getDryers();
+            const devices = turnDeviceJsonToObject(json.devices);
+
+            const deletePromises = devices.map(device =>
+                API.request(`devices/${device.ID}`, "DELETE", token)
+                    .then(response => {
+                        return response;
+                    })
+                    .catch(error => {
+                        console.error(`Failed to delete device ${device.ID}`, error);
+                        return null;
+                    })
+            );
+
+            await Promise.all(deletePromises);
+        } catch (error) {
+            console.error("Error when deleting all dryers:", error);
+        }
+    }
+}
+
+function turnDeviceJsonToObject(json: any): Device[] {
+    return json.map((item: any) => ({
+        ID: item.dryer_id,
+        Shadow: item.shadow ?? null,
+    }));
 }
 
 export default DryerService;

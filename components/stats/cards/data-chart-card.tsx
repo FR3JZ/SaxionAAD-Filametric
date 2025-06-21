@@ -14,19 +14,24 @@ const DataChartCard: React.FC<Props> = ({ tempData, humidityData }) => {
     const [dataTitle, setDataTitle] = useState<string>("Temprature");
     const dataSubjects: string[] = ["Temprature", "Humidity", "Energy", "Materials"];
 
-    // Handles subject switch, updates title accordingly
-    function changeDataSubject(newSubject: string) {
-        if (newSubject === "Materials") {
-            setDataTitle(newSubject + " Pie");
+    /**
+     * Set the title text above the chart
+     * @param newSubject The subject of the data
+     */
+    function changeDataSubject(newSubject:string) {
+        if(newSubject === "Materials") {
+            setDataTitle(newSubject +  " Pie");
         } else {
             setDataTitle(newSubject + " Curve");
         }
         setDataSubject(newSubject);
     }
 
-    // Returns the right data for the selected subject; falls back to dummy data if not available
-    function getSubjectData(): GraphData {
-        if (dataSubject === "Temprature" && tempData && tempData.value.length >= 1) {
+    /**
+     * @returns The graph data of the selected subject
+     */
+    function getSubjectData() : GraphData{
+        if(dataSubject === "Temprature" && tempData && tempData.value.length >= 1) {
             return tempData;
         }
         if (dataSubject === "Humidity" && humidityData && humidityData.value.length >= 1) {
