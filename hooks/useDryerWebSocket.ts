@@ -124,7 +124,6 @@ export const useDryerWebSocket = () => {
         };
 
         ws.current.onclose = () => {
-          console.log("WebSocket closed");
         };
       } catch (error) {
         console.error("Failed to get auth token or connect WebSocket", error);

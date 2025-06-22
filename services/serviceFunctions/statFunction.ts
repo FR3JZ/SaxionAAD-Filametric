@@ -2,16 +2,17 @@ import { DryerLog, StatsData, GraphData } from "@/constants/Objects";
 
 /**
  * Create an object with all the statistics the stats screen could need.
- * @param logs The logs created by the dryers
- * @param timePeriod The time period of how far back the user wants to look
- * @returns A object with all the compiled stats
+ * @param logs The logs created by the dryers.
+ * @param timePeriod The time period of how far back the user wants to look.
+ * @returns A object with all the compiled stats.
  */
 export default function createStatsDataObject(logs: DryerLog[], timePeriod: number): StatsData {
     // Need 2 logs minimum to get any stats
     if (logs.length >= 2) {
         // Get the first and last log of current period
         const lastLogCurrentPeriod: DryerLog = findLastLog(logs);
-        const firstLogOfCurrentPeriod: DryerLog = findFirstLog(findLogsOfCurrentPeriod(logs, lastLogCurrentPeriod!, timePeriod))
+        const logsOfCurrentPeriod: DryerLog[] = findLogsOfCurrentPeriod(logs, lastLogCurrentPeriod!, timePeriod)
+        const firstLogOfCurrentPeriod: DryerLog = findFirstLog(logsOfCurrentPeriod)
 
         // Get the first and last log of previous period
         const logsOfPreviousPeriod:DryerLog[] = findLogsOfPreviousPeriod(logs, lastLogCurrentPeriod, timePeriod)
@@ -41,11 +42,11 @@ export default function createStatsDataObject(logs: DryerLog[], timePeriod: numb
             wrtHumidity: calculateWRTHumidity(currentHumidityReduction, previousHumidityReduction),
             wrtCycles: calculateWRTCycles(currentCompletedCycles, previousCompletedCycles),
             temperaturePeriodArray: timePeriod === 1 ?
-                generateHourlyGraphData(logs, "temperature") :
-                generateDailyGraphData(logs, "temperature", Number(timePeriod)),
+                generateHourlyGraphData(logsOfCurrentPeriod, "temperature") :
+                generateDailyGraphData(logsOfCurrentPeriod, "temperature", Number(timePeriod)),
             humidityPeriodArray: timePeriod === 1 ?
-                generateHourlyGraphData(logs, "humidity") :
-                generateDailyGraphData(logs, "humidity", Number(timePeriod)),
+                generateHourlyGraphData(logsOfCurrentPeriod, "humidity") :
+                generateDailyGraphData(logsOfCurrentPeriod, "humidity", Number(timePeriod)),
         };
     } else {
         return emptyObject();
@@ -79,9 +80,11 @@ function emptyObject() : StatsData{
  * @returns True if the log is valid
  */
 function isLogValidForUse(log:DryerLog) : boolean{
-    if (log === undefined) return false;
-    if (log.humidity === undefined) return false;
-    if (log.completedCycles === undefined) return false;
+    if (log === undefined || log === null) return false;
+    if (log.humidity === undefined && log.humidity === null) return false;
+    if (log.temperature === undefined && log.temperature === null) return false;
+    if (log.completedCycles === undefined && log.completedCycles === null) return false;
+    if (log.timestamp === undefined && log.timestamp === null) return false;
     return true;
 }
 

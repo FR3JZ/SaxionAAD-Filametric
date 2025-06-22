@@ -19,13 +19,6 @@ const PersonalInformationCard = () => {
     }, [])
 
 
-    /**
-     * @deprecated AWS cognito does not allow the change of the username. Or the email of a verified user.
-     * This can only be done by an admin in AWS cognito.
-     */
-    function saveChanges() {
-        console.log("Username: " + username + "  Email: " + email);
-    }
 
     /**
      * Get the user email and username from the authcontext. 
@@ -85,7 +78,7 @@ const PersonalInformationCard = () => {
                                 keyboardType="email-address"
                             />
                             <Text style={[styles.grayText, {marginVertical: 4}]}>Email and username cannot be changed after registration</Text>
-                            <TouchableOpacity onPress={saveChanges} style={styles.saveChangesButton}>
+                            <TouchableOpacity style={styles.saveChangesButton}>
                                 <Text style={styles.buttonText}>Save changes</Text>
                             </TouchableOpacity>
                         </View>

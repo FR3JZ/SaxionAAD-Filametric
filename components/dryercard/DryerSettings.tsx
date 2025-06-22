@@ -72,7 +72,6 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
             value={autoUpdateFirmware}
             onChange={(val) => {
               setAutoUpdateFirmware(val);
-              console.log("Auto update firmware:", val);
             }}
           />
 
@@ -116,7 +115,6 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
             value={enableSounds}
             onChange={(val) => {
               setEnableSounds(val);
-              console.log("Device sounds:", val);
             }}
           />
 
@@ -129,7 +127,6 @@ const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
               value={sleepMode}
               onChange={(val) => {
                 setSleepMode(val);
-                console.log("Sleep mode:", val);
               }}
             />
           </View>

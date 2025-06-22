@@ -15,7 +15,6 @@ class ProfileService {
 
     static async createProfile(body: any) {
         try {
-            console.log(body);
             const token = await authService.getJWT();
             const json = await API.request('profiles', "POST", token, body);
             return json;

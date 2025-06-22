@@ -22,7 +22,6 @@ const UnitsFormatSettings = () => {
         selectedValue={tempUnit}
         onValueChange={(val) => {
           setTempUnit(val);
-          console.log('Temp unit changed to:', val);
         }}
         options={[
           { label: 'Celsius °C', value: 'Celsius' },
@@ -36,7 +35,6 @@ const UnitsFormatSettings = () => {
         selectedValue={timeFormat}
         onValueChange={(val) => {
           setTimeFormat(val);
-          console.log('Time format changed to:', val);
         }}
         options={[
           { label: '24-hour', value: '24-hour' },

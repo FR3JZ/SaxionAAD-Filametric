@@ -37,7 +37,6 @@ const LoginInput = () => {
         try {
             setSendingLoginRequest(true);
             await logIn(username, password, rememberUser); // Pass remember option too
-            console.log("LoginInput: Inloggen succesvol via AuthContext.");
         } catch (error: any) {
             console.error("LoginInput: Fout bij inloggen:", error);
             if (error instanceof Error) {

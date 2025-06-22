@@ -52,15 +52,19 @@ const PasswordResetInput = () => {
      * Send the username, resetcode and new password to change the password.
      */
     const sendPasswordReset = async () => {
-        try {
-            setSendingNewPassword(true);
-            setPasswordResetError("");
-            await Auth.forgotPasswordSubmit(username, resetCode, newPassword);
-            router.push("/LoginScreen"); // Navigate to login after success
-        } catch (error) {
-            if (error instanceof Error) setPasswordResetError(error.message);
-        } finally {
-            setSendingNewPassword(false);
+        if(isPasswordCorrect()) {
+            try {
+                setSendingNewPassword(true);
+                setPasswordResetError("");
+                await Auth.forgotPasswordSubmit(username, resetCode, newPassword);
+                router.push("/LoginScreen"); // Navigate to login after success
+            } catch (error) {
+                if (error instanceof Error) setPasswordResetError(error.message);
+            } finally {
+                setSendingNewPassword(false);
+            }
+        } else {
+            setPasswordResetError("Please enter a correct password, using the criteria below.");
         }
     };
 
