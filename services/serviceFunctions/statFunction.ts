@@ -79,9 +79,11 @@ function emptyObject() : StatsData{
  * @returns True if the log is valid
  */
 function isLogValidForUse(log:DryerLog) : boolean{
-    if (log === undefined) return false;
-    if (log.humidity === undefined) return false;
-    if (log.completedCycles === undefined) return false;
+    if (log === undefined || log === null) return false;
+    if (log.humidity === undefined && log.humidity === null) return false;
+    if (log.temperature === undefined && log.temperature === null) return false;
+    if (log.completedCycles === undefined && log.completedCycles === null) return false;
+    if (log.timestamp === undefined && log.timestamp === null) return false;
     return true;
 }
 

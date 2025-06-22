@@ -70,7 +70,9 @@ const DryerCard: React.FC<DryerCardProps> = ({
     useCallback(() => {
       const fetchProfile = async () => {
         const storedProfile = await getSavedProfile(name);
-        setProfile(storedProfile);
+        if(storedProfile) {
+          setProfile(storedProfile);
+        }
       };
       const fetchMode = async () => {
         const storedMode = await getSavedMode(name, profile.id);
@@ -115,6 +117,18 @@ const DryerCard: React.FC<DryerCardProps> = ({
     const progress = (used / totalTime) * 100;
     return Math.min(Math.max(Math.floor(progress), 0), 100);
   };
+
+  // Get the new temperature, limited to min 0, max 90
+  const newTemprature = (currentTemp:number, adjustment:number) => {
+    const newTemp = currentTemp + adjustment;
+    if(newTemp < 0) {
+      return 0;
+    }
+    if(newTemp > 90) {
+      return 90;
+    }
+    return newTemp;
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -203,10 +217,10 @@ const DryerCard: React.FC<DryerCardProps> = ({
               DryerService.changeDryerWhileRunning(name, timeRemaining + 60, Number(targetTemp))
             }
             onTempDown={() =>
-              DryerService.changeDryerWhileRunning(name, timeRemaining, Number(targetTemp) - 5)
+              DryerService.changeDryerWhileRunning(name, timeRemaining, newTemprature(Number(targetTemp), -5))
             }
             onTempUp={() =>
-              DryerService.changeDryerWhileRunning(name, timeRemaining, Number(targetTemp) + 5)
+              DryerService.changeDryerWhileRunning(name, timeRemaining, newTemprature(Number(targetTemp), 5))
             }
           />
         )}

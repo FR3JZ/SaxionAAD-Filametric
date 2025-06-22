@@ -45,6 +45,12 @@ const DryerProfileRow: React.FC<Props> = ({
     storage: require('../../assets/images/storage_mode_icon.png'),
   };
 
+  //Get profile name
+  const getProfileName = () => {
+    if(currentProfile.name !== null) return currentProfile.name;
+    return "";
+  }
+
   const icon = (modeIcons as any)[currentMode];
 
   return (
@@ -52,7 +58,7 @@ const DryerProfileRow: React.FC<Props> = ({
       {/* Profile name section with folder icon */}
       <TouchableOpacity style={styles.profileContainer} onPress={routeToSelectProfile}>
         <Ionicons name="folder" size={20} style={styles.iconFolder} />
-        <Text style={styles.profileText}>{currentProfile.name}</Text>
+        <Text style={styles.profileText}>{getProfileName()}</Text>
       </TouchableOpacity>
 
       {/* Mode icon bubble */}
