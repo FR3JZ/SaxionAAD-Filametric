@@ -27,15 +27,15 @@ const AboutSection = () => {
 
       <View style={styles.divider} />
 
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Privacy Policy')}>
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Privacy Policy</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Terms')}>
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Term of Service</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => console.log('Support')}>
+      <TouchableOpacity style={styles.button}>
         <Text style={styles.buttonText}>Contact Support</Text>
       </TouchableOpacity>
     </View>

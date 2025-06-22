@@ -23,7 +23,6 @@ const PrivacyDataSettings = () => {
         value={analytics}
         onChange={(val) => {
           setAnalytics(val);
-          console.log('Analytics tracking:', val);
         }}
       />
 
@@ -34,7 +33,6 @@ const PrivacyDataSettings = () => {
         value={crashReports}
         onChange={(val) => {
           setCrashReports(val);
-          console.log('Crash reporting:', val);
         }}
       />
     </View>

@@ -23,7 +23,6 @@ export default function TabOneScreen() {
       try {
         const session = await Auth.currentSession();
         const token = session.getIdToken().getJwtToken();
-        console.log('JWT Token:', token);
       } catch (error) {
         console.error('Error fetching session token:', error);
       }

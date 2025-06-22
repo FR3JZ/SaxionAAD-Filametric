@@ -22,7 +22,6 @@ const AppearanceSettings = () => {
         selectedValue={theme}
         onValueChange={(val) => {
           setTheme(val);
-          console.log('Theme set to:', val);
         }}
         options={[
           { label: 'System', value: 'System' },
@@ -37,7 +36,6 @@ const AppearanceSettings = () => {
         selectedValue={language}
         onValueChange={(val) => {
           setLanguage(val);
-          console.log('Language set to:', val);
         }}
         options={[
           { label: 'English', value: 'English' },

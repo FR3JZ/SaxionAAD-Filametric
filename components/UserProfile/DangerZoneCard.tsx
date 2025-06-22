@@ -92,10 +92,7 @@ const DangerZoneCard = () => {
                 style: "cancel",
             },
             {
-                text: "OK",
-                onPress: () => {
-                    console.log("settings reset");
-                },
+                text: "OK"
             },
         ],
             { cancelable: false }

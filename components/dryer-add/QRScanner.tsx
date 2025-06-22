@@ -32,7 +32,7 @@ export default function QRScanner({ onScanData }: { onScanData: (data: string) =
         if (status === "granted") {
             setShowCamera(true);
         } else {
-            console.log("No permissions");
+            console.error("No permissions");
         }
     };
 

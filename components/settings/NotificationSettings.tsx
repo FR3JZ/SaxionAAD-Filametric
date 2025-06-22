@@ -25,7 +25,6 @@ const NotificationSettings = () => {
         value={system}
         onChange={(val) => {
           setSystem(val);
-          console.log('System notifications:', val);
         }}
       />
 
@@ -36,7 +35,6 @@ const NotificationSettings = () => {
         value={drying}
         onChange={(val) => {
           setDrying(val);
-          console.log('Drying complete notifications:', val);
         }}
       />
 
@@ -47,7 +45,6 @@ const NotificationSettings = () => {
         value={silica}
         onChange={(val) => {
           setSilica(val);
-          console.log('Silica replacement reminders:', val);
         }}
       />
 
@@ -61,7 +58,6 @@ const NotificationSettings = () => {
         value={email}
         onChange={(val) => {
           setEmail(val);
-          console.log('Email notifications:', val);
         }}
       />
     </View>

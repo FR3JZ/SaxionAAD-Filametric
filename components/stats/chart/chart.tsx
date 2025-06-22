@@ -52,9 +52,6 @@ const Chart: React.FC<Props> = ({ data, subject }) => {
                   color: (opacity = 1) => `rgba(0, 0, 255, ${opacity})`,
                   labelColor: () => '#333',
                 }}
-                onDataPointClick={({ value }) => {
-                  console.log("Clicked:", value);
-                }}
               />
             </View>
           ) : (
