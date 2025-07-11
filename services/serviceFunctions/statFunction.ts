@@ -96,8 +96,8 @@ function isLogValidForUse(log:DryerLog) : boolean{
  * @returns A list of logs of the previous period
  */
 function findLogsOfPreviousPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: DryerLog, timeFrameInDays: number ): DryerLog[] {
-    const endTimestamp = lastLogOfCurrentPeriod.timestamp;
-    const cutOff = new Date(endTimestamp);
+    const endTimestamp:Date = lastLogOfCurrentPeriod.timestamp;
+    const cutOff:Date = new Date(endTimestamp);
     cutOff.setDate(cutOff.getDate() - timeFrameInDays);
 
     return logs.filter(log => log.timestamp.getTime() <= cutOff.getTime());
@@ -111,8 +111,8 @@ function findLogsOfPreviousPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: Dry
  * @returns A list of logs of the current period
  */
 function findLogsOfCurrentPeriod( logs: DryerLog[], lastLogOfCurrentPeriod: DryerLog, timeFrameInDays: number ): DryerLog[] {
-    const endTimestamp = lastLogOfCurrentPeriod.timestamp;
-    const cutOff = new Date(endTimestamp);
+    const endTimestamp:Date = lastLogOfCurrentPeriod.timestamp;
+    const cutOff:Date = new Date(endTimestamp);
     cutOff.setDate(cutOff.getDate() - timeFrameInDays);
 
     return logs.filter(log => log.timestamp.getTime() > cutOff.getTime());
@@ -168,7 +168,7 @@ function calculateHumidtyReduction(earliest:number, latest:number) : number {
  */
 function calculateCycles(earliest:number, latest:number) : number {
     if(earliest === null || latest === null || earliest === 0) return 0;
-    const cycles = latest - earliest;
+    const cycles:number = latest - earliest;
     return Number(cycles.toFixed(2));
 }
 
@@ -180,7 +180,7 @@ function calculateCycles(earliest:number, latest:number) : number {
  */
 function calculateWRTHumidity(currentPeriodReduction:number, previousPeriodReduction:number) :number {
     if(currentPeriodReduction === null || previousPeriodReduction === null) return 0;
-    const humidity = currentPeriodReduction - previousPeriodReduction;
+    const humidity:number = currentPeriodReduction - previousPeriodReduction;
     return Number(humidity.toFixed(2));
 }
 
@@ -192,7 +192,7 @@ function calculateWRTHumidity(currentPeriodReduction:number, previousPeriodReduc
  */
 function calculateWRTCycles(currentCompletedCycles:number, previousCompletedCycles:number) : number {
     if(currentCompletedCycles === null || previousCompletedCycles === null) return 0;
-    const cycles = currentCompletedCycles - previousCompletedCycles;
+    const cycles:number = currentCompletedCycles - previousCompletedCycles;
     return Number(cycles.toFixed(2));
 }
 
@@ -210,8 +210,8 @@ function generateHourlyGraphData(data: DryerLog[], dataType: string): GraphData 
 
     // Get the hour and the values of logs in that hour
     data.forEach(log => {
-        const hour = log.timestamp.getHours();
-        const value =
+        const hour:number = log.timestamp.getHours();
+        const value:number | null =
         dataType === "temperature"
             ? log.temperature
             : dataType === "humidity"
@@ -219,10 +219,10 @@ function generateHourlyGraphData(data: DryerLog[], dataType: string): GraphData 
             : null;
 
         if (value !== null) {
-        if (!dataMap.has(hour)) {
-            dataMap.set(hour, []);
-        }
-        dataMap.get(hour)!.push(value);
+            if (!dataMap.has(hour)) {
+                dataMap.set(hour, []);
+            }
+            dataMap.get(hour)!.push(value);
         }
     });
 
@@ -230,8 +230,8 @@ function generateHourlyGraphData(data: DryerLog[], dataType: string): GraphData 
     for (let hour = 0; hour < 24; hour++) {
         timestamps.push(`${hour.toString().padStart(2, "0")}:00`);
 
-        const valuesForHour = dataMap.get(hour) || [];
-        const avg =
+        const valuesForHour:number[] = dataMap.get(hour) || [];
+        const avg:number =
         valuesForHour.length > 0
             ? +(valuesForHour.reduce((sum, v) => sum + v, 0) / valuesForHour.length).toFixed(2)
             : 0;
@@ -259,20 +259,20 @@ function generateDailyGraphData(
     if(data.length < 1) return {timestamp: [], value: []};
     const dataMap: Map<string, number[]> = new Map();
 
-    const endDate = new Date();
+    const endDate:Date = new Date();
     endDate.setHours(0, 0, 0, 0);
 
-    const startDate = new Date(endDate);
+    const startDate:Date = new Date(endDate);
     startDate.setDate(endDate.getDate() - (daysBack - 1));
 
     // Get the days and the values of logs in that day
     data.forEach(log => {
-        const logDate = new Date(log.timestamp);
+        const logDate:Date = new Date(log.timestamp);
         logDate.setHours(0, 0, 0, 0);
 
         if (logDate >= startDate && logDate <= endDate) {
-        const key = logDate.toISOString().split("T")[0];
-        const value = dataType === "temperature" ? log.temperature : log.humidity;
+        const key:string = logDate.toISOString().split("T")[0];
+        const value:number = dataType === "temperature" ? log.temperature : log.humidity;
 
         if (!dataMap.has(key)) {
             dataMap.set(key, []);
@@ -286,18 +286,18 @@ function generateDailyGraphData(
 
     // Create the timestamps for the days
     for (
-        let d = new Date(startDate);
+        let d:Date = new Date(startDate);
         d <= endDate;
         d.setDate(d.getDate() + 1)
     ) {
-        const key = d.toISOString().split("T")[0];
-        const label = `${(d.getMonth() + 1).toString().padStart(2, "0")}-${d
+        const key:string = d.toISOString().split("T")[0];
+        const label:string = `${(d.getMonth() + 1).toString().padStart(2, "0")}-${d
         .getDate()
         .toString()
         .padStart(2, "0")}`;
 
-        const valuesForDay = dataMap.get(key) || [];
-        const avg =
+        const valuesForDay:number[] = dataMap.get(key) || [];
+        const avg:number =
         valuesForDay.length > 0
             ? +(valuesForDay.reduce((a, b) => a + b, 0) / valuesForDay.length).toFixed(2)
             : 0;

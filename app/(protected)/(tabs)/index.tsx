@@ -5,10 +5,11 @@ import Header from '../../../components/home/HomepageHeader';
 import HomePage from '../../../components/home/HomePage';
 import { useFocusEffect } from 'expo-router';
 import DryerService from '@/services/dryerService';
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
 export default function TabOneScreen() {
 
   const fetchDryers = async() => {
-    const devices = await DryerService.getDryers();
+    const devices:any = await DryerService.getDryers();
   }
 
   useFocusEffect(
@@ -21,8 +22,8 @@ export default function TabOneScreen() {
   useEffect(() => {
     const fetchSessionToken = async () => {
       try {
-        const session = await Auth.currentSession();
-        const token = session.getIdToken().getJwtToken();
+        const session:CognitoUserSession = await Auth.currentSession();
+        const token:string = session.getIdToken().getJwtToken();
       } catch (error) {
         console.error('Error fetching session token:', error);
       }

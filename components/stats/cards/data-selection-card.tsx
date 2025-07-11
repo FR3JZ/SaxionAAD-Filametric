@@ -44,7 +44,7 @@ const DataSelectionCard: React.FC<Props> = ({ dryerChanged, timeFrameChanged }) 
    */
   async function getDryers() {
     try {
-      const devices = await StatsService.getUserDevices();
+      const devices:Device[] = await StatsService.getUserDevices();
       setDryers(devices);
     } catch (e) {
       console.error(e)

@@ -1,10 +1,10 @@
-import { AuthContext } from "@/context/authContext";
+import { AuthContext, AuthState } from "@/context/authContext";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const PersonalInformationCard = () => {
-    const auth = useContext(AuthContext);
+    const auth:AuthState = useContext(AuthContext);
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
     // Local state for editable fields
@@ -24,8 +24,8 @@ const PersonalInformationCard = () => {
      * Get the user email and username from the authcontext. 
      */
     async function setDetails() {
-        const name = await auth.getCurrentUsername();
-        const mail = await auth.getCurrentEmail();
+        const name:string | null = await auth.getCurrentUsername();
+        const mail:string | null = await auth.getCurrentEmail();
         if (name !== null) setCurrentUsername(name);
         if (mail !== null) setCurrentEmail(mail);
     }

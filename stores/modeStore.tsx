@@ -10,7 +10,7 @@ export const saveMode = async (dryerId: string, profileId: any, mode: string) =>
 
 export const getSavedMode = async (dryerId: string, profileId: any): Promise<string | null> => {
   try {
-    const data = await SecureStore.getItemAsync(`${formatId(dryerId)}-${profileId}`);
+    const data:string | null = await SecureStore.getItemAsync(`${formatId(dryerId)}-${profileId}`);
     return data;
   } catch (e) {
     return null;

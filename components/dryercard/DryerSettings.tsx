@@ -18,13 +18,13 @@ interface DryerSettingsProps {
 
 const DryerSettings: React.FC<DryerSettingsProps> = ({ name }) => {
   // State variables for toggles and slider
-  const [sleepMode, setSleepMode] = useState(false);
-  const [brightness, setBrightness] = useState(75);
-  const [enableSounds, setEnableSounds] = useState(false);
-  const [autoUpdateFirmware, setAutoUpdateFirmware] = useState(false);
+  const [sleepMode, setSleepMode] = useState<boolean>(false);
+  const [brightness, setBrightness] = useState<number>(75);
+  const [enableSounds, setEnableSounds] = useState<boolean>(false);
+  const [autoUpdateFirmware, setAutoUpdateFirmware] = useState<boolean>(false);
 
   // Animation value for fade in/out
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim:Animated.Value = useRef(new Animated.Value(0)).current;
 
   // Animate fade in when screen is focused
   useFocusEffect(

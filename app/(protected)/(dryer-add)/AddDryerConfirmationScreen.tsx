@@ -1,6 +1,6 @@
 import DryerAddConfirmationPage from '@/components/dryer-add/DryerAddConfirmationPage';
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 export default function QRCodeScannerScreen() {
   return (
     <View style={styles.container}>

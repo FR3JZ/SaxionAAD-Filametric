@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ErrorSnackbar: React.FC<Props> = ({ visible, message, duration = 3000, onDismiss }) => {
-  const [top] = useState(new Animated.Value(-100));
+  const [top] = useState<Animated.Value>(new Animated.Value(-100));
 
   useEffect(() => {
     if (visible) {

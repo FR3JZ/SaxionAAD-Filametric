@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Auth } from "aws-amplify";
+import { CognitoUserSession } from "amazon-cognito-identity-js";
 
 const BASE_WS_URL = 'wss://w0s9dzo1x4.execute-api.eu-north-1.amazonaws.com/dev/';
 
@@ -20,20 +21,20 @@ export const useDryerWebSocket = () => {
   const [dryerMap, setDryerMap] = useState<Record<string, DryerData>>({});
 
   useEffect(() => {
-    let isMounted = true;
+    let isMounted:boolean = true;
 
     const connectWebSocket = async () => {
       try {
         // Fetch the current Cognito session to retrieve JWT token
-        const session = await Auth.currentSession();
-        const token = session.getIdToken().getJwtToken();
+        const session:CognitoUserSession = await Auth.currentSession();
+        const token:string = session.getIdToken().getJwtToken();
 
-        const url = `${BASE_WS_URL}?token=${encodeURIComponent(token)}`;
+        const url:string = `${BASE_WS_URL}?token=${encodeURIComponent(token)}`;
         ws.current = new WebSocket(url);
 
         ws.current.onmessage = (e: WebSocketMessageEvent) => {
           try {
-            const message = JSON.parse(e.data);
+            const message:any = JSON.parse(e.data);
             
             // Handle incoming environment data (live sensor values) 
             if (message.type === "environment" && message.serial && message.data) {
@@ -59,15 +60,15 @@ export const useDryerWebSocket = () => {
 
               // Handle cycle_started event
               if (data.event === "cycle_started") {
-                const targetTemp = parseFloat(data.temp);
-                const timestamp = new Date(data.timestamp).getTime();
-                const totalTime = data.time;
+                const targetTemp:number = parseFloat(data.temp);
+                const timestamp:number = new Date(data.timestamp).getTime();
+                const totalTime:any = data.time;
 
                 if (!isMounted) return;
 
                 setDryerMap(prev => {
-                  const previous = prev[serial];
-                  const isResumingFromPause = previous?.status === "Paused";
+                  const previous:DryerData = prev[serial];
+                  const isResumingFromPause:boolean = previous?.status === "Paused";
 
                   return {
                     ...prev,
@@ -92,8 +93,8 @@ export const useDryerWebSocket = () => {
                   data.isRunning ? "Running" :
                     data.isPaused ? "Paused" : "Completed";
 
-                const timeRemainingMin = data.remainingTime; // in minutes
-                const profileName = data.selectedProfile?.id;
+                const timeRemainingMin:any = data.remainingTime; // in minutes
+                const profileName:any = data.selectedProfile?.id;
 
                 if (!isMounted) return;
 

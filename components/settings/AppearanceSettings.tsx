@@ -5,8 +5,8 @@ import FilametricPicker from '../custom/FilametricPicker';
 
 const AppearanceSettings = () => {
   // Local state for theme and language settings
-  const [theme, setTheme] = useState('System');
-  const [language, setLanguage] = useState('English');
+  const [theme, setTheme] = useState<string>('System');
+  const [language, setLanguage] = useState<string>('English');
 
   return (
     <View style={styles.card}>

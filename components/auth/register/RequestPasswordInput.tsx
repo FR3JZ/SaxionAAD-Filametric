@@ -10,8 +10,8 @@ interface Props {
 
 const GetPassword: React.FC<Props> = ({ goBack, setUserPassword }) => {
     const [password, setPassword] = useState<string>("");
-    const [secureText1, setSecureText1] = useState(true);
-    const [isFocused, setIsFocused] = useState(false);
+    const [secureText1, setSecureText1] = useState<boolean>(true);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
 
     // State for password validation rules
     const [isCorrectLength, setIsCorrectLength] = useState<boolean>(false);

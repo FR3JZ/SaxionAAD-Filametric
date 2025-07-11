@@ -8,9 +8,9 @@ type SnackbarContextType = {
 const ErrorSnackbarContext = createContext<SnackbarContextType | undefined>(undefined);
 
 export const ErrorSnackbarProvider = ({ children }: { children: ReactNode }) => {
-  const [message, setMessage] = useState('');
-  const [visible, setVisible] = useState(false);
-  const [duration, setDuration] = useState(3000);
+  const [message, setMessage] = useState<string>('');
+  const [visible, setVisible] = useState<boolean>(false);
+  const [duration, setDuration] = useState<number>(3000);
 
   const showError = (msg: string, dur = 3000) => {
     setMessage(msg);
@@ -29,7 +29,7 @@ export const ErrorSnackbarProvider = ({ children }: { children: ReactNode }) => 
 };
 
 export const useErrorSnackbar = (): SnackbarContextType => {
-  const context = useContext(ErrorSnackbarContext);
+  const context:SnackbarContextType | undefined = useContext(ErrorSnackbarContext);
   if (!context) {
     throw new Error('useErrorSnackbar must be used within ErrorSnackbarProvider');
   }

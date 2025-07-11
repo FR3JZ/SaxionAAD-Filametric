@@ -1,4 +1,4 @@
-import { AuthContext } from '@/context/authContext';
+import { AuthContext, AuthState } from '@/context/authContext';
 import { setLoggedInState } from '@/nativeFeatures/AuthStorage';
 import { useFonts } from 'expo-font';
 import { Redirect, Stack } from 'expo-router';
@@ -50,7 +50,7 @@ export default function RootLayout() {
 }
 
 function ProtectedLayoutNav() {
-  const authState = useContext(AuthContext);
+  const authState:AuthState = useContext(AuthContext);
 
   if (!authState.isReady) {
     return null;

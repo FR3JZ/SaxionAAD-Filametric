@@ -9,17 +9,17 @@ interface Props {
 }
 
 const Chart: React.FC<Props> = ({ data, subject }) => {
-  const [containerWidth, setContainerWidth] = React.useState(0);
+  const [containerWidth, setContainerWidth] = React.useState<number>(0);
 
   // Limit the number of x-axis labels for readability
-  const maxLabels = 6;
-  const totalLabels = data.timestamp.length;
-  const step = Math.ceil(totalLabels / maxLabels);
+  const maxLabels:number = 6;
+  const totalLabels:number = data.timestamp.length;
+  const step:number = Math.ceil(totalLabels / maxLabels);
 
   /**
    * Prevent the x axis from becoming unreadable by the amount of labels.
    */
-  const filteredLabels = data.timestamp.map((label, index) =>
+  const filteredLabels = data.timestamp.map((label, index): string =>
     index % step === 0 ? label : " "
   );
 

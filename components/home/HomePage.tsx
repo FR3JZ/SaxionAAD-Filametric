@@ -31,8 +31,8 @@ const HomePage = () => {
       {Object.values(dryerMap)
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((dryer) => {
-          const isExpanded = expandedDryer === dryer.serial;
-          const isCollapsing = collapsingDryer === dryer.serial;
+          const isExpanded:boolean = expandedDryer === dryer.serial;
+          const isCollapsing:boolean = collapsingDryer === dryer.serial;
 
           // Only show one dryer at a time, or allow collapsing animation to complete
           if (!isExpanded && !isCollapsing && (expandedDryer || collapsingDryer)) {

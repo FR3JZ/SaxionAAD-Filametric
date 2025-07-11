@@ -15,7 +15,7 @@ const ProfileModeSelectionPage = ({
 
   // Retrieve the previously saved mode for this dryer & profile
   const getCurrentMode = async () => {
-    const currentMode = await getSavedMode(dryerId, profileId);
+    const currentMode:string | null = await getSavedMode(dryerId, profileId);
     if (currentMode !== null) {
       setSelected(currentMode);
     }

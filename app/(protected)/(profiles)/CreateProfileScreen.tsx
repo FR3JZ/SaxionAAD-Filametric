@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import ProfileCreationPage from '@/components/profiles/ProfileCreationPage';
 export default function CreateProfileScreen() {
   return (

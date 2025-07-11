@@ -20,7 +20,7 @@ const DryerMachineView: React.FC<DryerMachineViewProps> = ({
   onLeftAction,
   onRightAction,
 }) => {
-  const imageSource = dryerImages[type];
+  const imageSource:any = dryerImages[type];
 
   return (
     <View style={styles.container}>

@@ -1,12 +1,12 @@
 import ProfileModeSelectionPage from "@/components/profiles/ProfileModeSelectionPage";
 import ProfilePageHeader from "@/components/profiles/ProfilePageHeader";
-import { useLocalSearchParams } from "expo-router";
+import { UnknownOutputParams, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
 
 const SelectProfileModeScreen = () => {
-    const params = useLocalSearchParams();
+    const params:UnknownOutputParams = useLocalSearchParams();
     return (
         <View style={styles.container}>
             <ProfilePageHeader backArrow={true} title="Select Mode"></ProfilePageHeader>

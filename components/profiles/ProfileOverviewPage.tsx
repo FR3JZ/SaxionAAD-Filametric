@@ -28,14 +28,14 @@ const ProfileOverviewPage = ({ selection, dryerId }: ProfileOverviewPageProps) =
 
   // Fetch all available profiles from backend
   const fetchProfiles = async () => {
-    const json = await ProfileService.getProfiles();
+    const json:any = await ProfileService.getProfiles();
     setProfiles(json['profiles']);
   };
 
   // Load the currently selected profile for this dryer, if available
   const setSelectedProfile = async () => {
     if (dryerId) {
-      const activeProfile = await getSavedProfile(dryerId);
+      const activeProfile:any = await getSavedProfile(dryerId);
       if (activeProfile !== null) {
         setSelected(activeProfile);
       }

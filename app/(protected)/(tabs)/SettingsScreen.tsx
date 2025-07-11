@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import SettingsPage from '@/components/settings/SettingsPage';
 export default function Settings() {
   return (

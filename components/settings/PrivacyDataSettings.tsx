@@ -5,8 +5,8 @@ import LabeledSwitchRow from '../custom/LabeledSwitchRow';
 
 const PrivacyDataSettings = () => {
   // Local state for toggles
-  const [analytics, setAnalytics] = useState(false);
-  const [crashReports, setCrashReports] = useState(false);
+  const [analytics, setAnalytics] = useState<boolean>(false);
+  const [crashReports, setCrashReports] = useState<boolean>(false);
 
   return (
     <View style={styles.card}>
