@@ -1,7 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, router, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import { Tabs } from 'expo-router';
 
 import { useClientOnlyValue } from '@/hooks/useClientOnlyValue';
 

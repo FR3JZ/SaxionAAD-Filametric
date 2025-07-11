@@ -32,8 +32,8 @@ const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesList
 
   // Toggle expand/collapse animation for a specific profile
   const toggleProfile = (profileID: string) => {
-    const isOpen = openStates[profileID];
-    const newValue = !isOpen;
+    const isOpen:boolean = openStates[profileID];
+    const newValue:boolean = !isOpen;
     setOpenStates(prev => ({ ...prev, [profileID]: newValue }));
 
     if (animations[profileID]) {
@@ -67,7 +67,7 @@ const ProfilesList = ({ profiles, selected, setSelected, dryerId }: ProfilesList
               })
             : new Animated.Value(0);
 
-          const isOpen = openStates[profile.id];
+          const isOpen:boolean = openStates[profile.id];
 
           return (
             <TouchableOpacity key={profile.id} onPress={() => selectProfile(profile)}>

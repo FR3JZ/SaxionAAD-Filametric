@@ -1,12 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
-import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
+import { router, UnknownOutputParams, useFocusEffect, useLocalSearchParams } from "expo-router";
 import React, { useCallback, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AddInput from "./AddInput";
 import ErrorMessageText from "../error-handling/ErrorMessageText";
 
 const DryerAddPage = () => {
-  const params = useLocalSearchParams();
+  const params:UnknownOutputParams = useLocalSearchParams();
 
   const [dryerName, setDryerName] = useState<string>("");
   const [location, setLocation] = useState<string>("");

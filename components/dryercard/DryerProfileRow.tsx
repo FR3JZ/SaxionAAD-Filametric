@@ -51,7 +51,7 @@ const DryerProfileRow: React.FC<Props> = ({
     return "";
   }
 
-  const icon = (modeIcons as any)[currentMode];
+  const icon:any = (modeIcons as any)[currentMode];
 
   return (
     <View style={styles.row}>

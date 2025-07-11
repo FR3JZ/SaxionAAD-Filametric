@@ -23,8 +23,8 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
   onTimeChange,
   onDismiss,
 }) => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const overlayFadeAnim = useRef(new Animated.Value(0)).current;
+  const fadeAnim:Animated.Value = useRef(new Animated.Value(0)).current;
+  const overlayFadeAnim:Animated.Value = useRef(new Animated.Value(0)).current;
 
   // Fade-in animation when the panel mounts
   useEffect(() => {
@@ -60,8 +60,8 @@ const ManualAdjustmentsPanel: React.FC<ManualAdjustmentsPanelProps> = ({
     });
   };
 
-  const hours = Math.floor(timeRemaining / 60);
-  const minutes = timeRemaining % 60;
+  const hours:number = Math.floor(timeRemaining / 60);
+  const minutes:number = timeRemaining % 60;
 
   return (
     <TouchableWithoutFeedback onPress={handleClose}>

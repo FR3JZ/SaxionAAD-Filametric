@@ -6,14 +6,14 @@ import createStatsDataObject from "./serviceFunctions/statFunction";
 class StatsService {
 
     static async getStatsData(dryer:string, timePeriod:number) :Promise<StatsData> {
-        let timeRange = timePeriod;
+        let timeRange:number = timePeriod;
         if(timePeriod < 15) { 
             timeRange = timePeriod * 2
         }
         try {
-            const token = await authService.getJWT();
-            const json = await API.request(`telemetry?dryerId=${dryer}&timePeriod=${timeRange}`, 'GET', token );
-            const data = turnStatsDataJsonToObject(json.logs);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request(`telemetry?dryerId=${dryer}&timePeriod=${timeRange}`, 'GET', token );
+            const data:DryerLog[] = turnStatsDataJsonToObject(json.logs);
             return createStatsDataObject(data, timePeriod);
         } catch (error: any) {
             console.error("Error while retrieving stats:", error);
@@ -23,8 +23,8 @@ class StatsService {
 
     static async getUserDevices() : Promise<Device[]> {
         try {
-            const token = await authService.getJWT();
-            const json = await API.request('devices', 'GET', token);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request('devices', 'GET', token);
             return turnDeviceJsonToObject(json.devices);
         } catch (error: any) {
             console.error("Error while retrieving devices:", error);
@@ -33,14 +33,14 @@ class StatsService {
     }
 
     static async getAllDeviceStats(timePeriod: number): Promise<StatsData> {
-        let timeRange = timePeriod;
+        let timeRange:number = timePeriod;
         if(timePeriod < 15) { 
             timeRange = timePeriod * 2
         }
         try {
-            const token = await authService.getJWT();
-            const json = await API.request(`telemetry?timePeriod=${timeRange}`, 'GET', token );
-            const data = turnStatsDataJsonToObject(json.logs);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request(`telemetry?timePeriod=${timeRange}`, 'GET', token );
+            const data:DryerLog[] = turnStatsDataJsonToObject(json.logs);
             return createStatsDataObject(data, timePeriod);
         } catch (error: any) {
             console.error("Error while retrieving stats:", error);

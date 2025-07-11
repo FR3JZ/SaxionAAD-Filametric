@@ -11,13 +11,13 @@ interface Props {
 }
 
 const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser }) => {
-  const numberOfFields = 6;
+  const numberOfFields:number = 6;
   const [code, setCode] = useState<string[]>(Array(numberOfFields).fill(""));
   const [verificationError, setVerificationError] = useState<string>("");
 
-  const inputsRef = useRef<TextInput[]>([]);
+  const inputsRef:React.RefObject<TextInput[]> = useRef<TextInput[]>([]);
 
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState<number>(0);
 
     // Countdown for the button
     useEffect(() => {
@@ -44,7 +44,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
      */
     const handleChange = (text: string, index: number) => {
         if (/^\d?$/.test(text)) {
-            const newCode = [...code];
+            const newCode:string[] = [...code];
             newCode[index] = text;
             setCode(newCode);
 
@@ -56,7 +56,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
                 inputsRef.current[index - 1]?.focus();
             }
 
-            const isAllFilled = newCode.every((char) => char.length === 1);
+            const isAllFilled:boolean = newCode.every((char) => char.length === 1);
             if (isAllFilled) {
                 VerifyAccount(newCode);
             }
@@ -68,7 +68,7 @@ const VerifyInput: React.FC<Props> = ({ username, email, goBack, welcomeNewUser 
      * @param codeArray Is a array with all the numbers the user put in.
      */
     async function VerifyAccount(codeArray: string[]) {
-        const verification = codeArray.join(""); 
+        const verification:string = codeArray.join(""); 
         try {
             await Auth.confirmSignUp(username, verification);
             welcomeNewUser();

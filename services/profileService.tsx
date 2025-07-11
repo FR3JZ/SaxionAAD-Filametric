@@ -4,8 +4,8 @@ import authService from "./authService";
 class ProfileService {
     static async getProfiles() {
         try {
-            const token = await authService.getJWT();
-            const json = await API.request('profiles', "GET", token);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request('profiles', "GET", token);
             return json;
         } catch (error: any) {
             console.error("Error while retrieving profiles:", error);
@@ -15,8 +15,8 @@ class ProfileService {
 
     static async createProfile(body: any) {
         try {
-            const token = await authService.getJWT();
-            const json = await API.request('profiles', "POST", token, body);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request('profiles', "POST", token, body);
             return json;
         } catch (error: any) {
             console.error("Error while trying to create a profile:", error);
@@ -26,8 +26,8 @@ class ProfileService {
 
     static async deleteAllProfile() {
         try {
-            const token = await authService.getJWT();
-            const json = await API.request(`profiles`, "DELETE", token);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request(`profiles`, "DELETE", token);
             return json;
         } catch (error ){
             console.error("Error while trying to delete all profiles:", error);

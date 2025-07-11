@@ -10,7 +10,7 @@ export const saveProfile = async (dryer_id: string, profile: any) => {
 
 export const getSavedProfile = async (dryer_id: string): Promise<any | null> => {
   try {
-    const data = await SecureStore.getItemAsync(formatId(dryer_id));
+    const data:string | null = await SecureStore.getItemAsync(formatId(dryer_id));
     return data ? JSON.parse(data) : null;
   } catch (e) {
     return null;

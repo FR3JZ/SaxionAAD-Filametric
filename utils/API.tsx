@@ -1,4 +1,4 @@
-const API_URL = process.env.EXPO_PUBLIC_API_URL;
+const API_URL:string | undefined = process.env.EXPO_PUBLIC_API_URL;
 
 class API {
   static async request(
@@ -16,11 +16,11 @@ class API {
       headers,
       body: body ? JSON.stringify(body) : undefined,
     };
-    let response = await fetch(`${API_URL}${endpoint}`, options);
+    let response:Response = await fetch(`${API_URL}${endpoint}`, options);
 
 
     if (!response.ok) {
-        const json = await response.json();
+        const json:any = await response.json();
         throw new Error(json.msg || "An error occurred.");
     }
 

@@ -55,27 +55,27 @@ const DryerCard: React.FC<DryerCardProps> = ({
   onToggleExpand,
   onCollapseComplete,
 }) => {
-  const [showAdjustments, setShowAdjustments] = useState(false);
+  const [showAdjustments, setShowAdjustments] = useState<boolean>(false);
   const [adjustedTemp, setAdjustedTemp] = useState<number | null>(null);
   const [adjustedTime, setAdjustedTime] = useState<number | null>(null);
 
-  const [machineViewHeight, setMachineViewHeight] = useState(0);
+  const [machineViewHeight, setMachineViewHeight] = useState<number>(0);
   const [profile, setProfile] = useState<any>({});
   const [mode, setMode] = useState<string>("normal");
 
-  const animatedHeight = useRef(new Animated.Value(0)).current;
+  const animatedHeight = useRef<Animated.Value>(new Animated.Value(0)).current;
 
   // Load profile & mode on screen focus
   useFocusEffect(
     useCallback(() => {
       const fetchProfile = async () => {
-        const storedProfile = await getSavedProfile(name);
+        const storedProfile:any = await getSavedProfile(name);
         if(storedProfile) {
           setProfile(storedProfile);
         }
       };
       const fetchMode = async () => {
-        const storedMode = await getSavedMode(name, profile.id);
+        const storedMode:string | null = await getSavedMode(name, profile.id);
         setMode(storedMode ?? 'normal');
       };
       fetchProfile();
@@ -106,21 +106,21 @@ const DryerCard: React.FC<DryerCardProps> = ({
   }, [targetTemp, timeRemaining, showAdjustments]);
 
   const formatMinutesToTime = (minutes: number): string => {
-    const h = Math.floor(minutes / 60);
-    const m = Math.floor(minutes % 60);
+    const h:number = Math.floor(minutes / 60);
+    const m:number = Math.floor(minutes % 60);
     return `${h}h ${m}m`;
   };
 
   const calculateProgress = (): number => {
     if (!totalTime || totalTime <= 0) return 0;
-    const used = totalTime - timeRemaining;
-    const progress = (used / totalTime) * 100;
+    const used:number = totalTime - timeRemaining;
+    const progress:number = (used / totalTime) * 100;
     return Math.min(Math.max(Math.floor(progress), 0), 100);
   };
 
   // Get the new temperature, limited to min 0, max 90
-  const newTemprature = (currentTemp:number, adjustment:number) => {
-    const newTemp = currentTemp + adjustment;
+  const newTemprature = (currentTemp:number, adjustment:number) : number => {
+    const newTemp:number = currentTemp + adjustment;
     if(newTemp < 0) {
       return 0;
     }
@@ -235,8 +235,8 @@ const DryerCard: React.FC<DryerCardProps> = ({
             onDismiss={() => {
               setShowAdjustments(false);
 
-              const tempChanged = adjustedTemp !== null && adjustedTemp !== targetTemp;
-              const timeChanged = adjustedTime !== null && adjustedTime !== timeRemaining;
+              const tempChanged:boolean = adjustedTemp !== null && adjustedTemp !== targetTemp;
+              const timeChanged:boolean = adjustedTime !== null && adjustedTime !== timeRemaining;
 
               if (tempChanged || timeChanged) {
                 DryerService.changeDryerWhileRunning(name, adjustedTime!, adjustedTemp!);

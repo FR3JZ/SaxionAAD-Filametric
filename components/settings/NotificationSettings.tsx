@@ -5,10 +5,10 @@ import LabeledSwitchRow from '../custom/LabeledSwitchRow';
 
 const NotificationSettings = () => {
   // Local state for individual notification toggles
-  const [system, setSystem] = useState(false);
-  const [drying, setDrying] = useState(false);
-  const [silica, setSilica] = useState(false);
-  const [email, setEmail] = useState(false);
+  const [system, setSystem] = useState<boolean>(false);
+  const [drying, setDrying] = useState<boolean>(false);
+  const [silica, setSilica] = useState<boolean>(false);
+  const [email, setEmail] = useState<boolean>(false);
 
   return (
     <View style={styles.card}>

@@ -17,8 +17,8 @@ const PasswordResetInput = () => {
     const [sendingNewPassword, setSendingNewPassword] = useState<boolean>(false);
     const [passwordResetError, setPasswordResetError] = useState<string>("");
 
-    const [secureText1, setSecureText1] = useState(true);
-    const [isFocused, setIsFocused] = useState(false);
+    const [secureText1, setSecureText1] = useState<boolean>(true);
+    const [isFocused, setIsFocused] = useState<boolean>(false);
     const [isCorrectLength, setIsCorrectLength] = useState<boolean>(false);
     const [hasLowerAndUpercase, setHasLowerAndUpercase] = useState<boolean>(false);
     const [hasNumber, setHasNumber] = useState<boolean>(false);

@@ -1,15 +1,13 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import { router, useFocusEffect } from "expo-router";
-
-const { width } = Dimensions.get("window");
 
 const QRScannerPage = () => {
     const [hasPermission, setHasPermission] = useState<boolean>(false);
     const [scanned, setScanned] = useState<boolean>(false);
-    const scannedRef = useRef(false); // prevent duplicate scans
+    const scannedRef = useRef<boolean>(false); // prevent duplicate scans
 
     // Reset scanned state when screen regains focus
     useFocusEffect(

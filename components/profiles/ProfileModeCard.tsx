@@ -36,10 +36,10 @@ const ProfileModeCard: React.FC<ProfileModeCardProps> = ({
   dryerId,
   profileId,
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState<boolean>(false);
 
   // Animation state for expand/collapse
-  const animation = useRef(new Animated.Value(0)).current;
+  const animation:Animated.Value = useRef(new Animated.Value(0)).current;
 
   const toggleExpand = () => {
     if (expanded) {

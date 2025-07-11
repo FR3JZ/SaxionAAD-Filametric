@@ -32,10 +32,7 @@ const ProfileMultiPicker = ({
   temperature,
   setTemperature,
 }: ProfileMultiPickerProps) => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedInput, setSelectedInput] = useState<
-    "hours" | "minutes" | "temperature"
-  >("hours");
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [selectedValues, setSelectedValues] = useState({
     hours,
     minutes,
@@ -66,9 +63,9 @@ const ProfileMultiPicker = ({
   };
 
   // Picker data ranges
-  const hoursData = Array.from({ length: 12 }, (_, i) => i + 1);
-  const minutesData = Array.from({ length: 60 }, (_, i) => i);
-  const temperatureData = Array.from({ length: 100 }, (_, i) => i);
+  const hoursData:number[] = Array.from({ length: 12 }, (_, i) => i + 1);
+  const minutesData:number[] = Array.from({ length: 60 }, (_, i) => i);
+  const temperatureData:number[] = Array.from({ length: 100 }, (_, i) => i);
 
   return (
     <View style={styles.inputsContainer}>

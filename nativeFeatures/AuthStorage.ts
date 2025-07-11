@@ -2,7 +2,7 @@ import * as SecureStorage from "expo-secure-store";
 import { Platform } from "react-native";
 
 const LOGIN_KEY:string = "Login-state-key";
-const REMEMBER_KEY = "REMEMBER_USER";
+const REMEMBER_KEY:string = "REMEMBER_USER";
 
 /**
  * Used to store the state of the user login
@@ -34,7 +34,7 @@ export async function setRememberUser(value: boolean) {
  * @returns True if the user wants to be remembered
  */
 export async function getRememberUser(): Promise<boolean> {
-    const value = await getData(REMEMBER_KEY);
+    const value:string = await getData(REMEMBER_KEY);
     return value === "true";
 }
 
@@ -64,7 +64,7 @@ async function save(key:string, data: string){
  * @returns The stored data in string format
  */
 async function getData(key:string) : Promise<string> {
-    let data = null;
+    let data:any = null;
 
     if(Platform.OS === 'web'){
         return "" // Cannot retrieve because there is no save in web version

@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { AuthContext } from "@/context/authContext";
+import { AuthContext, AuthState } from "@/context/authContext";
 const Header = () => {
-    const auth = useContext(AuthContext)
+    const auth:AuthState = useContext(AuthContext)
     const [username, setUsername] = useState<string>("");
     const [isGettingUsername, setIsGettingUsername] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ const Header = () => {
     async function setTheUsername() {
         try {
             setIsGettingUsername(true);
-            const name = await auth.getCurrentUsername();
+            const name:string | null = await auth.getCurrentUsername();
             if(name !== null) {
                 setUsername(name);
             }

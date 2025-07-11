@@ -5,8 +5,8 @@ import FilametricPicker from '../custom/FilametricPicker';
 
 const UnitsFormatSettings = () => {
   // State for selected temperature unit and time format
-  const [tempUnit, setTempUnit] = useState('Celsius');
-  const [timeFormat, setTimeFormat] = useState('24-hour');
+  const [tempUnit, setTempUnit] = useState<string>('Celsius');
+  const [timeFormat, setTimeFormat] = useState<string>('24-hour');
 
   return (
     <View style={styles.card}>

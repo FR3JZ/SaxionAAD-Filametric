@@ -1,11 +1,11 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { UnknownOutputParams, useLocalSearchParams } from "expo-router";
 import DryerSettings from "@/components/dryercard/DryerSettings";
 
 export default function DryerSettingsScreen() {
-  const params = useLocalSearchParams();
-  const name = Array.isArray(params.name) ? params.name[0] : params.name;
+  const params:UnknownOutputParams = useLocalSearchParams();
+  const name:string = Array.isArray(params.name) ? params.name[0] : params.name;
 
   return (
     <View style={styles.container}>

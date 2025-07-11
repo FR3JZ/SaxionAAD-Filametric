@@ -1,12 +1,11 @@
 import { clearRememberUser, getRememberUser, setLoggedInState, setRememberUser } from "@/nativeFeatures/AuthStorage";
-import { useRouter } from "expo-router";
+import { Router, useRouter } from "expo-router";
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import React from "react";
 import { Auth, Hub } from "aws-amplify";
-import { CognitoUser } from "amazon-cognito-identity-js";
 
 // Context type describing authentication state and actions
-type AuthState = {
+export type AuthState = {
     isLoggedIn: boolean;
     isReady: boolean;
     user: any;
@@ -38,7 +37,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const [user, setUser] = useState<any>(null);
     const [username, setUsername] = useState<string>("");
     const [email, setEmail] = useState<string>("");
-    const router = useRouter();
+    const router:Router = useRouter();
 
     /**
      * Send the login request to AWS cognito
@@ -49,7 +48,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     const logIn = async (username: string, password: string, rememberUser:boolean) => {
         try {
             await setRememberUser(rememberUser);
-            const cognitoUser = await Auth.signIn(username, password);
+            const cognitoUser:any = await Auth.signIn(username, password);
 
             setUser(cognitoUser);
             setIsLoggedIn(true);
@@ -80,11 +79,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
      * Check to see if the user is loged in or not.
      */
     const checkAuthenticationStatus = async () => {
-        let authenticated = false;
+        let authenticated:boolean = false;
         try {
             const rememberTheUser:boolean = await getRememberUser();
             if(rememberTheUser) {
-                const cognitoUser = await Auth.currentAuthenticatedUser();
+                const cognitoUser:any = await Auth.currentAuthenticatedUser();
                 setUser(cognitoUser);
                 authenticated = true;
             }
@@ -140,7 +139,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
             if(username) {
                 return username;
             }
-            const userInfo = await Auth.currentUserInfo();
+            const userInfo:any = await Auth.currentUserInfo();
             setUsername(userInfo?.username)
             return userInfo?.username ?? null;
         } catch (error) {
@@ -157,7 +156,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
             if(email) {
                 return email;
             }
-            const userInfo = await Auth.currentUserInfo();
+            const userInfo:any = await Auth.currentUserInfo();
             setEmail(userInfo?.email)
             return userInfo?.attributes.email ?? null;
         } catch (error) {

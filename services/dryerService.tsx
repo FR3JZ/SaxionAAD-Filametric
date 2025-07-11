@@ -5,8 +5,8 @@ import { Device } from "@/constants/Objects";
 class DryerService {
     static async getDryers() {
         try {
-            const token = await authService.getJWT();
-            const json = await API.request('devices', "GET", token);
+            const token:string = await authService.getJWT();
+            const json:any = await API.request('devices', "GET", token);
             return json;
         } catch (error: any) {
             console.error("Error while retrieving devices", error);
@@ -15,8 +15,8 @@ class DryerService {
     }
 
     static async startDryer(dryerId: string, profile_id: string, mode: string) {
-        const token = await authService.getJWT();
-        const json = await API.request(`devices/${dryerId}`, "POST", token, {
+        const token:string = await authService.getJWT();
+        const json:any = await API.request(`devices/${dryerId}`, "POST", token, {
             command: "start",
             profile_id: profile_id,
             mode: mode
@@ -24,22 +24,22 @@ class DryerService {
     }
 
     static async stopDryer(dryerId: string) {
-        const token = await authService.getJWT();
-        const json = await API.request(`devices/${dryerId}`, "POST", token, {
+        const token:string = await authService.getJWT();
+        const json:any = await API.request(`devices/${dryerId}`, "POST", token, {
             command: "stop",
         });
     }
 
     static async pauseDryer(dryerId: string) {
-        const token = await authService.getJWT();
-        const json = await API.request(`devices/${dryerId}`, "POST", token, {
+        const token:string = await authService.getJWT();
+        const json:any = await API.request(`devices/${dryerId}`, "POST", token, {
             command: "pause",
         });
     }
 
     static async changeDryerWhileRunning(dryerId: string, time: number, temp: number) {
-        const token = await authService.getJWT();
-        const json = await API.request(`devices/${dryerId}`, "POST", token, {
+        const token:string = await authService.getJWT();
+        const json:any = await API.request(`devices/${dryerId}`, "POST", token, {
             command: "start",
             duration: time,
             target_temp: temp
@@ -49,11 +49,11 @@ class DryerService {
     static async deleteAllDryers() {
 
         try {
-            const token = await authService.getJWT();
-            const json = await this.getDryers();
-            const devices = turnDeviceJsonToObject(json.devices);
+            const token:string = await authService.getJWT();
+            const json:any = await this.getDryers();
+            const devices:Device[] = turnDeviceJsonToObject(json.devices);
 
-            const deletePromises = devices.map(device =>
+            const deletePromises:Promise<any>[] = devices.map(device =>
                 API.request(`devices/${device.ID}`, "DELETE", token)
                     .then(response => {
                         return response;

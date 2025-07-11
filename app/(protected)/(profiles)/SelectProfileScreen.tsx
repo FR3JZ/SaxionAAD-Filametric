@@ -1,12 +1,12 @@
 import ProfileOverviewPage from "@/components/profiles/ProfileOverviewPage";
 import ProfilePageHeader from "@/components/profiles/ProfilePageHeader";
-import { useLocalSearchParams } from "expo-router";
+import { UnknownOutputParams, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 
 
 const SelectProfileScreen = () => {
-    const params = useLocalSearchParams();
+    const params:UnknownOutputParams = useLocalSearchParams();
 
     return (
         <View style={styles.container}>
